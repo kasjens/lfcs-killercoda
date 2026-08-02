@@ -1,6 +1,6 @@
 {
-  "title": "LFCS: find it in the man pages",
-  "description": "Man pages are the only reference you get in the exam. Six timed lookups that drill the technique, not the trivia.",
+  "title": "LFCS prep 1: find it in the man pages",
+  "description": "Start here. Man pages are the only reference you get in the exam. Fifteen lookups across six steps that drill the technique the domain scenarios assume you already have.",
   "details": {
     "intro": {
       "text": "intro.md",

@@ -1,6 +1,6 @@
 {
-  "title": "LFCS man page speed drill",
-  "description": "Fifty scored items on man page sections, search, the pager and LFCS-specific lookups. Typed answers, no multiple choice, in a terminal with real man pages beside it.",
+  "title": "LFCS prep 2: man page speed drill",
+  "description": "Fifty scored items on man page sections, search, the pager and LFCS-specific lookups. Typed answers, no multiple choice, in a terminal with real man pages beside it. Do prep 1 first.",
   "details": {
     "intro": {
       "text": "intro.md",

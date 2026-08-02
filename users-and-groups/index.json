@@ -1,0 +1,20 @@
+{
+  "title": "LFCS: Users and groups",
+  "description": "The Users and Groups domain, 10% of the exam. Accounts, environment profiles, resource limits, ACLs and LDAP lookups, found in the man pages rather than remembered.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Accounts",             "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "Environment profiles", "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Resource limits",      "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "ACLs",                 "text": "step4.md", "verify": "verify4.sh" },
+      { "title": "LDAP accounts",        "text": "step5.md", "verify": "verify5.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}

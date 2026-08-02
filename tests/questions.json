@@ -105,6 +105,85 @@
          "answer": "8", "decoy": "1",
          "page": "update-ca-certificates", "section": "8"}
       ]
+    },
+
+    "users-and-groups": {
+      "title": "LFCS: Users and groups",
+      "domain": "Users and Groups",
+      "weight": "10%",
+      "steps": [
+        "Create and manage local user and group accounts",
+        "Personal and system-wide environment profiles",
+        "Configure user resource limits",
+        "Configure and manage ACLs",
+        "Use LDAP user and group accounts"
+      ],
+      "questions": [
+        {"n": 1, "step": 1, "subject": "the command that creates a local account",
+         "answer": "useradd", "decoy": "adduser",
+         "page": "useradd", "section": "8", "contains": "useradd"},
+        {"n": 2, "step": 1, "subject": "the command that modifies an existing account",
+         "answer": "usermod", "decoy": "moduser",
+         "page": "usermod", "section": "8", "contains": "usermod"},
+        {"n": 3, "step": 1, "subject": "the section the chage page lives in",
+         "answer": "1", "decoy": "8",
+         "page": "chage", "section": "1"},
+        {"n": 4, "step": 1, "subject": "the page documenting the encrypted password and ageing fields",
+         "answer": "shadow", "accept": ["shadow(5)", "/etc/shadow"], "decoy": "passwd",
+         "page": "shadow", "section": "5", "contains": "encrypted password"},
+
+        {"n": 5, "step": 2, "subject": "the page documenting /etc/profile and ~/.bashrc",
+         "answer": "bash", "decoy": "profile",
+         "page": "bash", "section": "1", "contains": ".bashrc"},
+        {"n": 6, "step": 2, "subject": "the PAM module that sets environment variables at login",
+         "answer": "pam_env", "decoy": "pam_limits",
+         "page": "pam_env", "section": "8", "contains": "pam_env"},
+        {"n": 7, "step": 2, "subject": "the configuration page for that module",
+         "answer": "pam_env.conf", "accept": ["pam_env.conf(5)"], "decoy": "environment",
+         "page": "pam_env.conf", "section": "5", "contains": "pam_env.conf"},
+        {"n": 8, "step": 2, "subject": "the page defining UMASK and PASS_MAX_DAYS",
+         "answer": "login.defs", "accept": ["/etc/login.defs"], "decoy": "login.access",
+         "page": "login.defs", "section": "5", "contains": "PASS_MAX_DAYS"},
+
+        {"n": 9, "step": 3, "subject": "the PAM module that applies limits.conf",
+         "answer": "pam_limits", "decoy": "pam_env",
+         "page": "pam_limits", "section": "8", "contains": "pam_limits"},
+        {"n": 10, "step": 3, "subject": "the limits.conf field holding soft or hard",
+         "answer": "type", "decoy": "class",
+         "page": "limits.conf", "section": "5", "contains": "hard"},
+        {"n": 11, "step": 3, "subject": "the limits.conf item capping open file descriptors",
+         "answer": "nofile", "decoy": "nofiles",
+         "page": "limits.conf", "section": "5", "contains": "nofile"},
+        {"n": 12, "step": 3, "subject": "the limits.conf item capping the number of processes",
+         "answer": "nproc", "decoy": "maxproc",
+         "page": "limits.conf", "section": "5", "contains": "nproc"},
+
+        {"n": 13, "step": 4, "subject": "the command that displays a file's ACL",
+         "answer": "getfacl", "decoy": "lsacl",
+         "page": "getfacl", "section": "1", "contains": "getfacl"},
+        {"n": 14, "step": 4, "subject": "the command that sets an ACL",
+         "answer": "setfacl", "decoy": "chacl",
+         "page": "setfacl", "section": "1", "contains": "setfacl"},
+        {"n": 15, "step": 4, "subject": "the page describing the ACL model itself",
+         "answer": "acl", "accept": ["acl(5)"], "decoy": "facl",
+         "page": "acl", "section": "5", "contains": "mask"},
+        {"n": 16, "step": 4, "subject": "the ACL entry that caps effective permissions",
+         "answer": "mask", "decoy": "default",
+         "page": "acl", "section": "5", "contains": "mask"},
+
+        {"n": 17, "step": 5, "subject": "the page deciding which sources answer passwd and group lookups",
+         "answer": "nsswitch.conf", "accept": ["/etc/nsswitch.conf"], "decoy": "resolv.conf",
+         "page": "nsswitch.conf", "section": "5", "contains": "passwd"},
+        {"n": 18, "step": 5, "subject": "the section that page lives in",
+         "answer": "5", "decoy": "8",
+         "page": "nsswitch.conf", "section": "5"},
+        {"n": 19, "step": 5, "subject": "the configuration page for the SSSD daemon",
+         "answer": "sssd.conf", "accept": ["sssd.conf(5)"], "decoy": "nsswitch.conf",
+         "page": "sssd.conf", "section": "5", "contains": "sssd"},
+        {"n": 20, "step": 5, "subject": "the configuration page for the LDAP client library",
+         "answer": "ldap.conf", "accept": ["ldap.conf(5)"], "decoy": "sssd.conf",
+         "page": "ldap.conf", "section": "5", "contains": "ldap"}
+      ]
     }
   }
 }
