@@ -1,0 +1,21 @@
+{
+  "title": "LFCS: find it in the man pages",
+  "description": "Man pages are the only reference you get in the exam. Six timed lookups that drill the technique, not the trivia.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Sections",        "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "You forgot the command name", "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Inside a long page", "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "Which page defines this?", "text": "step4.md", "verify": "verify4.sh" },
+      { "title": "Where does the page live?", "text": "step5.md", "verify": "verify5.sh" },
+      { "title": "Now use it for real", "text": "step6.md", "verify": "verify6.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}

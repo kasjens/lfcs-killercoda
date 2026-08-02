@@ -1,0 +1,24 @@
+{
+  "title": "LFCS man page speed drill",
+  "description": "Fifty scored items on man page sections, search, the pager and LFCS-specific lookups. Typed answers, no multiple choice, in a terminal with real man pages beside it.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Warm up",     "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "Full round",  "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Repair",      "text": "step3.md", "verify": "verify3.sh" }
+    ],
+    "finish": { "text": "finish.md" },
+    "assets": {
+      "host01": [
+        { "file": "drill.py",  "target": "/root", "chmod": "+x" },
+        { "file": "bank.json", "target": "/root" }
+      ]
+    }
+  },
+  "backend": { "imageid": "ubuntu" }
+}
