@@ -5,7 +5,7 @@ bad=0
 note() { echo "$1" >&2; bad=1; }
 mp=/mnt/shared
 
-line="$(grep -E "^[^#]*[[:space:]]$mp[[:space:]]" /etc/fstab 2>/dev/null | tail -n1)"
+line="$(grep -E "^[^#]*[[:space:]]${mp}[[:space:]]" /etc/fstab 2>/dev/null | tail -n1)"
 [ -n "$line" ] || { echo "no /etc/fstab entry for $mp" >&2; exit 1; }
 
 src="$(printf '%s' "$line" | awk '{print $1}')"

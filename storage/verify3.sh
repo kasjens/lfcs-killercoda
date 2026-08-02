@@ -20,7 +20,7 @@ label="$(blkid -o value -s LABEL "$src" 2>/dev/null)"
 uuid="$(blkid -o value -s UUID "$src" 2>/dev/null)"
 [ -n "$uuid" ] || note "could not read a UUID from $src"
 
-line="$(grep -E "^[^#]*[[:space:]]$mp[[:space:]]" /etc/fstab 2>/dev/null | tail -n1)"
+line="$(grep -E "^[^#]*[[:space:]]${mp}[[:space:]]" /etc/fstab 2>/dev/null | tail -n1)"
 if [ -z "$line" ]; then
   note "no /etc/fstab entry for $mp"
 else

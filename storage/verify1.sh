@@ -29,8 +29,10 @@ if ! findmnt -n /srv/lv >/dev/null 2>&1; then
   note "nothing is mounted at /srv/lv"
 else
   src="$(findmnt -n -o SOURCE /srv/lv 2>/dev/null)"
+  # Covers both spellings the kernel may report, /dev/datavg/datalv and
+  # /dev/mapper/datavg-datalv.
   case "$src" in
-    *datavg*datalv*|/dev/mapper/datavg-datalv) ;;
+    *datavg*datalv*) ;;
     *) note "/srv/lv is mounted from $src, not from the logical volume" ;;
   esac
 fi
