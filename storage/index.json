@@ -1,0 +1,22 @@
+{
+  "title": "LFCS: Storage",
+  "description": "The Storage domain, 20% of the exam. LVM, filesystems, swap, remote mounts, automounters and I/O performance, performed on a real box with spare disks attached.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "LVM",                  "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "Virtual filesystem",   "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Filesystems",          "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "Remote filesystems",   "text": "step4.md", "verify": "verify4.sh" },
+      { "title": "Swap",                 "text": "step5.md", "verify": "verify5.sh" },
+      { "title": "Automounter",          "text": "step6.md", "verify": "verify6.sh" },
+      { "title": "Storage performance",  "text": "step7.md", "verify": "verify7.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}

@@ -41,6 +41,7 @@ E=$(TMPDIR=/tmp mktemp -d); cp -a /etc/. "$E"/ 2>/dev/null || true
 mount --bind "$E" /etc
 mount -t tmpfs tmpfs /home
 mount -t tmpfs tmpfs /root
+mount -t tmpfs tmpfs /mnt
 mount --bind {srv} /srv
 set +e
 """
@@ -70,7 +71,8 @@ def userns_problem() -> str:
     return reason[0]
 
 
-def run_cycle(verifier: Path, setup: str, solve: str, srv: Path) -> tuple[str, str]:
+def run_cycle(verifier: Path, setup: str, solve: str, cleanup: str,
+              srv: Path) -> tuple[str, str]:
     """Return (before, after) as 'pass' | 'fail' | 'error'.
 
     `setup` recreates whatever the scenario's background.sh would have put on
@@ -85,6 +87,9 @@ def run_cycle(verifier: Path, setup: str, solve: str, srv: Path) -> tuple[str, s
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "before=$?"
 {solve}
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
+# Loop devices and volume groups are kernel-wide, so they outlive the mount
+# namespace and would leak into the next task. Always runs, pass or fail.
+{cleanup}
 """
         p = subprocess.run(UNSHARE + ["sh", "-c", body],
                            capture_output=True, text=True, timeout=180)
@@ -116,15 +121,21 @@ for name, scenario in MANIFEST["scenarios"].items():
         if not verifier.is_file():
             errors.append(f"{name} step {step}: {verifier.name} does not exist")
             continue
-        if task.get("sandbox") == "root" or userns_error:
-            why = "needs real root" if task.get("sandbox") == "root" else userns_error
+        # "root" means loop devices or device-mapper, which a user namespace
+        # cannot provide however it is mapped. Those still run when we really
+        # are root, which is how CI covers them; they only skip unprivileged.
+        needs_root = task.get("sandbox") == "root"
+        if (needs_root and os.geteuid() != 0) or userns_error:
+            why = "needs real root for loop devices" if needs_root else userns_error
             skipped.append(f"{name} step {step} ({task['title']}): {why}")
             continue
 
         with tempfile.TemporaryDirectory(dir="/tmp") as srv:
             before, after = run_cycle(verifier,
                                       "\n".join(task.get("setup", [])),
-                                      "\n".join(task["solve"]), Path(srv))
+                                      "\n".join(task["solve"]),
+                                      "\n".join(task.get("cleanup", [])),
+                                      Path(srv))
         ran += 1
         if before == "error" or after == "error":
             errors.append(f"{name} step {step}: the verifier could not be run in the sandbox")

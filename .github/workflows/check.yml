@@ -35,7 +35,8 @@ jobs:
           # Packages the domain scenarios ask questions about. Without these,
           # test_questions.py can only skip the claims that depend on them.
           sudo -E apt-get install -y -qq git sysstat lsof openssl \
-            ca-certificates acl sssd-common ldap-utils
+            ca-certificates acl sssd-common ldap-utils \
+            lvm2 xfsprogs e2fsprogs autofs
           sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
             passwd login mount cron bash procps systemd libpam-modules
           sudo mandb -q

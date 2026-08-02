@@ -137,6 +137,93 @@
          "answer": "ldap.conf", "accept": ["ldap.conf(5)"], "decoy": "sssd.conf",
          "page": "ldap.conf", "section": "5", "contains": "ldap"}
       ]
+    },
+
+    "storage": {
+      "title": "LFCS: Storage",
+      "domain": "Storage",
+      "weight": "20%",
+      "steps": [
+        "Configure and manage LVM storage",
+        "Manage and configure the virtual file system",
+        "Create, manage and troubleshoot filesystems",
+        "Use remote filesystems and network block devices",
+        "Configure and manage swap space",
+        "Configure filesystem automounters",
+        "Monitor storage performance"
+      ],
+
+      "tasks": [
+        {"n": 1, "title": "LVM", "sandbox": "root",
+         "setup": [
+           "mkdir -p /srv",
+           "dd if=/dev/zero of=/srv/spare1.img bs=1M count=512 status=none",
+           "losetup --find --show /srv/spare1.img > /tmp/lfcs-spare1"
+         ],
+         "solve": [
+           "dev=$(cat /tmp/lfcs-spare1)",
+           "pvcreate -y -f \"$dev\" >/dev/null 2>&1",
+           "vgcreate datavg \"$dev\" >/dev/null 2>&1",
+           "lvcreate -y -L 200M -n datalv datavg >/dev/null 2>&1",
+           "mkfs.ext4 -q /dev/datavg/datalv",
+           "mkdir -p /srv/lv",
+           "mount /dev/datavg/datalv /srv/lv"
+         ],
+         "cleanup": [
+           "umount /srv/lv 2>/dev/null",
+           "vgremove -y -f datavg >/dev/null 2>&1",
+           "pvremove -y -f \"$(cat /tmp/lfcs-spare1)\" >/dev/null 2>&1",
+           "losetup -d \"$(cat /tmp/lfcs-spare1)\" 2>/dev/null",
+           "rm -f /tmp/lfcs-spare1 /srv/spare1.img"
+         ]},
+        {"n": 2, "title": "virtual filesystem", "sandbox": "user-ns",
+         "solve": [
+           "mkdir -p /srv/cache",
+           "printf 'tmpfs /srv/cache tmpfs size=64M,mode=1777 0 0\\n' >> /etc/fstab",
+           "mount -t tmpfs -o size=64M,mode=1777 tmpfs /srv/cache"
+         ]},
+        {"n": 3, "title": "filesystems", "sandbox": "root",
+         "setup": [
+           "mkdir -p /srv",
+           "dd if=/dev/zero of=/srv/spare2.img bs=1M count=256 status=none",
+           "losetup --find --show /srv/spare2.img > /tmp/lfcs-spare2"
+         ],
+         "solve": [
+           "dev=$(cat /tmp/lfcs-spare2)",
+           "mkfs.ext4 -q -L DATA \"$dev\"",
+           "mkdir -p /srv/disk",
+           "mount \"$dev\" /srv/disk",
+           "uuid=$(blkid -o value -s UUID \"$dev\")",
+           "printf 'UUID=%s /srv/disk ext4 defaults 0 2\\n' \"$uuid\" >> /etc/fstab"
+         ],
+         "cleanup": [
+           "umount /srv/disk 2>/dev/null",
+           "losetup -d \"$(cat /tmp/lfcs-spare2)\" 2>/dev/null",
+           "rm -f /tmp/lfcs-spare2 /srv/spare2.img"
+         ]},
+        {"n": 4, "title": "remote filesystems", "sandbox": "user-ns",
+         "solve": [
+           "mkdir -p /mnt/shared",
+           "printf 'fileserver:/export/shared /mnt/shared nfs _netdev,noauto,rw 0 0\\n' >> /etc/fstab"
+         ]},
+        {"n": 5, "title": "swap", "sandbox": "user-ns",
+         "solve": [
+           "dd if=/dev/zero of=/srv/swapfile bs=1M count=256 status=none",
+           "chmod 600 /srv/swapfile",
+           "mkswap /srv/swapfile >/dev/null 2>&1",
+           "printf '/srv/swapfile none swap sw 0 0\\n' >> /etc/fstab"
+         ]},
+        {"n": 6, "title": "automounter", "sandbox": "user-ns",
+         "solve": [
+           "mkdir -p /etc/auto.master.d",
+           "printf '/data /etc/auto.data --timeout=60\\n' > /etc/auto.master.d/data.autofs",
+           "printf 'backup -fstype=nfs,ro fileserver:/export/backup\\n' > /etc/auto.data"
+         ]},
+        {"n": 7, "title": "storage performance", "sandbox": "user-ns",
+         "solve": ["iostat -x 1 2 > /root/iostat.txt"]}
+      ],
+
+      "questions": []
     }
   }
 }
