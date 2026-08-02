@@ -9,50 +9,51 @@ own. They are documented inside the shell's page, under INVOCATION, because
 which file gets read depends on whether the shell is a login shell or an
 interactive one.
 
-There is a trap here of exactly the same shape as `man ulimit`. Asking `man`
-for `profile` does not give you `/etc/profile`. On a machine with BPF tooling
-installed it hands you a CPU profiler with that name. The file you want is in
-the shell page.
+There is a trap here of the same shape as `man ulimit`. Asking `man` for
+`profile` does not give you `/etc/profile`. On a box with BPF tooling installed
+it hands you a CPU profiler with that name.
 
-The PAM path runs earlier, before any shell starts, which is why it also
-applies to logins that never get a shell at all. A PAM module reads a
-configuration file and sets variables from it. Because it runs at the PAM
-layer, it is the only one of the two that affects graphical sessions and some
-service logins.
+Editing `/etc/profile` directly is the wrong instinct. It is package owned, so
+an upgrade can overwrite it. It sources every `.sh` file in a drop-in directory
+instead, and that is where system-wide additions belong.
 
-Defaults that apply to account creation and password ageing live in a third
-file again, `login.defs`, which is where `UMASK` and `PASS_MAX_DAYS` are set
-system-wide.
+The default umask for new logins is a different mechanism again. It is not a
+shell setting, it is a login setting, and it lives with the other account
+defaults like `PASS_MAX_DAYS`.
 
 ### Task
 
-**5.** The page that documents `/etc/profile` and `~/.bashrc`.
+1. Make **`EDITOR=vim`** appear in every **login** shell, set system-wide, not
+   in any one user's dotfiles and not by editing `/etc/profile` itself.
+2. Set the system-wide default **`UMASK`** for new logins to **`027`**.
 
-**6.** The PAM module that sets environment variables at login.
-
-**7.** The configuration page for that module.
-
-**8.** The page defining `UMASK` and `PASS_MAX_DAYS`.
-
-```
-answer 5 <page name>
-answer 6 <module>
-answer 7 <page name>
-answer 8 <page name>
-```{{copy}}
+The check starts a login shell with an empty environment and reads `EDITOR` out
+of it, so exporting it in your current session will not pass.
 
 <details><summary>Tip</summary>
 
 ```
-man -k pam_ | head -20
-man -k login
+man 1 bash
+man 5 login.defs
 ```{{exec}}
 
-For question 5, do not trust `man profile`. Work out which page documents shell
-startup files instead, then confirm with `man -K '\.bashrc'` if you want proof.
+In `bash(1)`, search for `INVOCATION` to see exactly which files a login shell
+reads and in what order. That tells you which directory the drop-in belongs in.
 
-Questions 6 and 7 are the module and its config file. PAM modules are section
-8, their config files are section 5, and the config page is usually the module
-name with a suffix.
+Check your work the same way the verifier does:
+
+```
+env -i bash -lc 'echo $EDITOR'
+```{{exec}}
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+echo 'export EDITOR=vim' > /etc/profile.d/lfcs.sh
+chmod 644 /etc/profile.d/lfcs.sh
+sed -i -E 's/^[[:space:]]*UMASK[[:space:]]+.*/UMASK\t\t027/' /etc/login.defs
+```{{copy}}
 
 </details>

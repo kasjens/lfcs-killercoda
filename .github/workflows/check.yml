@@ -72,6 +72,13 @@ jobs:
       - name: Domain questions match their man pages
         run: python3 tests/test_questions.py --no-skips
 
+      # Each task verifier is run against a clean box and then against the
+      # reference solution. The failure this catches is a verifier that passes
+      # before the learner has done anything, which looks like a working
+      # scenario. Root comes from a user namespace, so the runner is untouched.
+      - name: Task verifiers fail before the task and pass after
+        run: python3 tests/test_tasks.py --no-skips
+
       - name: Verifiers accept right answers and reject wrong ones
         run: bash tests/test_verifiers.sh
 

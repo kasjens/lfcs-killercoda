@@ -1,7 +1,7 @@
 # Done
 
-Twenty lookups across the five competencies that make up Users and Groups, 10%
-of the exam.
+Four tasks performed on a real box, plus the LDAP lookups, covering the five
+competencies that make up Users and Groups, 10% of the exam.
 
 The moves worth keeping:
 

@@ -1,29 +1,19 @@
 # Users and groups
 
-The smallest domain at 10% of the exam, and the one where the answers are
+The smallest LFCS domain at 10% of the exam, and the one where the answers are
 spread across the most files. Five competencies: local accounts, environment
 profiles, resource limits, ACLs, and LDAP lookups.
 
-One step per competency. Each step opens with the theory, then asks a set of
-questions you answer from the man pages on the box beside you.
+The exam is performance based. You are not asked to name a command, you are
+asked to fix a box. So four of these five steps are real work: read the theory,
+open the pages you need, and change the system. The check reads the machine
+afterwards, so any route that produces the right result passes.
 
-Twenty questions, numbered straight through. Record each with the `answer`
-command:
-
-```
-answer 1 useradd
-```{{copy}}
-
-That writes to `/tmp/answers/1`, which is the file the check reads, so plain
-redirection does the same job:
-
-```
-echo useradd > /tmp/answers/1
-```{{copy}}
-
-Answer the whole set, then press **Check**. A wrong answer names the question it
-belongs to, so you can go back to just that one.
+The fifth step is LDAP, which needs a directory server to talk to and so cannot
+be rehearsed properly here. That one is lookups, and it says so.
 
 > Do **LFCS prep 1: find it in the man pages** first if you have not. This
 > scenario assumes `man -k`, `man -K`, `man -w` and the pager keys are already
-> reflexes.
+> reflexes. It will not tell you which page to open.
+
+You are root. There is nothing on this box you can break that matters.

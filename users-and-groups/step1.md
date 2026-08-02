@@ -10,42 +10,49 @@ The tools that write those files are administrative, so they are section 8.
 That is the rule for this whole area, with one exception worth knowing.
 
 `chage` changes password ageing, which sounds administrative, but its page is
-in **section 1**. The reason is that an unprivileged user can run `chage -l` on
-themselves to see when their own password expires. A command that ordinary
-users can usefully run is a user command, whatever it manages. Section numbers
-describe who the command is for, not how important it is.
+in **section 1**. An unprivileged user can run `chage -l` on themselves to see
+when their own password expires. A command ordinary users can usefully run is a
+user command, whatever it manages.
 
-The same logic explains `passwd`: `passwd(1)` is the command you run,
-`passwd(5)` is the file format. Same name, two sections, and `whatis` shows
-both.
+That split matters for this task. Account expiry is not a `useradd` field you
+can see in `/etc/passwd`. It lives in `/etc/shadow`, and it is set with a
+different tool from the one that creates the account.
 
 ### Task
 
-**1.** The command that creates a local account.
+Build it on the box. Nothing to type into an answer file here, the check reads
+the system.
 
-**2.** The command that modifies an existing account.
+1. A group **`webops`** with GID **4000**.
+2. A user **`deploy`** with home **`/home/deploy`**, login shell **`/bin/bash`**,
+   and `webops` as its **primary** group. The home directory must exist.
+3. `deploy`'s account must **expire on 31 December 2026**.
 
-**3.** The section the `chage` page lives in.
-
-**4.** The page documenting the encrypted password and the ageing fields. Page
-name, no section number.
-
-```
-answer 1 <command>
-answer 2 <command>
-answer 3 <number>
-answer 4 <page name>
-```{{copy}}
+Any route that produces that result passes. Press **Check** when you are done.
 
 <details><summary>Tip</summary>
 
 ```
-man -k account
-whatis chage passwd shadow
+man 8 useradd
+man 8 groupadd
+man 1 chage
 ```{{exec}}
 
-Question 1 has a tempting near-miss on Debian and Ubuntu: there is a friendlier
-wrapper script with a similar name. The exam is distribution agnostic, so the
-answer is the portable tool, which is the one with the section 8 page.
+`useradd` does not create the home directory unless you ask it to, and the flag
+for the primary group is not the same as the one for supplementary groups. Read
+the difference before you pick.
+
+For the expiry, `chage -l deploy` shows you what is currently set, which is the
+quickest way to confirm you got the date format right.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+groupadd -g 4000 webops
+useradd -m -d /home/deploy -s /bin/bash -g webops deploy
+chage -E 2026-12-31 deploy
+```{{copy}}
 
 </details>

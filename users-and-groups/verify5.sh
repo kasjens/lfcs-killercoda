@@ -23,9 +23,9 @@ check() { # check <n> <cs|ci> <subject> <accepted answer>...
   bad=1
 }
 
-check 17 ci 'the page deciding which sources answer passwd and group lookups' 'nsswitch.conf' '/etc/nsswitch.conf'
-check 18 ci 'the section that page lives in' '5'
-check 19 ci 'the configuration page for the SSSD daemon' 'sssd.conf' 'sssd.conf(5)'
-check 20 ci 'the configuration page for the LDAP client library' 'ldap.conf' 'ldap.conf(5)'
+check 1 ci 'the page deciding which sources answer passwd and group lookups' 'nsswitch.conf' '/etc/nsswitch.conf'
+check 2 ci 'the section that page lives in' '5'
+check 3 ci 'the configuration page for the SSSD daemon' 'sssd.conf' 'sssd.conf(5)'
+check 4 ci 'the configuration page for the LDAP client library' 'ldap.conf' 'ldap.conf(5)'
 
 exit "$bad"
