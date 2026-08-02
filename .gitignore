@@ -3,10 +3,6 @@
 __pycache__/
 *.py[cod]
 
-# Drill state. Normally under /tmp, but LFCS_DRILL_STATE can point anywhere.
-lfcs-drill/
-history.json
-
 .venv/
 venv/
 

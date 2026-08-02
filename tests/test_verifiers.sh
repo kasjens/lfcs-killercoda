@@ -18,6 +18,17 @@ expect() { # expect <want pass|fail> <label> <script dir> <script> ...
   fi
 }
 
+# Some of these pass or fail on the exit code alone but report the wrong thing
+# to the learner, which an exit code cannot catch.
+says() { # says <substring> <label> <script dir> <script>
+  local want="$1" label="$2" dir="$3" script="$4" out
+  out="$( cd "$dir" && bash "$script" 2>&1 )"
+  case "$out" in
+    *"$want"*) pass=$((pass + 1)); printf '  ok    %-46s (%s)\n' "$label" "said so" ;;
+    *) fail=$((fail + 1)); printf '  FAIL  %-46s wanted %s in: %s\n' "$label" "$want" "$out" ;;
+  esac
+}
+
 N=man-pages-navigation
 mkdir -p /tmp/answers
 
@@ -44,11 +55,49 @@ else
   echo "  skip  step5 (nfs(5) not installed here)"
 fi
 
-timer() { sudo mkdir -p /etc/systemd/system 2>/dev/null || mkdir -p /etc/systemd/system
-          printf '%s\n' "$1" | sudo tee /etc/systemd/system/hello.timer >/dev/null 2>&1 \
-            || printf '%s\n' "$1" > /etc/systemd/system/hello.timer; }
+# verify6.sh reads a fixed path, so step 6 has to stage a real unit file there.
+# The write used to be attempted with every error discarded, which meant that
+# on a box where it could not succeed the three rejection cases still reported
+# ok: the file simply never changed. A verifier that was never invoked is not a
+# verifier that rejected something. Establish up front that staging works, and
+# skip out loud when it does not.
+UNIT=/etc/systemd/system/hello.timer
+SUDO=""
 
-if command -v systemd-analyze >/dev/null 2>&1; then
+can_stage() {
+  if [ "$(id -u)" -ne 0 ]; then
+    sudo -n true 2>/dev/null || return 1
+    SUDO="sudo"
+  fi
+  # Never clobber a real unit file that happens to share the name.
+  [ -e "$UNIT" ] && return 2
+  $SUDO mkdir -p /etc/systemd/system 2>/dev/null || return 1
+  printf 'probe\n' | $SUDO tee "$UNIT" >/dev/null 2>&1 || return 1
+  $SUDO rm -f "$UNIT" 2>/dev/null || return 1
+  return 0
+}
+
+stage() { # stage <unit file text> — preconditions are already checked, so a
+          # failure here is real and must stop the run rather than be counted.
+  printf '%s\n' "$1" | $SUDO tee "$UNIT" >/dev/null 2>&1 && return 0
+  echo "  ERROR could not write $UNIT, step 6 results would be meaningless" >&2
+  exit 1
+}
+
+cleanup_unit() { [ -n "${staged:-}" ] && $SUDO rm -f "$UNIT"; }
+trap cleanup_unit EXIT
+
+can_stage; staging=$?
+
+if [ "$staging" -eq 2 ]; then
+  echo "  skip  step6 ($UNIT already exists, refusing to overwrite it)"
+elif [ "$staging" -ne 0 ]; then
+  echo "  skip  step6 (needs root or passwordless sudo to stage $UNIT)"
+elif ! command -v systemd-analyze >/dev/null 2>&1; then
+  echo "  skip  step6 (no systemd-analyze here)"
+else
+  staged=1
+  timer() { stage "$1"; }
   timer "[Timer]
 OnCalendar=Mon *-*-* 03:00:00
 Unit=hello.service";  expect pass "step6 canonical"                "$N" verify6.sh
@@ -64,10 +113,52 @@ Unit=hello.service";  expect fail "step6 invalid expression"       "$N" verify6.
   timer "[Timer]
 OnCalendar=Mon *-*-* 03:00:00"
                       expect fail "step6 missing Unit="            "$N" verify6.sh
-  rm -f /etc/systemd/system/hello.timer
-else
-  echo "  skip  step6 (no systemd-analyze here)"
+  $SUDO rm -f "$UNIT"
+  staged=""
 fi
+
+# ---------------------------------------------------------------- drill
+# The drill verifiers read the round history. They honour LFCS_DRILL_STATE, so
+# these run against a scratch directory rather than the learner's real state.
+
+D=man-pages-drill
+state="$(mktemp -d)"
+trap 'cleanup_unit; rm -rf "$state"' EXIT
+export LFCS_DRILL_STATE="$state"
+
+hist() { printf '%s\n' "$1" > "$state/history.json"; }
+
+# round <asked> <notCold json> <review true|false>
+round() { printf '{"finished":"2026-01-01T00:00:00+00:00","topic":"ALL",'
+          printf '"review":%s,"asked":%s,"planned":%s,"cold":1,"revealed":0,' "$3" "$1" "$1"
+          printf '"missed":0,"pct":50,"xp":25,"seconds":60,"notCold":%s}' "$2"; }
+
+rm -f "$state/history.json"
+expect fail "drill1 no history yet"            "$D" verify1.sh
+hist "[$(round 8 '[]' false)]"
+expect pass "drill1 eight item round"          "$D" verify1.sh
+expect fail "drill2 eight is not enough"       "$D" verify2.sh
+hist "[$(round 20 '[1,2]' false)]"
+expect pass "drill2 twenty item round"         "$D" verify2.sh
+expect fail "drill3 full round, no repair yet" "$D" verify3.sh
+hist "[$(round 20 '[]' false)]"
+expect pass "drill3 clean round needs nothing" "$D" verify3.sh
+says "nothing needed repairing" "drill3 clean round says so" "$D" verify3.sh
+hist "[$(round 20 '[1,2]' false),$(round 2 '[]' true)]"
+expect pass "drill3 repair round done"         "$D" verify3.sh
+
+# The three that used to be wrong. A learner who revealed sixteen items gets a
+# sixteen-item review round, which the old size-based guess read as the full
+# round; and any small round at all counted as the repair.
+hist "[$(round 20 '[1,2]' false),$(round 16 '[3]' true)]"
+expect pass "drill3 large review still counts" "$D" verify3.sh
+hist "[$(round 20 '[1,2]' false),$(round 16 '[]' true)]"
+expect pass "drill3 large clean review counts" "$D" verify3.sh
+# Exits 0 either way. The old code got here by reading the review round as the
+# full round and telling the learner their full round had been clean.
+says "Repair round done" "drill3 large clean review, right reason" "$D" verify3.sh
+hist "[$(round 20 '[1,2]' false),$(round 3 '[]' false)]"
+expect fail "drill3 a small round is no repair" "$D" verify3.sh
 
 echo
 echo "  $pass passed, $fail failed"
