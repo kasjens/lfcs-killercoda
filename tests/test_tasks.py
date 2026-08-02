@@ -52,8 +52,15 @@ set +e
 UNSHARE = ["unshare", "-rm"] + ([] if os.geteuid() == 0 else ["--map-auto"])
 
 
-def have_userns() -> bool:
-    return subprocess.run(UNSHARE + ["true"], capture_output=True).returncode == 0
+def userns_problem() -> str:
+    """Empty string if the sandbox works, otherwise why it does not."""
+    p = subprocess.run(UNSHARE + ["true"], capture_output=True, text=True)
+    if p.returncode == 0:
+        return ""
+    reason = p.stderr.strip().splitlines()[-1:] or ["unshare failed"]
+    if "--map-auto" in UNSHARE:
+        return f"{reason[0]} (unprivileged sandbox needs a subuid range; try running as root)"
+    return reason[0]
 
 
 def run_cycle(verifier: Path, solve: str, srv: Path) -> tuple[str, str]:
@@ -87,7 +94,7 @@ bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
         return state("before"), state("after")
 
 
-userns = have_userns()
+userns_error = userns_problem()
 
 for name, scenario in MANIFEST["scenarios"].items():
     for task in scenario.get("tasks", []):
@@ -96,8 +103,8 @@ for name, scenario in MANIFEST["scenarios"].items():
         if not verifier.is_file():
             errors.append(f"{name} step {step}: {verifier.name} does not exist")
             continue
-        if task.get("sandbox") == "root" or not userns:
-            why = "needs real root" if task.get("sandbox") == "root" else "no user namespaces here"
+        if task.get("sandbox") == "root" or userns_error:
+            why = "needs real root" if task.get("sandbox") == "root" else userns_error
             skipped.append(f"{name} step {step} ({task['title']}): {why}")
             continue
 

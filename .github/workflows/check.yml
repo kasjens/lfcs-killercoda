@@ -76,8 +76,11 @@ jobs:
       # reference solution. The failure this catches is a verifier that passes
       # before the learner has done anything, which looks like a working
       # scenario. Root comes from a user namespace, so the runner is untouched.
+      # sudo because the runner account has no subuid range, so the
+      # unprivileged form of the sandbox cannot map anything but uid 0 and
+      # every task would skip. Real root needs no mapping.
       - name: Task verifiers fail before the task and pass after
-        run: python3 tests/test_tasks.py --no-skips
+        run: sudo python3 tests/test_tasks.py --no-skips
 
       - name: Verifiers accept right answers and reject wrong ones
         run: bash tests/test_verifiers.sh
