@@ -45,11 +45,17 @@ set +e
 """
 
 
-# --map-auto matters when unprivileged: plain -r maps only uid 0, so chgrp and
-# setfacl to any other id fail with EINVAL and an ACL task looks broken when it
-# is not. It needs a subuid/subgid range for the calling user. Real root has
-# every id already and may have no subuid range at all, so it does not use it.
-UNSHARE = ["unshare", "-rm"] + ([] if os.geteuid() == 0 else ["--map-auto"])
+# Root wants a mount namespace and nothing else: it already owns every uid, and
+# adding -r would put it in a user namespace mapping only uid 0, where chgrp and
+# setfacl to any other id fail with EINVAL.
+#
+# Unprivileged, the user namespace is the only way to get root at all, and it
+# needs --map-auto plus a subuid range for the same reason: without it only uid
+# 0 exists and an ACL task looks broken when it is not.
+#
+# --propagation private so the bind mounts cannot escape into the host.
+UNSHARE = (["unshare", "-m", "--propagation", "private"] if os.geteuid() == 0
+           else ["unshare", "-rm", "--map-auto", "--propagation", "private"])
 
 
 def userns_problem() -> str:
