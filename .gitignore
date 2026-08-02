@@ -1,0 +1,14 @@
+# drill.py is imported by tests/test_bank.py, so running the tests leaves a
+# __pycache__ behind next to the asset. Killercoda copies assets/ verbatim.
+__pycache__/
+*.py[cod]
+
+# Drill state. Normally under /tmp, but LFCS_DRILL_STATE can point anywhere.
+lfcs-drill/
+history.json
+
+.venv/
+venv/
+
+.DS_Store
+*.swp
