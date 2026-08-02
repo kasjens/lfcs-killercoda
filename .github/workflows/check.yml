@@ -39,6 +39,10 @@ jobs:
             lvm2 xfsprogs e2fsprogs autofs \
             nftables openssh-server chrony nginx iproute2 \
             libvirt-clients apparmor apparmor-utils cron
+          # libvirtd(8) is in libvirt-daemon-system, not libvirt-clients.
+          # --no-install-recommends keeps qemu off the runner; only the page
+          # is needed here.
+          sudo -E apt-get install -y -qq --no-install-recommends libvirt-daemon-system
           sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
             passwd login mount cron bash procps systemd libpam-modules
           sudo mandb -q
