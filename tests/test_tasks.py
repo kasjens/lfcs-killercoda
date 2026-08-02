@@ -97,10 +97,17 @@ bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
         cmd = UNSHARE + (["-n"] if netns else [])
         if netns:
             body = "ip link set lo up 2>/dev/null\n" + body
-        p = subprocess.run(cmd + ["sh", "-c", body],
-                           capture_output=True, text=True, timeout=180)
+
+        # Output goes to a file, not a pipe. A task that backgrounds anything,
+        # a listener for instance, leaves a child holding the inherited pipe,
+        # and communicate() then waits for EOF long after the shell has exited.
+        # That is a hang, not a failure, and it reads as one in CI.
+        log = Path(work) / "out.txt"
+        with log.open("w") as fh:
+            subprocess.run(cmd + ["sh", "-c", body], stdin=subprocess.DEVNULL,
+                           stdout=fh, stderr=fh, text=True, timeout=180)
         codes = {}
-        for line in p.stdout.splitlines():
+        for line in log.read_text(errors="replace").splitlines():
             if "=" in line and line.split("=")[0] in ("before", "after"):
                 k, v = line.split("=", 1)
                 codes[k] = v.strip()

@@ -376,7 +376,7 @@
             "sleep 1"
           ],
           "cleanup": [
-            "kill \"$(cat /tmp/lfcs-listener)\" 2>/dev/null",
+            "kill \"$(cat /tmp/lfcs-listener 2>/dev/null)\" 2>/dev/null",
             "rm -f /tmp/lfcs-listener"
           ]
         },
