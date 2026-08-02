@@ -37,7 +37,8 @@ jobs:
           sudo -E apt-get install -y -qq git sysstat lsof openssl \
             ca-certificates acl sssd-common ldap-utils \
             lvm2 xfsprogs e2fsprogs autofs \
-            nftables openssh-server chrony nginx iproute2
+            nftables openssh-server chrony nginx iproute2 \
+            libvirt-clients apparmor apparmor-utils cron
           sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
             passwd login mount cron bash procps systemd libpam-modules
           sudo mandb -q

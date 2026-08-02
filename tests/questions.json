@@ -462,6 +462,165 @@
         }
       ],
       "questions": []
+    },
+    "operations": {
+      "title": "LFCS: Operations and deployment",
+      "domain": "Operations Deployment",
+      "weight": "25%",
+      "steps": [
+        "Configure kernel parameters, persistent and non-persistent",
+        "Diagnose and troubleshoot processes and services",
+        "Schedule jobs",
+        "Software packages and repositories",
+        "Recover from a boot-blocking failure",
+        "Manage virtual machines with libvirt",
+        "Configure container engines",
+        "Mandatory access control"
+      ],
+      "tasks": [
+        {
+          "n": 1,
+          "title": "kernel parameters",
+          "sandbox": "user-ns-net",
+          "solve": [
+            "sysctl -w net.ipv4.ip_forward=1 >/dev/null",
+            "mkdir -p /etc/sysctl.d",
+            "printf 'net.ipv4.ip_forward = 1\\nvm.swappiness = 10\\n' > /etc/sysctl.d/99-lfcs.conf"
+          ]
+        },
+        {
+          "n": 2,
+          "title": "broken unit",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/systemd/system",
+            "printf '[Unit]\\nDescription=broken\\n\\n[Servce]\\nExecStart=/usr/bin/definitely-not-here\\n' > /etc/systemd/system/broken.service"
+          ],
+          "solve": [
+            "printf '[Unit]\\nDescription=broken\\n\\n[Service]\\nExecStart=/usr/bin/true\\n' > /etc/systemd/system/broken.service"
+          ]
+        },
+        {
+          "n": 3,
+          "title": "scheduled jobs",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/cron.d /etc/systemd/system /usr/local/bin",
+            "printf '#!/bin/sh\\necho report\\n' > /usr/local/bin/report.sh",
+            "chmod +x /usr/local/bin/report.sh"
+          ],
+          "solve": [
+            "printf '30 2 * * * root /usr/local/bin/report.sh\\n' > /etc/cron.d/lfcs",
+            "printf '[Unit]\\nDescription=report\\n\\n[Service]\\nType=oneshot\\nExecStart=/usr/local/bin/report.sh\\n' > /etc/systemd/system/lfcs-report.service",
+            "printf '[Unit]\\nDescription=report timer\\n\\n[Timer]\\nOnCalendar=daily\\nUnit=lfcs-report.service\\n\\n[Install]\\nWantedBy=timers.target\\n' > /etc/systemd/system/lfcs-report.timer"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "repositories and pinning",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/apt/sources.list.d /etc/apt/preferences.d /etc/apt/keyrings"
+          ],
+          "solve": [
+            "printf 'deb [signed-by=/etc/apt/keyrings/lfcs.gpg] https://repo.example.com stable main\\n' > /etc/apt/sources.list.d/lfcs.list",
+            "printf 'Package: nginx\\nPin: origin repo.example.com\\nPin-Priority: 1001\\n' > /etc/apt/preferences.d/lfcs"
+          ]
+        },
+        {
+          "n": 5,
+          "title": "boot-blocking fstab",
+          "sandbox": "user-ns",
+          "setup": [
+            "printf '/dev/vda1 / ext4 defaults 0 1\\nUUID=00000000-0000-0000-0000-000000000000 /mnt/backup ext4 defaults 0 2\\n' > /etc/fstab",
+            "mkdir -p /mnt/backup"
+          ],
+          "solve": [
+            "printf '/dev/vda1 / ext4 defaults 0 1\\nUUID=00000000-0000-0000-0000-000000000000 /mnt/backup ext4 defaults,nofail 0 0\\n' > /etc/fstab"
+          ]
+        },
+        {
+          "n": 7,
+          "title": "container engine",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/docker"
+          ],
+          "solve": [
+            "printf '{\\n  \"log-driver\": \"json-file\",\\n  \"log-opts\": { \"max-size\": \"10m\", \"max-file\": \"3\" },\\n  \"live-restore\": true\\n}\\n' > /etc/docker/daemon.json"
+          ]
+        }
+      ],
+      "questions": [
+        {
+          "n": 1,
+          "step": 6,
+          "subject": "the command-line client for managing libvirt guests",
+          "answer": "virsh",
+          "decoy": "virt-manager",
+          "page": "virsh",
+          "section": "1",
+          "contains": "virsh"
+        },
+        {
+          "n": 2,
+          "step": 6,
+          "subject": "the section the virsh page lives in",
+          "answer": "1",
+          "decoy": "8",
+          "page": "virsh",
+          "section": "1"
+        },
+        {
+          "n": 3,
+          "step": 6,
+          "subject": "the libvirt daemon itself",
+          "answer": "libvirtd",
+          "decoy": "virsh",
+          "page": "libvirtd",
+          "section": "8",
+          "contains": "libvirtd"
+        },
+        {
+          "n": 4,
+          "step": 8,
+          "subject": "the page describing the MAC system Ubuntu actually enforces",
+          "answer": "apparmor",
+          "accept": [
+            "apparmor(7)"
+          ],
+          "decoy": "selinux",
+          "page": "apparmor",
+          "section": "7",
+          "contains": "AppArmor"
+        },
+        {
+          "n": 5,
+          "step": 8,
+          "subject": "the page describing the profile language",
+          "answer": "apparmor.d",
+          "accept": [
+            "apparmor.d(5)"
+          ],
+          "decoy": "apparmor",
+          "page": "apparmor.d",
+          "section": "5",
+          "contains": "profile"
+        },
+        {
+          "n": 6,
+          "step": 8,
+          "subject": "the command reporting which profiles are loaded and in what mode",
+          "answer": "aa-status",
+          "accept": [
+            "apparmor_status"
+          ],
+          "decoy": "aa-enforce",
+          "page": "aa-status",
+          "section": "8",
+          "contains": "aa-status"
+        }
+      ]
     }
   }
 }

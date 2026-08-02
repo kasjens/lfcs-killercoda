@@ -1,0 +1,23 @@
+{
+  "title": "LFCS: Operations and deployment",
+  "description": "The Operations Deployment domain, 25% of the exam. Kernel parameters, service troubleshooting, scheduled jobs, packages and pinning, boot recovery, libvirt, container engines and mandatory access control.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Kernel parameters",   "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "A broken service",    "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Scheduled jobs",      "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "Packages and pinning","text": "step4.md", "verify": "verify4.sh" },
+      { "title": "Boot recovery",       "text": "step5.md", "verify": "verify5.sh" },
+      { "title": "libvirt",             "text": "step6.md", "verify": "verify6.sh" },
+      { "title": "Container engines",   "text": "step7.md", "verify": "verify7.sh" },
+      { "title": "Mandatory access control", "text": "step8.md", "verify": "verify8.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}
