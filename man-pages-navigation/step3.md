@@ -18,22 +18,40 @@ man renders through `less`, so every `less` key works:
 
 ### Task
 
-Open `man 8 mount` and find the mount option that **prevents binaries being
-executed** from the mounted filesystem.
+Two options out of `mount(8)`, and one key out of the pager itself.
+
+**7.** The mount option that **prevents binaries being executed** from the
+mounted filesystem.
+
+**8.** The mount option that **stops set-user-ID and set-group-ID bits taking
+effect** on it.
+
+**9.** The pager key that jumps straight to the **end** of a page. Case matters:
+the other case does the opposite.
+
+Read 7 and 8 out of the page. Both are in the same list, so `&` earns its keep
+here:
 
 ```
 man 8 mount
 ```{{exec}}
 
-Then record it (just the option, as it would appear in `/etc/fstab`):
+Record the options as they would appear in `/etc/fstab`, and the key as the
+single character you press:
 
 ```
-answer 3 <option>
+answer 7 <option>
+answer 8 <option>
+answer 9 <key>
 ```{{copy}}
 
 <details><summary>Tip</summary>
 
 Inside the page, type `&exec` and press Enter. Every line mentioning exec, and
-nothing else. Press `&` then Enter with an empty pattern to switch it off.
+nothing else. Press `&` then Enter with an empty pattern to switch it off. For
+question 8, `&suid` narrows it the same way.
+
+Question 9 is in the pager's own help, which is `h` from inside any page, or
+`man less` from outside it.
 
 </details>

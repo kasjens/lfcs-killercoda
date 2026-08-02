@@ -25,15 +25,26 @@ man 7 systemd.directives
 
 ### Task
 
-Which man page defines **`WorkingDirectory=`**? Record the page name without the
-section number.
+**10.** Which man page defines **`WorkingDirectory=`**? Page name, no section
+number.
+
+**11.** Which page is the index itself, the one listing every directive against
+the page that defines it? Page name again.
+
+**12.** Which section is that index page in?
 
 ```
-answer 4 <page name>
+answer 10 <page name>
+answer 11 <page name>
+answer 12 <number>
 ```{{copy}}
 
 <details><summary>Tip</summary>
 
 Inside `systemd.directives(7)`, search for the directive: `/WorkingDirectory`
+
+Question 12 is worth pausing on. An index of directives is not a file you edit
+and not a command you run, so neither 5 nor 8 fits. `man -k systemd.directives`
+gives you the number without opening anything.
 
 </details>

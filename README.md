@@ -5,7 +5,7 @@ the man pages fast enough that it does not cost you the task.
 
 | Scenario | What it is |
 |---|---|
-| [`man-pages-navigation`](man-pages-navigation) | Six verified lookups. Every answer requires opening a page. |
+| [`man-pages-navigation`](man-pages-navigation) | Six steps, fifteen verified lookups. Every answer requires opening a page. |
 | [`man-pages-drill`](man-pages-drill) | Fifty scored items, typed answers, run as `drill` in the terminal. |
 
 Once the repo is connected to a Killercoda profile they appear at:

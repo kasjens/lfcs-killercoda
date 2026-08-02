@@ -1,6 +1,6 @@
 # Done
 
-Six lookups, and none of them needed you to know the answer in advance.
+Fifteen lookups, and none of them needed you to know the answer in advance.
 
 The moves worth keeping:
 
