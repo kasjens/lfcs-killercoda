@@ -78,7 +78,7 @@ def userns_problem() -> str:
 
 
 def run_cycle(verifier: Path, setup: str, solve: str, cleanup: str,
-              srv: Path, netns: bool = False) -> tuple[str, str]:
+              srv: Path, netns: bool = False) -> tuple[str, str, str]:
     """Return (before, after) as 'pass' | 'fail' | 'error'.
 
     `setup` recreates whatever the scenario's background.sh would have put on
@@ -93,7 +93,12 @@ def run_cycle(verifier: Path, setup: str, solve: str, cleanup: str,
 {setup}
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "before=$?"
 {solve}
-bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
+AFTERLOG=$(TMPDIR=/tmp mktemp)
+bash {shlex.quote(str(script))} > "$AFTERLOG" 2>&1; echo "after=$?"
+# Pass the verifier's own complaint through. "still fails after the reference
+# solution" without it means reading the source to find out why.
+echo "---after-output---"; cat "$AFTERLOG"; echo "---end-after-output---"
+rm -f "$AFTERLOG"
 # Loop devices and volume groups are kernel-wide, so they outlive the mount
 # namespace and would leak into the next task. Always runs, pass or fail.
 {cleanup}
@@ -138,7 +143,12 @@ rm -rf /srv/..?* /srv/.[!.]* /srv/* 2>/dev/null
                 return "error"
             return "pass" if code == "0" else "fail"
 
-        return state("before"), state("after")
+        text = log.read_text(errors="replace")
+        detail = ""
+        if "---after-output---" in text:
+            detail = text.split("---after-output---", 1)[1] \
+                         .split("---end-after-output---", 1)[0].strip()
+        return state("before"), state("after"), detail
 
 
 userns_error = userns_problem()
@@ -160,7 +170,7 @@ for name, scenario in MANIFEST["scenarios"].items():
             continue
 
         with tempfile.TemporaryDirectory(dir="/tmp") as srv:
-            before, after = run_cycle(verifier,
+            before, after, detail = run_cycle(verifier,
                                       "\n".join(task.get("setup", [])),
                                       "\n".join(task["solve"]),
                                       "\n".join(task.get("cleanup", [])),
@@ -174,8 +184,9 @@ for name, scenario in MANIFEST["scenarios"].items():
             errors.append(f"{name} step {step} ({task['title']}): "
                           "verifier passes before the task is done")
         if after != "pass":
+            why = f": {detail.splitlines()[0]}" if detail else ""
             errors.append(f"{name} step {step} ({task['title']}): "
-                          "verifier still fails after the reference solution")
+                          f"verifier still fails after the reference solution{why}")
 
 print(f"  {ran} task verifier(s) exercised before and after their solution")
 for s in skipped:
