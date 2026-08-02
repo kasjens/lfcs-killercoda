@@ -317,6 +317,9 @@ def summary(history, topics, xp, best, planned, elapsed, args):
     write_history({
         "finished": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "topic": args.topic or "ALL",
+        # A review round is otherwise indistinguishable from a short normal
+        # one, which left verify3.sh guessing from the item count.
+        "review": bool(args.review),
         "asked": total,
         "planned": planned,
         "cold": cold,
