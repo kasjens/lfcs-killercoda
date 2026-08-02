@@ -1,0 +1,71 @@
+name: check
+
+# Killercoda pulls straight from the default branch and has no validation of
+# its own: a step file that does not exist renders blank on the live scenario
+# with no error anywhere. These checks are the only thing between a bad push
+# and a learner staring at an empty pane.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Same two moves as the scenarios' background.sh: undo the stripped
+      # documentation, then reinstall the packages whose pages get looked up.
+      # Without this, verify5 has no nfs(5) to compare against and skips.
+      - name: Install man pages and shellcheck
+        run: |
+          sudo rm -f /etc/dpkg/dpkg.cfg.d/excludes
+          export DEBIAN_FRONTEND=noninteractive
+          sudo -E apt-get update -qq
+          sudo -E apt-get install -y -qq man-db manpages manpages-dev less \
+            quota nfs-common shellcheck
+          sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
+            passwd login mount cron
+          sudo mandb -q
+
+      # test_verifiers.sh skips step 5 and step 6 when their tooling is absent.
+      # A skip is not a pass, so on CI the skip itself is the failure: if the
+      # runner image ever drops one of these, that must be loud, not silent.
+      - name: Confirm nothing will silently skip
+        run: |
+          fail=0
+          nfs_page="$(man -w 5 nfs 2>/dev/null | head -n1)"
+          case "$nfs_page" in
+            /*) [ -f "$nfs_page" ] || { echo "::error::man -w 5 nfs gave a path that does not exist: $nfs_page"; fail=1; } ;;
+            *)  echo "::error::nfs(5) not found, so step 5 would skip"; fail=1 ;;
+          esac
+          command -v systemd-analyze >/dev/null \
+            || { echo "::error::no systemd-analyze, so step 6 would skip"; fail=1; }
+          sudo test -w /etc/systemd/system \
+            || { echo "::error::/etc/systemd/system is not writable, so step 6 cannot stage a timer"; fail=1; }
+          exit "$fail"
+
+      - name: Referenced files exist
+        run: python3 tests/validate_scenarios.py
+
+      - name: Bank is consistent
+        run: python3 tests/test_bank.py
+
+      - name: A full drill round scores 100%
+        run: python3 tests/test_drill_round.py
+
+      - name: Verifiers accept right answers and reject wrong ones
+        run: bash tests/test_verifiers.sh
+
+      - name: Shellcheck
+        # SC2148 is excluded because the Killercoda hook scripts are sourced by
+        # the platform and carry no shebang of their own.
+        run: find . -name '*.sh' -exec shellcheck -s bash -e SC2148 {} +

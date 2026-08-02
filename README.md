@@ -58,6 +58,7 @@ man-pages-drill/
 tests/
 ├── validate_scenarios.py   every file index.json references must exist
 ├── test_bank.py            bank consistency + control-token collisions
+├── test_drill_round.py     a full round, answered correctly, scores 100%
 └── test_verifiers.sh       verifiers accept right answers, reject wrong ones
 ```
 
@@ -79,11 +80,19 @@ with `/`, not merely a zero exit code.
 ```bash
 python3 tests/validate_scenarios.py
 python3 tests/test_bank.py
+python3 tests/test_drill_round.py
 bash tests/test_verifiers.sh
 find . -name '*.sh' -exec shellcheck -s bash -e SC2148 {} +
 ```
 
-CI runs all four on every push, plus a headless drill round that must score 100%.
+CI runs all five on every push. `test_drill_round.py` is the headless round: it
+pipes the canonical answer to all 56 blanks and requires 100% cold.
+
+Two of them need more than a checkout. `test_verifiers.sh` stages a unit file
+under `/etc/systemd/system`, so step 6 only runs as root, and step 5 needs
+`nfs(5)` installed. Both announce a skip rather than failing. A skip is not a
+pass, so CI installs the man pages first and fails outright if either check
+would have skipped.
 
 ## The drill
 
