@@ -6,6 +6,11 @@ note() { echo "$1" >&2; bad=1; }
 
 # A login shell reads /etc/profile, which reads /etc/profile.d/*.sh. env -i
 # clears the environment first so an EDITOR exported by hand does not pass.
+#
+# shellcheck disable=SC2016
+# The single quotes are the point: $EDITOR has to be expanded by the login
+# shell being tested, not by this one. Double quotes would expand it here,
+# where it is empty, and the check would always pass.
 got="$(env -i bash -lc 'printf %s "$EDITOR"' 2>/dev/null)"
 if [ -z "$got" ]; then
   note "a fresh login shell has no EDITOR set"
