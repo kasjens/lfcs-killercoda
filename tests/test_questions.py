@@ -132,6 +132,13 @@ print(f"  {len(manifest['scenarios'])} scenario(s), {total} questions, "
 for s in skipped:
     print(f"  skip  {s}")
 
+# On a box missing a package, a skipped claim is honest. On CI, where every
+# package is installed on purpose, it means the question is unverified and
+# nobody would notice. --no-skips turns that into the failure it is.
+if "--no-skips" in sys.argv and skipped:
+    errors.append(f"{len(skipped)} claim(s) skipped with --no-skips: "
+                  "a package the questions depend on is not installed")
+
 if errors:
     print("\nFAILED", file=sys.stderr)
     for e in errors:

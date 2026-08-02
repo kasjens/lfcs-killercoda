@@ -32,8 +32,12 @@ jobs:
           sudo -E apt-get update -qq
           sudo -E apt-get install -y -qq man-db manpages manpages-dev less \
             quota nfs-common shellcheck
+          # Packages the domain scenarios ask questions about. Without these,
+          # test_questions.py can only skip the claims that depend on them.
+          sudo -E apt-get install -y -qq git sysstat lsof openssl \
+            ca-certificates acl sssd-common ldap-utils
           sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
-            passwd login mount cron
+            passwd login mount cron bash procps systemd libpam-modules
           sudo mandb -q
 
       # test_verifiers.sh skips step 5 and step 6 when their tooling is absent.
@@ -61,6 +65,12 @@ jobs:
 
       - name: A full drill round scores 100%
         run: python3 tests/test_drill_round.py
+
+      # --no-skips because every package the questions reference is installed
+      # above. A skipped claim here is an unverified question, not a missing
+      # package, and it would otherwise pass unnoticed.
+      - name: Domain questions match their man pages
+        run: python3 tests/test_questions.py --no-skips
 
       - name: Verifiers accept right answers and reject wrong ones
         run: bash tests/test_verifiers.sh
