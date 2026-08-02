@@ -40,6 +40,7 @@ E=$(TMPDIR=/tmp mktemp -d); cp -a /etc/. "$E"/ 2>/dev/null || true
 : > "$E"/shadow; : > "$E"/gshadow; chmod 640 "$E"/shadow "$E"/gshadow
 mount --bind "$E" /etc
 mount -t tmpfs tmpfs /home
+mount -t tmpfs tmpfs /root
 mount --bind {srv} /srv
 set +e
 """
@@ -69,12 +70,18 @@ def userns_problem() -> str:
     return reason[0]
 
 
-def run_cycle(verifier: Path, solve: str, srv: Path) -> tuple[str, str]:
-    """Return (before, after) as 'pass' | 'fail' | 'error'."""
+def run_cycle(verifier: Path, setup: str, solve: str, srv: Path) -> tuple[str, str]:
+    """Return (before, after) as 'pass' | 'fail' | 'error'.
+
+    `setup` recreates whatever the scenario's background.sh would have put on
+    the box before the learner starts, so "before" is the state they actually
+    meet rather than an empty machine.
+    """
     with tempfile.TemporaryDirectory(dir="/tmp") as work:
         script = Path(work) / "verify.sh"
         script.write_text(verifier.read_text(encoding="utf-8"), encoding="utf-8")
         body = SANDBOX.format(srv=shlex.quote(str(srv))) + f"""
+{setup}
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "before=$?"
 {solve}
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
@@ -115,7 +122,9 @@ for name, scenario in MANIFEST["scenarios"].items():
             continue
 
         with tempfile.TemporaryDirectory(dir="/tmp") as srv:
-            before, after = run_cycle(verifier, "\n".join(task["solve"]), Path(srv))
+            before, after = run_cycle(verifier,
+                                      "\n".join(task.get("setup", [])),
+                                      "\n".join(task["solve"]), Path(srv))
         ran += 1
         if before == "error" or after == "error":
             errors.append(f"{name} step {step}: the verifier could not be run in the sandbox")

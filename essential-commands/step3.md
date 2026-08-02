@@ -1,47 +1,51 @@
 # Monitor and troubleshoot system performance
 
-Three tools cover most of what the exam asks, and they come from two different
-packages, which matters when one of them is missing from a fresh box.
+There are two different jobs here and the tools split along that line.
 
-Virtual memory statistics, meaning memory, swap, I/O and CPU sampled over an
-interval, come from a tool in `procps`. Its page is in **section 8**, not 1,
-which surprises people who expect a reporting tool to be a user command. Per
-device I/O statistics and historical activity reports both come from `sysstat`,
-and those two pages are in section 1.
+**Sampling live** is what `vmstat` and `iostat` do. You give them an interval
+and a count, and they report what is happening now. The first line of `vmstat`
+output is an average since boot, not a sample, which is why reading a single
+`vmstat` with no interval tells you almost nothing useful.
 
-The distinction worth carrying: a tool that samples the machine live and a tool
-that reports what a collector already recorded are different jobs. The second
-only has data if its collector has been running, which is why it can be
-installed and still tell you nothing.
+**Reporting history** is what `sar` does, and it can only report what a
+collector already wrote down. That collector is a separate job installed with
+the same package and, on Debian and Ubuntu, it ships **disabled**. So `sar` can
+be installed, on your PATH, and still say it has no data. Turning it on is a
+setting in `/etc/default/sysstat`.
+
+A packaging detail worth carrying: `vmstat` is section **8** while `iostat` and
+`sar` are section **1**, because they come from different packages with
+different conventions. `whatis` settles it faster than guessing.
 
 ### Task
 
-**9.** The command that reports virtual memory statistics.
+1. Enable **sysstat data collection** so `sar` will have something to report.
+2. Capture **three one-second samples** of virtual memory statistics to
+   **`/root/vmstat.txt`**.
 
-**10.** The section that command's page lives in. It is not the one you would
-guess.
-
-**11.** The command that reports per-device I/O statistics.
-
-**12.** The command that reports system activity collected over time.
-
-```
-answer 9 <command>
-answer 10 <number>
-answer 11 <command>
-answer 12 <command>
-```{{copy}}
+The check reads the file and counts sample rows, so a single snapshot will not
+pass.
 
 <details><summary>Tip</summary>
 
-`man -k` searches one-line descriptions, which is exactly where these three
-describe themselves:
-
 ```
-man -k 'statistics'
-man -k 'system activity'
+whatis vmstat iostat sar
+man 8 vmstat
 ```{{exec}}
 
-`whatis` gives you the section number for question 10 without opening anything.
+The `vmstat` page explains its two arguments in the first paragraph of
+DESCRIPTION: one is the delay, the other is how many times to report.
+
+For the collector, look at `/etc/default/sysstat`. It is a one-line change and
+the file says what the setting does.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+sed -i 's/^ENABLED=.*/ENABLED="true"/' /etc/default/sysstat
+vmstat 1 3 > /root/vmstat.txt
+```{{copy}}
 
 </details>

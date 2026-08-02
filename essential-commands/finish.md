@@ -1,30 +1,32 @@
 # Done
 
-Twenty-four lookups across the six competencies that make up Essential
-Commands, 20% of the exam.
+Six tasks performed on a real box, covering the six competencies that make up
+Essential Commands, 20% of the exam.
 
 The moves worth keeping:
 
-- **Per-subcommand pages are hyphenated.** `git-clone(1)`, `openssl-x509(1ssl)`.
+- **Per-subcommand pages are hyphenated.** `git-clone(1)`, `openssl-req(1ssl)`.
   Two toolkits, one convention, and it turns "I do not know the flags" into a
   page you can read on the spot.
-- **`man -k` on the description, not the name.** These tools describe
-  themselves: "report virtual memory statistics", "list open files". Search the
-  sentence you would use, not the command you cannot remember.
-- **`whatis` before `man`** when all you need is the section number.
-- **Section 8 means administrative.** Rebuilding a trust store, listing open
-  files and sampling virtual memory are all system jobs, which is why none of
-  the three are in section 1.
+- **`systemd.directives(7)`** settles which page owns a directive, instead of
+  opening two and guessing.
+- **Drop-ins over edits.** `<unit>.d/*.conf` survives package upgrades and
+  `systemctl cat` shows you the merged result.
+- **`du | sort -h | tail`** finds an offender in one line. Plain `du -h` on a
+  real tree is unreadable.
 
-Four traps that were in here on purpose:
+Five traps that were in here on purpose:
 
-1. `vmstat` is section **8**, not 1.
-2. `man ulimit` gives you the C function in section **3**. The shell builtin
-   lives in `bash(1)`.
-3. PAM limits do not apply to systemd services. Those need
-   `systemd.resource-control(5)`.
-4. A directory walk cannot see a deleted file that is still held open, which is
-   why the two disk-space commands can disagree and both be right.
+1. `User=` and `WorkingDirectory=` are in `systemd.exec(5)`, not
+   `systemd.service(5)`.
+2. Enabling a unit is a symlink, and it needs an `[Install]` section to point
+   at. No `[Install]`, no enable.
+3. `sar` ships with its collector **disabled** on Debian and Ubuntu, so it can
+   be installed and still have nothing to report.
+4. PAM limits never reach a systemd service, because a service never logged in.
+   That is `systemd.resource-control(5)` territory.
+5. `du` cannot see a deleted file that is still held open, which is why it and
+   `df` can disagree and both be right.
 
-Next: pick another domain. Users and groups is the smallest at 10%, networking
-and operations are the heaviest at 25% each.
+Next: users and groups is the smallest domain at 10%. Storage is 20%.
+Networking and operations are 25% each.

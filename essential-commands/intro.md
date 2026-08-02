@@ -5,25 +5,13 @@ not "basic Linux". Since the May 2023 revision it means six specific things:
 Git, services, performance, resource constraints, disk space, and SSL
 certificates.
 
-One step per competency. Each step opens with the theory, then asks a set of
-questions you answer from the man pages on the box beside you.
+The exam is performance based. You are not asked to name a command, you are
+asked to fix a box. So every step here is real work: read the theory, open the
+pages you need, and change the system. The check reads the machine afterwards,
+so any route that produces the right result passes.
 
-Twenty-four questions, numbered straight through. Record each with the `answer`
-command:
+> Do **LFCS prep 1: find it in the man pages** first if you have not. This
+> scenario assumes `man -k`, `man -K`, `man -w` and the pager keys are already
+> reflexes. It will tell you what to achieve, not which page to open.
 
-```
-answer 1 git clone
-```{{copy}}
-
-That writes to `/tmp/answers/1`, which is the file the check reads, so plain
-redirection does the same job:
-
-```
-echo git clone > /tmp/answers/1
-```{{copy}}
-
-Answer the whole set, then press **Check**. A wrong answer names the question it
-belongs to, so you can go back to just that one.
-
-> The base image ships without man pages. They are installing now, and the
-> terminal will say when they are live.
+You are root. There is nothing on this box you can break that matters.

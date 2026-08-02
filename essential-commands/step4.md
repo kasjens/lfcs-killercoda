@@ -1,52 +1,61 @@
 # Determine application and service specific constraints
 
-Resource limits reach a process by two completely separate routes, and knowing
-which one applies is most of the work.
+Resource limits reach a process by two separate routes, and picking the wrong
+one is the classic failure.
 
-The old route is PAM. When a user logs in, `pam_limits` reads a config file and
-applies limits to that session. Those limits are inherited by everything the
-session starts. This is the route that governs a person at a shell.
+The old route is PAM. At login, `pam_limits` reads `/etc/security/limits.conf`
+and applies limits to that session, which everything the session starts then
+inherits. This governs a person at a shell.
 
-The new route is systemd. A service started by systemd never went through a
-login, so PAM limits do not apply to it. Its constraints come from directives
-in the unit, and they are documented on their own page covering `CPUQuota=`,
-`MemoryMax=` and the rest. If you set a limit in the PAM file and the service
-ignores it, this is why.
+The new route is systemd. A service started by systemd **never logged in**, so
+PAM never ran for it and `limits.conf` does not apply. Its constraints come
+from directives in the unit, documented on their own page,
+`systemd.resource-control(5)`, which covers `MemoryMax=`, `CPUQuota=` and the
+rest. If you set a limit in `limits.conf` and the service ignores it, that is
+why.
 
-There is a trap in the middle. The shell command everyone uses to inspect
-limits is a **shell builtin**, so it has no page of its own. Asking `man` for
-it hands you a C library function of the same name in section 3, which is a
-different thing entirely. The builtin is documented inside the shell's own
-page.
+The other half of this step is *where* to put the directives. Editing a unit
+file directly works until the package that shipped it is upgraded. systemd
+reads a drop-in directory beside the unit, `<unit>.d/`, and merges any `.conf`
+in it over the top. That survives upgrades and keeps your change separable, so
+it is the answer whenever the question is "add a setting to an existing unit".
 
 ### Task
 
-**13.** The file that sets per-user resource limits at login. Filename alone is
-fine.
+Constrain `hello.service` **without editing the unit file**:
 
-**14.** The section `man ulimit` actually lands you in.
+1. `MemoryMax=` **512M**
+2. `CPUQuota=` **20%**
 
-**15.** The page that documents the shell builtin `ulimit`.
-
-**16.** The page documenting `CPUQuota=` and `MemoryMax=`. Page name, no section
-number.
-
-```
-answer 13 <file>
-answer 14 <number>
-answer 15 <page name>
-answer 16 <page name>
-```{{copy}}
+The check fails if those directives appear in `hello.service` itself.
 
 <details><summary>Tip</summary>
 
 ```
-whatis ulimit
-man 7 systemd.directives
+man 5 systemd.resource-control
+man 5 systemd.unit
 ```{{exec}}
 
-For question 15, once you are in the right page it is enormous, so do not
-scroll. Search for the builtin by name, or use `&ulimit` to collapse the page
-to the lines that mention it.
+`systemd.unit(5)` describes the drop-in directory and the exact naming it
+expects, under the part about how unit files are loaded. The directory name is
+derived from the unit name, and the file inside needs the right section header
+or the directives are ignored silently.
+
+`systemctl cat hello.service` shows the unit and every drop-in merged, which is
+the quickest way to confirm yours was picked up.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+mkdir -p /etc/systemd/system/hello.service.d
+cat > /etc/systemd/system/hello.service.d/limits.conf <<'EOF'
+[Service]
+MemoryMax=512M
+CPUQuota=20%
+EOF
+systemctl daemon-reload
+```{{copy}}
 
 </details>
