@@ -1,10 +1,11 @@
 echo "Installing man pages — the base image ships without them. About a minute."
 while [ ! -f /tmp/scenario-ready ]; do sleep 1; done
 echo
-echo "Ready. Check it worked:  man -k quota"
 
 # The base image may ship a stub /usr/bin/man that exits 0 while doing nothing,
-# so check for a real page path rather than a zero exit code.
+# so check for a real page path rather than a zero exit code. This is the only
+# thing that should announce readiness: saying "Ready" before it has run makes
+# a claim the next line can contradict.
 if man -w 5 fstab 2>/dev/null | grep -q '^/'; then
   echo "Man pages are live. Try: man -k quota"
 else
