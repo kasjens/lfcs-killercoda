@@ -36,7 +36,13 @@ errors, skipped, ran = [], [], 0
 # is copied somewhere that survives. /tmp explicitly: TMPDIR may point at /home.
 SANDBOX = r"""
 set -e
-E=$(TMPDIR=/tmp mktemp -d); cp -a /etc/. "$E"/ 2>/dev/null || true
+# The /etc copy is made in a directory Python owns, not by mktemp inside the
+# namespace. A directory created in here is never cleaned up: the namespace
+# exits and takes the only reference with it, leaving a full copy of /etc in
+# /tmp per task. That filled /tmp, and then `cp -a /etc/.` began failing and
+# every verifier broke at once.
+E={etc}
+mkdir -p "$E"; cp -a /etc/. "$E"/ 2>/dev/null || true
 : > "$E"/shadow; : > "$E"/gshadow; chmod 640 "$E"/shadow "$E"/gshadow
 mount --bind "$E" /etc
 mount -t tmpfs tmpfs /home
@@ -82,7 +88,8 @@ def run_cycle(verifier: Path, setup: str, solve: str, cleanup: str,
     with tempfile.TemporaryDirectory(dir="/tmp") as work:
         script = Path(work) / "verify.sh"
         script.write_text(verifier.read_text(encoding="utf-8"), encoding="utf-8")
-        body = SANDBOX.format(srv=shlex.quote(str(srv))) + f"""
+        etcdir = shlex.quote(str(Path(work) / "etc"))
+        body = SANDBOX.format(srv=shlex.quote(str(srv)), etc=etcdir) + f"""
 {setup}
 bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "before=$?"
 {solve}
@@ -90,6 +97,15 @@ bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
 # Loop devices and volume groups are kernel-wide, so they outlive the mount
 # namespace and would leak into the next task. Always runs, pass or fail.
 {cleanup}
+
+# Teardown has to happen in here. Everything these tasks create is written as
+# root in the namespace, which is a subuid outside it, and the user running the
+# tests cannot delete files owned by that subuid. Left alone, each run strands a
+# full copy of /etc in /tmp; a few hundred of those exhausted the tmpfs inode
+# table and then every verifier failed at once for no visible reason.
+umount /etc 2>/dev/null
+rm -rf {etcdir} 2>/dev/null
+rm -rf /srv/..?* /srv/.[!.]* /srv/* 2>/dev/null
 """
         # A network task reconfigures interfaces, routes and firewall rules. In
         # its own network namespace that is free; without one it would take

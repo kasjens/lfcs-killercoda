@@ -31,9 +31,12 @@ case "$pw" in
   *) note "PasswordAuthentication is '$pw', not no" ;;
 esac
 
-# The config is only correct if sshd itself accepts it.
+# The config is only correct if sshd itself accepts it. Pass its own complaint
+# through: "sshd rejects this" without the reason is not a useful failure.
 if command -v sshd >/dev/null 2>&1; then
-  sshd -t -f "$conf" >/dev/null 2>&1 || note "sshd rejects $conf as invalid"
+  if ! out="$(sshd -t -f "$conf" 2>&1)"; then
+    note "sshd rejects $conf: $(printf '%s' "$out" | head -n2 | tr '\n' ' ')"
+  fi
 fi
 
 exit "$bad"
