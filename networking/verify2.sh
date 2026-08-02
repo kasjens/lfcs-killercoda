@@ -25,9 +25,8 @@ fi
 grep -qE '^[[:space:]]*makestep[[:space:]]+' "$conf" 2>/dev/null \
   || note "no makestep directive in $conf"
 
-# If the binary is here, let it judge its own config.
-if command -v chronyd >/dev/null 2>&1; then
-  chronyd -Q -f "$conf" >/dev/null 2>&1 || note "chronyd rejects $conf"
-fi
+# No daemon validation here on purpose. `chronyd -Q` looks like a dry run but
+# still performs a real time query, so against an unreachable server it blocks
+# until it times out. A verifier must not do network I/O.
 
 exit "$bad"

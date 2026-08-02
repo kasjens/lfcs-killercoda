@@ -45,8 +45,10 @@ man 5 chrony.conf
 Search the page for `iburst` and for `makestep`. Both are described with
 examples, and `makestep` takes two arguments.
 
-`chronyd -Q -f /etc/chrony/chrony.conf` parses the file and reports errors
-without starting a daemon.
+`chronyd -Q -f /etc/chrony/chrony.conf` looks like a dry run, and it does check
+the file, but it also performs a real query. Against a server that does not
+answer it sits there until it gives up, so it is not the quick syntax check it
+appears to be.
 
 </details>
 
