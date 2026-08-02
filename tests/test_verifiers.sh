@@ -84,8 +84,10 @@ stage() { # stage <unit file text> — preconditions are already checked, so a
   exit 1
 }
 
-cleanup_unit() { [ -n "${staged:-}" ] && $SUDO rm -f "$UNIT"; }
-trap cleanup_unit EXIT
+# One cleanup for both halves of the file. Single-quoted, so the variables are
+# read when the trap fires rather than now: `state` does not exist yet.
+trap '[ -n "${staged:-}" ] && $SUDO rm -f "$UNIT"
+      [ -n "${state:-}" ] && rm -rf "$state"' EXIT
 
 can_stage; staging=$?
 
@@ -123,7 +125,6 @@ fi
 
 D=man-pages-drill
 state="$(mktemp -d)"
-trap 'cleanup_unit; rm -rf "$state"' EXIT
 export LFCS_DRILL_STATE="$state"
 
 hist() { printf '%s\n' "$1" > "$state/history.json"; }
