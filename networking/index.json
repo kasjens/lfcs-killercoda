@@ -1,0 +1,23 @@
+{
+  "title": "LFCS: Networking",
+  "description": "The Networking domain, 25% of the exam and the heaviest. Addressing, resolution, time sync, sockets, OpenSSH, nftables and NAT, static routing, bridges and bonds, and a reverse proxy.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Addressing and resolution", "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "Time synchronisation",      "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Monitoring sockets",        "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "OpenSSH",                   "text": "step4.md", "verify": "verify4.sh" },
+      { "title": "Packet filtering and NAT",  "text": "step5.md", "verify": "verify5.sh" },
+      { "title": "Static routing",            "text": "step6.md", "verify": "verify6.sh" },
+      { "title": "Bridges and bonds",         "text": "step7.md", "verify": "verify7.sh" },
+      { "title": "Reverse proxy",             "text": "step8.md", "verify": "verify8.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}

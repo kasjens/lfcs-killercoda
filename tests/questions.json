@@ -25,61 +25,84 @@
         "Troubleshoot disk space issues",
         "Work with SSL certificates"
       ],
-
       "tasks": [
-        {"n": 1, "title": "git repository", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /srv/app && cd /srv/app",
-           "git init -q /srv/app",
-           "git -C /srv/app config user.name 'LFCS Candidate'",
-           "git -C /srv/app config user.email 'candidate@example.com'",
-           "echo '# app' > /srv/app/README.md",
-           "git -C /srv/app add README.md",
-           "git -C /srv/app commit -q -m 'Add README'",
-           "git -C /srv/app branch release"
-         ]},
-        {"n": 2, "title": "systemd unit", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /etc/systemd/system/multi-user.target.wants",
-           "printf '[Unit]\\nDescription=hello\\n\\n[Service]\\nType=simple\\nExecStart=/usr/bin/sleep 3600\\nRestart=on-failure\\nUser=deploy\\nWorkingDirectory=/srv/app\\n\\n[Install]\\nWantedBy=multi-user.target\\n' > /etc/systemd/system/hello.service",
-           "ln -sf /etc/systemd/system/hello.service /etc/systemd/system/multi-user.target.wants/hello.service"
-         ]},
-        {"n": 3, "title": "performance collection", "sandbox": "user-ns",
-         "setup": [
-           "mkdir -p /etc/default",
-           "printf 'ENABLED=\"false\"\\n' > /etc/default/sysstat"
-         ],
-         "solve": [
-           "sed -i -E 's/^[[:space:]]*ENABLED[[:space:]]*=.*/ENABLED=\"true\"/' /etc/default/sysstat",
-           "vmstat 1 3 > /root/vmstat.txt"
-         ]},
-        {"n": 4, "title": "service constraints", "sandbox": "user-ns",
-         "setup": [
-           "printf '[Unit]\\nDescription=hello\\n\\n[Service]\\nExecStart=/usr/bin/sleep 3600\\n' > /etc/systemd/system/hello.service"
-         ],
-         "solve": [
-           "mkdir -p /etc/systemd/system/hello.service.d",
-           "printf '[Service]\\nMemoryMax=512M\\nCPUQuota=20%%\\n' > /etc/systemd/system/hello.service.d/limits.conf"
-         ]},
-        {"n": 5, "title": "disk space", "sandbox": "user-ns",
-         "setup": [
-           "mkdir -p /srv/data",
-           "dd if=/dev/zero of=/srv/data/archive.log bs=1M count=5 status=none",
-           "echo 'small' > /srv/data/app.log",
-           "echo 'notes' > /srv/data/notes.txt"
-         ],
-         "solve": ["rm -f /srv/data/archive.log"]},
-        {"n": 6, "title": "SSL certificate", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /etc/ssl/private /etc/ssl/certs",
-           "openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj '/CN=lfcs.example.com' -keyout /etc/ssl/private/lfcs.key -out /etc/ssl/certs/lfcs.crt >/dev/null 2>&1",
-           "chmod 600 /etc/ssl/private/lfcs.key"
-         ]}
+        {
+          "n": 1,
+          "title": "git repository",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /srv/app && cd /srv/app",
+            "git init -q /srv/app",
+            "git -C /srv/app config user.name 'LFCS Candidate'",
+            "git -C /srv/app config user.email 'candidate@example.com'",
+            "echo '# app' > /srv/app/README.md",
+            "git -C /srv/app add README.md",
+            "git -C /srv/app commit -q -m 'Add README'",
+            "git -C /srv/app branch release"
+          ]
+        },
+        {
+          "n": 2,
+          "title": "systemd unit",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /etc/systemd/system/multi-user.target.wants",
+            "printf '[Unit]\\nDescription=hello\\n\\n[Service]\\nType=simple\\nExecStart=/usr/bin/sleep 3600\\nRestart=on-failure\\nUser=deploy\\nWorkingDirectory=/srv/app\\n\\n[Install]\\nWantedBy=multi-user.target\\n' > /etc/systemd/system/hello.service",
+            "ln -sf /etc/systemd/system/hello.service /etc/systemd/system/multi-user.target.wants/hello.service"
+          ]
+        },
+        {
+          "n": 3,
+          "title": "performance collection",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/default",
+            "printf 'ENABLED=\"false\"\\n' > /etc/default/sysstat"
+          ],
+          "solve": [
+            "sed -i -E 's/^[[:space:]]*ENABLED[[:space:]]*=.*/ENABLED=\"true\"/' /etc/default/sysstat",
+            "vmstat 1 3 > /root/vmstat.txt"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "service constraints",
+          "sandbox": "user-ns",
+          "setup": [
+            "printf '[Unit]\\nDescription=hello\\n\\n[Service]\\nExecStart=/usr/bin/sleep 3600\\n' > /etc/systemd/system/hello.service"
+          ],
+          "solve": [
+            "mkdir -p /etc/systemd/system/hello.service.d",
+            "printf '[Service]\\nMemoryMax=512M\\nCPUQuota=20%%\\n' > /etc/systemd/system/hello.service.d/limits.conf"
+          ]
+        },
+        {
+          "n": 5,
+          "title": "disk space",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /srv/data",
+            "dd if=/dev/zero of=/srv/data/archive.log bs=1M count=5 status=none",
+            "echo 'small' > /srv/data/app.log",
+            "echo 'notes' > /srv/data/notes.txt"
+          ],
+          "solve": [
+            "rm -f /srv/data/archive.log"
+          ]
+        },
+        {
+          "n": 6,
+          "title": "SSL certificate",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /etc/ssl/private /etc/ssl/certs",
+            "openssl req -x509 -newkey rsa:2048 -nodes -days 365 -subj '/CN=lfcs.example.com' -keyout /etc/ssl/private/lfcs.key -out /etc/ssl/certs/lfcs.crt >/dev/null 2>&1",
+            "chmod 600 /etc/ssl/private/lfcs.key"
+          ]
+        }
       ],
-
       "questions": []
     },
-
     "users-and-groups": {
       "title": "LFCS: Users and groups",
       "domain": "Users and Groups",
@@ -91,54 +114,103 @@
         "Configure and manage ACLs",
         "Use LDAP user and group accounts"
       ],
-
       "tasks": [
-        {"n": 1, "title": "accounts", "sandbox": "user-ns",
-         "solve": [
-           "groupadd -g 4000 webops",
-           "useradd -m -d /home/deploy -s /bin/bash -g webops deploy",
-           "chage -E 2026-12-31 deploy"
-         ]},
-        {"n": 2, "title": "environment profiles", "sandbox": "user-ns",
-         "solve": [
-           "printf 'export EDITOR=vim\\n' > /etc/profile.d/lfcs.sh",
-           "chmod 644 /etc/profile.d/lfcs.sh",
-           "sed -i -E 's/^[[:space:]]*UMASK[[:space:]]+.*/UMASK\\t\\t027/' /etc/login.defs",
-           "grep -qiE '^[[:space:]]*UMASK' /etc/login.defs || printf 'UMASK\\t\\t027\\n' >> /etc/login.defs"
-         ]},
-        {"n": 3, "title": "resource limits", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /etc/security/limits.d",
-           "printf 'deploy soft nofile 4096\\ndeploy hard nofile 8192\\n' > /etc/security/limits.d/deploy.conf"
-         ]},
-        {"n": 4, "title": "ACLs", "sandbox": "user-ns",
-         "solve": [
-           "groupadd -g 4000 webops",
-           "useradd -M -g webops deploy",
-           "mkdir -p /srv/webops",
-           "chgrp webops /srv/webops",
-           "chmod 2770 /srv/webops",
-           "setfacl -m u:deploy:rwx /srv/webops",
-           "setfacl -d -m u:deploy:rwx /srv/webops"
-         ]}
+        {
+          "n": 1,
+          "title": "accounts",
+          "sandbox": "user-ns",
+          "solve": [
+            "groupadd -g 4000 webops",
+            "useradd -m -d /home/deploy -s /bin/bash -g webops deploy",
+            "chage -E 2026-12-31 deploy"
+          ]
+        },
+        {
+          "n": 2,
+          "title": "environment profiles",
+          "sandbox": "user-ns",
+          "solve": [
+            "printf 'export EDITOR=vim\\n' > /etc/profile.d/lfcs.sh",
+            "chmod 644 /etc/profile.d/lfcs.sh",
+            "sed -i -E 's/^[[:space:]]*UMASK[[:space:]]+.*/UMASK\\t\\t027/' /etc/login.defs",
+            "grep -qiE '^[[:space:]]*UMASK' /etc/login.defs || printf 'UMASK\\t\\t027\\n' >> /etc/login.defs"
+          ]
+        },
+        {
+          "n": 3,
+          "title": "resource limits",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /etc/security/limits.d",
+            "printf 'deploy soft nofile 4096\\ndeploy hard nofile 8192\\n' > /etc/security/limits.d/deploy.conf"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "ACLs",
+          "sandbox": "user-ns",
+          "solve": [
+            "groupadd -g 4000 webops",
+            "useradd -M -g webops deploy",
+            "mkdir -p /srv/webops",
+            "chgrp webops /srv/webops",
+            "chmod 2770 /srv/webops",
+            "setfacl -m u:deploy:rwx /srv/webops",
+            "setfacl -d -m u:deploy:rwx /srv/webops"
+          ]
+        }
       ],
-
       "questions": [
-        {"n": 1, "step": 5, "subject": "the page deciding which sources answer passwd and group lookups",
-         "answer": "nsswitch.conf", "accept": ["/etc/nsswitch.conf"], "decoy": "resolv.conf",
-         "page": "nsswitch.conf", "section": "5", "contains": "passwd"},
-        {"n": 2, "step": 5, "subject": "the section that page lives in",
-         "answer": "5", "decoy": "8",
-         "page": "nsswitch.conf", "section": "5"},
-        {"n": 3, "step": 5, "subject": "the configuration page for the SSSD daemon",
-         "answer": "sssd.conf", "accept": ["sssd.conf(5)"], "decoy": "nsswitch.conf",
-         "page": "sssd.conf", "section": "5", "contains": "sssd"},
-        {"n": 4, "step": 5, "subject": "the configuration page for the LDAP client library",
-         "answer": "ldap.conf", "accept": ["ldap.conf(5)"], "decoy": "sssd.conf",
-         "page": "ldap.conf", "section": "5", "contains": "ldap"}
+        {
+          "n": 1,
+          "step": 5,
+          "subject": "the page deciding which sources answer passwd and group lookups",
+          "answer": "nsswitch.conf",
+          "accept": [
+            "/etc/nsswitch.conf"
+          ],
+          "decoy": "resolv.conf",
+          "page": "nsswitch.conf",
+          "section": "5",
+          "contains": "passwd"
+        },
+        {
+          "n": 2,
+          "step": 5,
+          "subject": "the section that page lives in",
+          "answer": "5",
+          "decoy": "8",
+          "page": "nsswitch.conf",
+          "section": "5"
+        },
+        {
+          "n": 3,
+          "step": 5,
+          "subject": "the configuration page for the SSSD daemon",
+          "answer": "sssd.conf",
+          "accept": [
+            "sssd.conf(5)"
+          ],
+          "decoy": "nsswitch.conf",
+          "page": "sssd.conf",
+          "section": "5",
+          "contains": "sssd"
+        },
+        {
+          "n": 4,
+          "step": 5,
+          "subject": "the configuration page for the LDAP client library",
+          "answer": "ldap.conf",
+          "accept": [
+            "ldap.conf(5)"
+          ],
+          "decoy": "sssd.conf",
+          "page": "ldap.conf",
+          "section": "5",
+          "contains": "ldap"
+        }
       ]
     },
-
     "storage": {
       "title": "LFCS: Storage",
       "domain": "Storage",
@@ -152,77 +224,241 @@
         "Configure filesystem automounters",
         "Monitor storage performance"
       ],
-
       "tasks": [
-        {"n": 1, "title": "LVM", "sandbox": "root",
-         "setup": [
-           "mkdir -p /srv",
-           "dd if=/dev/zero of=/srv/spare1.img bs=1M count=512 status=none",
-           "losetup --find --show /srv/spare1.img > /tmp/lfcs-spare1"
-         ],
-         "solve": [
-           "dev=$(cat /tmp/lfcs-spare1)",
-           "pvcreate -y -f \"$dev\" >/dev/null 2>&1",
-           "vgcreate datavg \"$dev\" >/dev/null 2>&1",
-           "lvcreate -y -L 200M -n datalv datavg >/dev/null 2>&1",
-           "mkfs.ext4 -q /dev/datavg/datalv",
-           "mkdir -p /srv/lv",
-           "mount /dev/datavg/datalv /srv/lv"
-         ],
-         "cleanup": [
-           "umount /srv/lv 2>/dev/null",
-           "vgremove -y -f datavg >/dev/null 2>&1",
-           "pvremove -y -f \"$(cat /tmp/lfcs-spare1)\" >/dev/null 2>&1",
-           "losetup -d \"$(cat /tmp/lfcs-spare1)\" 2>/dev/null",
-           "rm -f /tmp/lfcs-spare1 /srv/spare1.img"
-         ]},
-        {"n": 2, "title": "virtual filesystem", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /srv/cache",
-           "printf 'tmpfs /srv/cache tmpfs size=64M,mode=1777 0 0\\n' >> /etc/fstab",
-           "mount -t tmpfs -o size=64M,mode=1777 tmpfs /srv/cache"
-         ]},
-        {"n": 3, "title": "filesystems", "sandbox": "root",
-         "setup": [
-           "mkdir -p /srv",
-           "dd if=/dev/zero of=/srv/spare2.img bs=1M count=256 status=none",
-           "losetup --find --show /srv/spare2.img > /tmp/lfcs-spare2"
-         ],
-         "solve": [
-           "dev=$(cat /tmp/lfcs-spare2)",
-           "mkfs.ext4 -q -L DATA \"$dev\"",
-           "mkdir -p /srv/disk",
-           "mount \"$dev\" /srv/disk",
-           "uuid=$(blkid -o value -s UUID \"$dev\")",
-           "printf 'UUID=%s /srv/disk ext4 defaults 0 2\\n' \"$uuid\" >> /etc/fstab"
-         ],
-         "cleanup": [
-           "umount /srv/disk 2>/dev/null",
-           "losetup -d \"$(cat /tmp/lfcs-spare2)\" 2>/dev/null",
-           "rm -f /tmp/lfcs-spare2 /srv/spare2.img"
-         ]},
-        {"n": 4, "title": "remote filesystems", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /mnt/shared",
-           "printf 'fileserver:/export/shared /mnt/shared nfs _netdev,noauto,rw 0 0\\n' >> /etc/fstab"
-         ]},
-        {"n": 5, "title": "swap", "sandbox": "user-ns",
-         "solve": [
-           "dd if=/dev/zero of=/srv/swapfile bs=1M count=256 status=none",
-           "chmod 600 /srv/swapfile",
-           "mkswap /srv/swapfile >/dev/null 2>&1",
-           "printf '/srv/swapfile none swap sw 0 0\\n' >> /etc/fstab"
-         ]},
-        {"n": 6, "title": "automounter", "sandbox": "user-ns",
-         "solve": [
-           "mkdir -p /etc/auto.master.d",
-           "printf '/data /etc/auto.data --timeout=60\\n' > /etc/auto.master.d/data.autofs",
-           "printf 'backup -fstype=nfs,ro fileserver:/export/backup\\n' > /etc/auto.data"
-         ]},
-        {"n": 7, "title": "storage performance", "sandbox": "user-ns",
-         "solve": ["iostat -x 1 2 > /root/iostat.txt"]}
+        {
+          "n": 1,
+          "title": "LVM",
+          "sandbox": "root",
+          "setup": [
+            "mkdir -p /srv",
+            "dd if=/dev/zero of=/srv/spare1.img bs=1M count=512 status=none",
+            "losetup --find --show /srv/spare1.img > /tmp/lfcs-spare1"
+          ],
+          "solve": [
+            "dev=$(cat /tmp/lfcs-spare1)",
+            "pvcreate -y -f \"$dev\" >/dev/null 2>&1",
+            "vgcreate datavg \"$dev\" >/dev/null 2>&1",
+            "lvcreate -y -L 200M -n datalv datavg >/dev/null 2>&1",
+            "mkfs.ext4 -q /dev/datavg/datalv",
+            "mkdir -p /srv/lv",
+            "mount /dev/datavg/datalv /srv/lv"
+          ],
+          "cleanup": [
+            "umount /srv/lv 2>/dev/null",
+            "vgremove -y -f datavg >/dev/null 2>&1",
+            "pvremove -y -f \"$(cat /tmp/lfcs-spare1)\" >/dev/null 2>&1",
+            "losetup -d \"$(cat /tmp/lfcs-spare1)\" 2>/dev/null",
+            "rm -f /tmp/lfcs-spare1 /srv/spare1.img"
+          ]
+        },
+        {
+          "n": 2,
+          "title": "virtual filesystem",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /srv/cache",
+            "printf 'tmpfs /srv/cache tmpfs size=64M,mode=1777 0 0\\n' >> /etc/fstab",
+            "mount -t tmpfs -o size=64M,mode=1777 tmpfs /srv/cache"
+          ]
+        },
+        {
+          "n": 3,
+          "title": "filesystems",
+          "sandbox": "root",
+          "setup": [
+            "mkdir -p /srv",
+            "dd if=/dev/zero of=/srv/spare2.img bs=1M count=256 status=none",
+            "losetup --find --show /srv/spare2.img > /tmp/lfcs-spare2"
+          ],
+          "solve": [
+            "dev=$(cat /tmp/lfcs-spare2)",
+            "mkfs.ext4 -q -L DATA \"$dev\"",
+            "mkdir -p /srv/disk",
+            "mount \"$dev\" /srv/disk",
+            "uuid=$(blkid -o value -s UUID \"$dev\")",
+            "printf 'UUID=%s /srv/disk ext4 defaults 0 2\\n' \"$uuid\" >> /etc/fstab"
+          ],
+          "cleanup": [
+            "umount /srv/disk 2>/dev/null",
+            "losetup -d \"$(cat /tmp/lfcs-spare2)\" 2>/dev/null",
+            "rm -f /tmp/lfcs-spare2 /srv/spare2.img"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "remote filesystems",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /mnt/shared",
+            "printf 'fileserver:/export/shared /mnt/shared nfs _netdev,noauto,rw 0 0\\n' >> /etc/fstab"
+          ]
+        },
+        {
+          "n": 5,
+          "title": "swap",
+          "sandbox": "user-ns",
+          "solve": [
+            "dd if=/dev/zero of=/srv/swapfile bs=1M count=256 status=none",
+            "chmod 600 /srv/swapfile",
+            "mkswap /srv/swapfile >/dev/null 2>&1",
+            "printf '/srv/swapfile none swap sw 0 0\\n' >> /etc/fstab"
+          ]
+        },
+        {
+          "n": 6,
+          "title": "automounter",
+          "sandbox": "user-ns",
+          "solve": [
+            "mkdir -p /etc/auto.master.d",
+            "printf '/data /etc/auto.data --timeout=60\\n' > /etc/auto.master.d/data.autofs",
+            "printf 'backup -fstype=nfs,ro fileserver:/export/backup\\n' > /etc/auto.data"
+          ]
+        },
+        {
+          "n": 7,
+          "title": "storage performance",
+          "sandbox": "user-ns",
+          "solve": [
+            "iostat -x 1 2 > /root/iostat.txt"
+          ]
+        }
       ],
-
+      "questions": []
+    },
+    "networking": {
+      "title": "LFCS: Networking",
+      "domain": "Networking",
+      "weight": "25%",
+      "steps": [
+        "Configure IPv4 and IPv6 networking and hostname resolution",
+        "Set and synchronize system time using time servers",
+        "Monitor and troubleshoot networking",
+        "Configure the OpenSSH server and client",
+        "Configure packet filtering, port redirection and NAT",
+        "Configure static routing",
+        "Configure bridge and bonding devices",
+        "Implement reverse proxies and load balancers"
+      ],
+      "tasks": [
+        {
+          "n": 1,
+          "title": "addressing and resolution",
+          "sandbox": "user-ns-net",
+          "solve": [
+            "ip link add dummy0 type dummy",
+            "ip addr add 10.9.9.10/24 dev dummy0",
+            "ip -6 addr add 2001:db8::10/64 dev dummy0",
+            "ip link set dummy0 up",
+            "printf '10.9.9.10 app.lfcs.local app\\n' >> /etc/hosts"
+          ]
+        },
+        {
+          "n": 2,
+          "title": "time synchronisation",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/chrony",
+            "printf '# empty\\n' > /etc/chrony/chrony.conf"
+          ],
+          "solve": [
+            "printf 'server time.example.com iburst\\nmakestep 1.0 3\\n' >> /etc/chrony/chrony.conf"
+          ]
+        },
+        {
+          "n": 3,
+          "title": "socket monitoring",
+          "sandbox": "user-ns-net",
+          "solve": [
+            "ss -tulpn > /root/sockets.txt"
+          ],
+          "setup": [
+            "python3 -m http.server 8080 --bind 127.0.0.1 >/dev/null 2>&1 & echo $! > /tmp/lfcs-listener",
+            "sleep 1"
+          ],
+          "cleanup": [
+            "kill \"$(cat /tmp/lfcs-listener)\" 2>/dev/null",
+            "rm -f /tmp/lfcs-listener"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "OpenSSH server",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/ssh",
+            "printf 'Port 22\\nPermitRootLogin prohibit-password\\nPasswordAuthentication yes\\n' > /etc/ssh/sshd_config"
+          ],
+          "solve": [
+            "sed -i -E 's/^[[:space:]]*Port[[:space:]]+.*/Port 2222/' /etc/ssh/sshd_config",
+            "sed -i -E 's/^[[:space:]]*PermitRootLogin[[:space:]]+.*/PermitRootLogin no/' /etc/ssh/sshd_config",
+            "sed -i -E 's/^[[:space:]]*PasswordAuthentication[[:space:]]+.*/PasswordAuthentication no/' /etc/ssh/sshd_config"
+          ]
+        },
+        {
+          "n": 5,
+          "title": "packet filtering and NAT",
+          "sandbox": "user-ns-net",
+          "solve": [
+            "nft add table inet filter",
+            "nft 'add chain inet filter input { type filter hook input priority 0; policy drop; }'",
+            "nft add rule inet filter input ct state established,related accept",
+            "nft add rule inet filter input iif lo accept",
+            "nft add rule inet filter input tcp dport 22 accept",
+            "nft add table ip nat",
+            "nft 'add chain ip nat postrouting { type nat hook postrouting priority 100; }'",
+            "nft add rule ip nat postrouting oifname \"dummy0\" masquerade"
+          ],
+          "setup": [
+            "ip link add dummy0 type dummy",
+            "ip link set dummy0 up"
+          ]
+        },
+        {
+          "n": 6,
+          "title": "static routing",
+          "sandbox": "user-ns-net",
+          "setup": [
+            "ip link add dummy0 type dummy",
+            "ip addr add 10.9.9.10/24 dev dummy0",
+            "ip link set dummy0 up"
+          ],
+          "solve": [
+            "ip route add 192.0.2.0/24 via 10.9.9.254 dev dummy0",
+            "ip route add unreachable 198.51.100.0/24",
+            "ip -6 route add 2001:db8:beef::/48 dev dummy0"
+          ]
+        },
+        {
+          "n": 7,
+          "title": "bridge and bonding",
+          "sandbox": "user-ns-net",
+          "setup": [
+            "ip link add dummy1 type dummy",
+            "ip link add dummy2 type dummy"
+          ],
+          "solve": [
+            "ip link add br0 type bridge",
+            "ip link set dummy1 master br0",
+            "ip link set br0 up",
+            "ip link add bond0 type bond mode active-backup",
+            "ip link set dummy2 down",
+            "ip link set dummy2 master bond0",
+            "ip link set bond0 up"
+          ]
+        },
+        {
+          "n": 8,
+          "title": "reverse proxy",
+          "sandbox": "user-ns",
+          "setup": [
+            "mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled"
+          ],
+          "solve": [
+            "printf 'server {\\n  listen 8080;\\n  location / {\\n    proxy_pass http://127.0.0.1:3000;\\n    proxy_set_header Host $host;\\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\\n  }\\n}\\n' > /etc/nginx/sites-available/lfcs",
+            "ln -sf /etc/nginx/sites-available/lfcs /etc/nginx/sites-enabled/lfcs"
+          ]
+        }
+      ],
       "questions": []
     }
   }

@@ -72,7 +72,7 @@ def userns_problem() -> str:
 
 
 def run_cycle(verifier: Path, setup: str, solve: str, cleanup: str,
-              srv: Path) -> tuple[str, str]:
+              srv: Path, netns: bool = False) -> tuple[str, str]:
     """Return (before, after) as 'pass' | 'fail' | 'error'.
 
     `setup` recreates whatever the scenario's background.sh would have put on
@@ -91,7 +91,13 @@ bash {shlex.quote(str(script))} >/dev/null 2>&1; echo "after=$?"
 # namespace and would leak into the next task. Always runs, pass or fail.
 {cleanup}
 """
-        p = subprocess.run(UNSHARE + ["sh", "-c", body],
+        # A network task reconfigures interfaces, routes and firewall rules. In
+        # its own network namespace that is free; without one it would take
+        # down the connectivity of whatever is running the tests.
+        cmd = UNSHARE + (["-n"] if netns else [])
+        if netns:
+            body = "ip link set lo up 2>/dev/null\n" + body
+        p = subprocess.run(cmd + ["sh", "-c", body],
                            capture_output=True, text=True, timeout=180)
         codes = {}
         for line in p.stdout.splitlines():
@@ -135,7 +141,8 @@ for name, scenario in MANIFEST["scenarios"].items():
                                       "\n".join(task.get("setup", [])),
                                       "\n".join(task["solve"]),
                                       "\n".join(task.get("cleanup", [])),
-                                      Path(srv))
+                                      Path(srv),
+                                      netns=task.get("sandbox") == "user-ns-net")
         ran += 1
         if before == "error" or after == "error":
             errors.append(f"{name} step {step}: the verifier could not be run in the sandbox")
