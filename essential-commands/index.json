@@ -1,0 +1,21 @@
+{
+  "title": "LFCS: Essential commands",
+  "description": "The Essential Commands domain, 20% of the exam. Git, services, performance, resource constraints, disk space and SSL certificates, found in the man pages rather than remembered.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "background.sh",
+      "foreground": "foreground.sh"
+    },
+    "steps": [
+      { "title": "Basic Git operations",        "text": "step1.md", "verify": "verify1.sh" },
+      { "title": "Services",                    "text": "step2.md", "verify": "verify2.sh" },
+      { "title": "Performance",                 "text": "step3.md", "verify": "verify3.sh" },
+      { "title": "Constraints",                 "text": "step4.md", "verify": "verify4.sh" },
+      { "title": "Disk space",                  "text": "step5.md", "verify": "verify5.sh" },
+      { "title": "SSL certificates",            "text": "step6.md", "verify": "verify6.sh" }
+    ],
+    "finish": { "text": "finish.md" }
+  },
+  "backend": { "imageid": "ubuntu" }
+}
