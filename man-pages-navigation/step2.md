@@ -50,3 +50,17 @@ apropos -s 1,8 'manual page'
 ```{{exec}}
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 4 setquota
+answer 5 mandb
+answer 6 manpath
+```{{copy}}
+
+`edquota` is the near miss for the first: it opens an editor rather than
+taking limits on the command line. `mandb` builds the index that `apropos`
+reads, which is why a fresh box says nothing appropriate until it has run.
+
+</details>

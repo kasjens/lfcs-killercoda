@@ -48,3 +48,17 @@ and not a command you run, so neither 5 nor 8 fits. `man -k systemd.directives`
 gives you the number without opening anything.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 10 systemd.exec
+answer 11 systemd.directives
+answer 12 7
+```{{copy}}
+
+`WorkingDirectory=` was factored out of `systemd.service(5)` because sockets
+and mounts need it too. The directive index is section 7 because it describes
+neither a file nor a command.
+
+</details>

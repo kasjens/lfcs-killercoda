@@ -66,3 +66,94 @@ answer 54 <your answer>
 answer 55 <your answer>
 answer 56 <your answer>
 ```{{copy}}
+
+<details><summary>Tips</summary>
+
+**47.** The command is 8, the drop-in directory is 5.
+
+**48.** The directive is in the unit page. The grammar behind the directive is
+in systemd.time(7).
+
+**49.** fstab(5) gives you the columns. mount(8) gives you what goes in column
+four.
+
+**50.** Open, slash, read, q. Four moves, under fifteen seconds.
+
+**51.** Open, slash, read, q. Four moves, under fifteen seconds.
+
+**52.** One tool, many section 5 pages. When in doubt, man -k the product
+name.
+
+**53.** Long page, unfamiliar syntax: go to EXAMPLES first, not the top.
+
+**54.** Long page, unfamiliar syntax: go to EXAMPLES first, not the top.
+
+**55.** Anything systemd that smells like a date or a duration is
+systemd.time(7).
+
+**56.** man -k nmcli shows all three. The examples page is the one worth
+opening first.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+answer 47 man 5 sysctl.d
+answer 48 man 7 systemd.time
+answer 49 man 8 mount
+answer 50 man setfacl
+answer 51 /default
+answer 52 man 5 firewalld.richlanguage
+answer 53 man 8 nft
+answer 54 /EXAMPLES
+answer 55 man 7 systemd.time
+answer 56 man 7 nmcli-examples
+```{{copy}}
+
+**47.** It does need .conf, and files are read in lexical order with /etc
+winning over /usr/lib. All of that is on one page. Going to sysctl(8) instead
+gives you the flags but not the file rules.
+
+**48.** systemd.timer(5) tells you OnCalendar= exists. systemd.time(7) is
+where the calendar grammar, the shorthands like weekly, and the timespan units
+are actually defined — and it has worked examples you can copy. It is a 7
+because it documents a syntax rather than a file.
+
+**49.** fstab(5) describes the six columns but hands the fourth one — the
+options — to mount(8). Every mount option you will ever need in fstab is
+documented under FILESYSTEM-INDEPENDENT MOUNT OPTIONS in mount(8), and
+filesystem-specific ones like the NFS set live in nfs(5).
+
+**50.** It is -d. The pattern here matters more than the flag: open the page,
+search rather than scroll, and get out. acl(5) covers the concept and the text
+format if you need those instead.
+
+**51.** It is -d. The pattern here matters more than the flag: open the page,
+search rather than scroll, and get out. acl(5) covers the concept and the text
+format if you need those instead.
+
+**52.** firewalld splits across a dozen pages: firewall-cmd(1) for the tool,
+firewalld.zone(5) for zone files, firewalld.richlanguage(5) for rich rules,
+firewalld.conf(5) for the daemon. man -k firewalld lists them all in one line
+if you cannot recall the suffix.
+
+**53.** nft(8) is long, and its EXAMPLES section has complete table-chain-rule
+blocks you can adapt. Searching straight to EXAMPLES is the single highest-
+value pager habit for this exam — most admin pages have one.
+
+**54.** nft(8) is long, and its EXAMPLES section has complete table-chain-rule
+blocks you can adapt. Searching straight to EXAMPLES is the single highest-
+value pager habit for this exam — most admin pages have one.
+
+**55.** journalctl(1) says --since takes a timestamp and points at
+systemd.time(7), which is where yesterday, -1h, and the absolute formats are
+actually listed. Same page as the OnCalendar grammar, asked from the other
+direction.
+
+**56.** NetworkManager ships a separate examples page that almost nobody
+finds. nmcli(1) is the flag reference, nm-settings-nmcli(5) is the property
+list, and nmcli-examples(7) is the one with full working command lines for
+static addressing, bonds and bridges.
+
+</details>

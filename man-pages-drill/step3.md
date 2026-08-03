@@ -73,3 +73,85 @@ answer 25 <your answer>
 answer 26 <your answer>
 answer 27 <your answer>
 ```{{copy}}
+
+<details><summary>Tips</summary>
+
+**18.** -k for keyword. Do not know the name, know a word.
+
+**19.** The db in mandb is the database that -k reads. No db, no keywords.
+
+**20.** Little k, little search — just the descriptions. Big K, big search —
+every word of every page.
+
+**21.** whatis asks what it is. apropos asks what is about this.
+
+**22.** -s for section, and it accepts a list: -s 5,8.
+
+**23.** -e for exact.
+
+**24.** -a for and. -e for exact. Both are narrowing tools.
+
+**25.** -w for where.
+
+**26.** It is a regex, so treat it like grep.
+
+**27.** Like PATH, but for pages.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+answer 18 man -k quota
+answer 19 mandb
+answer 20 man -K OnCalendar
+answer 21 whatis ss
+answer 22 apropos -s 5 mount
+answer 23 apropos -e mount
+answer 24 apropos -a nfs mount
+answer 25 man -w sshd_config
+answer 26 man -k '^chage'
+answer 27 manpath
+```{{copy}}
+
+**18.** man -k is apropos: it searches the one-line NAME descriptions of every
+page. It is the fastest way out of a blank on this exam, and it costs you
+about three seconds.
+
+**19.** apropos and whatis read a prebuilt index, not the pages themselves. On
+a minimal install or a container that index does not exist yet. mandb builds
+it. Learn this now rather than discovering it under the clock.
+
+**20.** -K is global-apropos: it greps the body of every page, not just the
+descriptions. It is slow enough to hurt, so narrow it with a section when you
+can — man -K -s 5 OnCalendar. Capital K, and the difference from lowercase k
+is not cosmetic.
+
+**21.** whatis is man -f: exact name lookup, one line back. It also reveals
+every section the name exists in, which is a quick way to spot a 1-and-5
+collision before you open the wrong one.
+
+**22.** -s takes a comma- or colon-separated section list and works on
+apropos, whatis and man alike. Pair it with -K when a full-text search would
+otherwise take a minute.
+
+**23.** -e requires the keyword to match a whole page name or description
+rather than appearing inside one. It is the difference between four results
+and forty.
+
+**24.** apropos defaults to OR across keywords. -a switches it to AND. Two
+keywords with -a will usually get you to the right page in one shot where one
+keyword gets you a wall.
+
+**25.** -w prints the location rather than rendering. Handy when you want to
+grep or zcat the raw page, or to confirm which of several installed copies you
+are actually reading.
+
+**26.** Because -k takes a regex, ^ and $ work. Anchoring turns a noisy search
+into a precise one without needing -e.
+
+**27.** manpath shows the resolved search path. If a page you just installed
+is not being found, this is the first thing to check — and manpath(5)
+documents the config file behind it.
+
+</details>

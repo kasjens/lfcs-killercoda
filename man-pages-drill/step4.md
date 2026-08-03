@@ -76,3 +76,82 @@ answer 35 <your answer>
 answer 36 <your answer>
 answer 37 <your answer>
 ```{{copy}}
+
+<details><summary>Tips</summary>
+
+**28.** Headings shout. Search in caps to hit the heading, not the paragraph.
+
+**29.** Shift reverses. Everywhere in less, and in vim too.
+
+**30.** Shift reverses. Everywhere in less, and in vim too.
+
+**31.** Big G goes to the big end.
+
+**32.** Big G goes to the big end.
+
+**33.** q for quit, and it is the same key in less, top and journalctl.
+
+**34.** & is grep inside less. The one pager key most people never learn.
+
+**35.** Forward slash leans forward. The question mark curls back.
+
+**36.** h for help, and it is allowed in the exam because it is not the
+internet.
+
+**37.** d for down, u for up, and hold Ctrl for half.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+answer 28 /EXAMPLES
+answer 29 n
+answer 30 N
+answer 31 G
+answer 32 g
+answer 33 q
+answer 34 &noexec
+answer 35 ?noexec
+answer 36 h
+answer 37 Ctrl-d
+```{{copy}}
+
+**28.** man renders through less, so every less search works. Headings are
+uppercase, so searching for the uppercase word lands on the heading rather
+than on prose mentions of the word.
+
+**29.** Lowercase n goes forward, uppercase N goes back. Same as vim, which is
+worth leaning on since you are drilling both.
+
+**30.** Lowercase n goes forward, uppercase N goes back. Same as vim, which is
+worth leaning on since you are drilling both.
+
+**31.** g and G in less, same as vim's gg and G. Jumping to the end is how you
+check whether a page has an EXAMPLES or SEE ALSO section without scrolling
+through it.
+
+**32.** g and G in less, same as vim's gg and G. Jumping to the end is how you
+check whether a page has an EXAMPLES or SEE ALSO section without scrolling
+through it.
+
+**33.** q quits. Worth being deliberate about because Ctrl+C does not close
+less, and on the exam a stuck pager wastes seconds you are counting.
+
+**34.** & filters the display to matching lines only — the rest are hidden,
+not just skipped. On a page as long as mount(8) or nfs(5) this turns two
+minutes of scrolling into one line of typing. Press & then Enter with an empty
+pattern to switch it off.
+
+**35.** / searches forward, ? searches backward. n and N then step through the
+results in whichever direction you started.
+
+**36.** h prints the complete less command list, inside the pager, offline.
+The less man page itself says that if you forget every other command, remember
+this one.
+
+**37.** Ctrl-d is half a screen down, Ctrl-u is half a screen up, Space is a
+full screen. Half-screen scrolling keeps a few lines of context on screen,
+which matters when you are reading a table of mount options.
+
+</details>

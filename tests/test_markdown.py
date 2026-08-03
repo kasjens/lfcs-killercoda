@@ -31,12 +31,21 @@ for md in sorted(ROOT.glob("*/*.md")):
         errors.append(f"{md.relative_to(ROOT)}: two inline code spans separated "
                       f"only by '. ' — {m.group(0)[:60]}")
 
+# Every step offers a way forward when stuck and a way to check afterwards.
+# A step with neither is a dead end for anyone who cannot get it.
+for step in sorted(ROOT.glob("*/step*.md")):
+    body = step.read_text(encoding="utf-8")
+    if "<summary>Tip" not in body:
+        errors.append(f"{step.relative_to(ROOT)}: no Tip block")
+    if "<summary>Solution</summary>" not in body:
+        errors.append(f"{step.relative_to(ROOT)}: no Solution block")
+
 print(f"  {checked} markdown file(s) checked for renderer-hostile patterns")
+print(f"  {len(list(ROOT.glob('*/step*.md')))} step(s) checked for tips and solutions")
 
 if errors:
     print("\nFAILED", file=sys.stderr)
     for e in errors:
         print("  x " + e, file=sys.stderr)
-    print("  put a word between them, or reword", file=sys.stderr)
     sys.exit(1)
 print("  no adjacent inline code spans")

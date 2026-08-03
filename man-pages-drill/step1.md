@@ -71,3 +71,84 @@ answer 8 <your answer>
 answer 9 <your answer>
 answer 10 <your answer>
 ```{{copy}}
+
+<details><summary>Tips</summary>
+
+**1.** Five letters in F-I-E-L-D. If you edit the file, read 5.
+
+**2.** 8 looks like a padlock stacked twice. Locked = root only.
+
+**3.** Five fields, section five.
+
+**4.** You can chage yourself, so it is a user command. Self-service means
+section 1.
+
+**5.** Same word, two jobs. 1 does it, 5 describes it.
+
+**6.** -a for all the way through.
+
+**7.** Run it at a prompt with sudo, look in 8.
+
+**8.** Any /etc/*.d directory has its own section 5 page named after the
+directory.
+
+**9.** hier as in hierarchy. Overviews live in 7.
+
+**10.** 1 user, 2 syscall, 3 library, 4 device, 5 file format, 6 games, 7
+overview, 8 admin.
+
+</details>
+
+<details><summary>Solution</summary>
+
+```
+answer 1 man 5 fstab
+answer 2 8
+answer 3 man 5 crontab
+answer 4 1
+answer 5 man 5 passwd
+answer 6 man -a passwd
+answer 7 man 8 sysctl
+answer 8 man 5 sysctl.d
+answer 9 man 7 hier
+answer 10 4
+```{{copy}}
+
+**1.** fstab(5) is the file format. mount(8) is the command. Plain `man fstab`
+happens to land on 5 here because nothing else claims the name, but typing the
+number is the habit that saves you when a name lives in two sections.
+
+**2.** Section 8 is system administration commands — the ones that normally
+need root. Almost every LFCS task verb lives here.
+
+**3.** crontab(1) documents the *command* — how to edit and list. crontab(5)
+documents the *file* — the five fields, @reboot, ranges and steps. Bare `man
+crontab` gives you 1 and leaves you no wiser.
+
+**4.** chage is section 1, not 8, even though it reads like an admin tool —
+because an unprivileged user may run `chage -l` on their own account. useradd,
+usermod and userdel are 8; chage, passwd and gpasswd are 1.
+
+**5.** passwd(1) changes a password. passwd(5) describes the file. This is the
+cleanest example of why the number matters — the same name, two entirely
+different pages, and bare `man passwd` gives you the wrong one.
+
+**6.** -a walks all matches instead of stopping at the lowest-numbered one.
+Quit one page with q and the next opens. Useful when you know the name but not
+which section holds the thing you want.
+
+**7.** sysctl(8) documents -w, -p, -a and --system. sysctl.conf(5) documents
+the file syntax. sysctl(2) is the C system call and is no use to you on this
+exam.
+
+**8.** sysctl.d(5) is where the .conf suffix requirement, the numeric-prefix
+ordering, and the /etc over /usr/lib precedence are written down. This page
+answers more Operations Deployment questions than sysctl(8) does.
+
+**9.** hier(7) is the filesystem hierarchy overview. Section 7 holds
+conventions and overviews rather than commands or file formats.
+
+**10.** Section 4 is devices and special files. You rarely need it on LFCS,
+but knowing it exists stops you hunting through 5 and 8 for loop(4).
+
+</details>

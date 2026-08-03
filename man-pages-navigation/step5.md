@@ -47,3 +47,17 @@ man man
 ```{{exec}}
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 13 $(man -w 5 nfs)
+answer 14 -w
+answer 15 -K
+```{{copy}}
+
+Let `man -w` tell you the path rather than typing it: the version number in
+it changes between releases. `-K` searches page bodies, `-k` searches the
+one-line descriptions, and that single letter is the whole difference.
+
+</details>

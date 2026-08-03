@@ -63,3 +63,17 @@ Three different section numbers between the three answers, which is itself the
 clue: an overview, a file format, and an administrative command.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 4 apparmor
+answer 5 apparmor.d
+answer 6 aa-status
+```{{copy}}
+
+Three sections between three answers: `apparmor(7)` is the overview,
+`apparmor.d(5)` is the profile file format, and `aa-status(8)` is the
+administrative command. That spread is the same shape SELinux uses.
+
+</details>

@@ -55,3 +55,16 @@ Question 9 is in the pager's own help, which is `h` from inside any page, or
 `man less` from outside it.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 7 noexec
+answer 8 nosuid
+answer 9 G
+```{{copy}}
+
+Both options are in the filesystem-independent list in `mount(8)`. The key `G`
+goes to the end and `g` to the top, which is why the question said case matters.
+
+</details>

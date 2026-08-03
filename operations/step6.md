@@ -52,3 +52,17 @@ The client and the daemon differ by more than a suffix, and their section
 numbers tell you which is which without opening either.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 1 virsh
+answer 2 1
+answer 3 libvirtd
+```{{copy}}
+
+`virsh(1)` is a command you run, so section 1. `libvirtd(8)` is a system
+service you do not invoke directly, so section 8. The section numbers tell you
+which is which before you open either page.
+
+</details>

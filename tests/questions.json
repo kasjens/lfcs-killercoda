@@ -645,7 +645,9 @@
             "man fstab.5",
             "man -s 5 fstab",
             "man --sections=5 fstab"
-          ]
+          ],
+          "tip": "Five letters in F-I-E-L-D. If you edit the file, read 5.",
+          "why": "fstab(5) is the file format. mount(8) is the command. Plain `man fstab` happens to land on 5 here because nothing else claims the name, but typing the number is the habit that saves you when a name lives in two sections."
         },
         {
           "n": 2,
@@ -657,7 +659,9 @@
             "section 8",
             "man8",
             "8)"
-          ]
+          ],
+          "tip": "8 looks like a padlock stacked twice. Locked = root only.",
+          "why": "Section 8 is system administration commands \u2014 the ones that normally need root. Almost every LFCS task verb lives here."
         },
         {
           "n": 3,
@@ -668,7 +672,9 @@
           "accept": [
             "man crontab.5",
             "man -s 5 crontab"
-          ]
+          ],
+          "tip": "Five fields, section five.",
+          "why": "crontab(1) documents the *command* \u2014 how to edit and list. crontab(5) documents the *file* \u2014 the five fields, @reboot, ranges and steps. Bare `man crontab` gives you 1 and leaves you no wiser."
         },
         {
           "n": 4,
@@ -680,7 +686,9 @@
             "section 1",
             "man1",
             "1)"
-          ]
+          ],
+          "tip": "You can chage yourself, so it is a user command. Self-service means section 1.",
+          "why": "chage is section 1, not 8, even though it reads like an admin tool \u2014 because an unprivileged user may run `chage -l` on their own account. useradd, usermod and userdel are 8; chage, passwd and gpasswd are 1."
         },
         {
           "n": 5,
@@ -691,7 +699,9 @@
           "accept": [
             "man passwd.5",
             "man -s 5 passwd"
-          ]
+          ],
+          "tip": "Same word, two jobs. 1 does it, 5 describes it.",
+          "why": "passwd(1) changes a password. passwd(5) describes the file. This is the cleanest example of why the number matters \u2014 the same name, two entirely different pages, and bare `man passwd` gives you the wrong one."
         },
         {
           "n": 6,
@@ -702,7 +712,9 @@
           "accept": [
             "man --all passwd",
             "man -a -- passwd"
-          ]
+          ],
+          "tip": "-a for all the way through.",
+          "why": "-a walks all matches instead of stopping at the lowest-numbered one. Quit one page with q and the next opens. Useful when you know the name but not which section holds the thing you want."
         },
         {
           "n": 7,
@@ -713,7 +725,9 @@
           "accept": [
             "man sysctl.8",
             "man -s 8 sysctl"
-          ]
+          ],
+          "tip": "Run it at a prompt with sudo, look in 8.",
+          "why": "sysctl(8) documents -w, -p, -a and --system. sysctl.conf(5) documents the file syntax. sysctl(2) is the C system call and is no use to you on this exam."
         },
         {
           "n": 8,
@@ -725,7 +739,9 @@
             "man sysctl.d",
             "man sysctl.d.5",
             "man -s 5 sysctl.d"
-          ]
+          ],
+          "tip": "Any /etc/*.d directory has its own section 5 page named after the directory.",
+          "why": "sysctl.d(5) is where the .conf suffix requirement, the numeric-prefix ordering, and the /etc over /usr/lib precedence are written down. This page answers more Operations Deployment questions than sysctl(8) does."
         },
         {
           "n": 9,
@@ -737,7 +753,9 @@
             "man hier",
             "man hier.7",
             "man -s 7 hier"
-          ]
+          ],
+          "tip": "hier as in hierarchy. Overviews live in 7.",
+          "why": "hier(7) is the filesystem hierarchy overview. Section 7 holds conventions and overviews rather than commands or file formats."
         },
         {
           "n": 10,
@@ -749,7 +767,9 @@
             "section 4",
             "man4",
             "4)"
-          ]
+          ],
+          "tip": "1 user, 2 syscall, 3 library, 4 device, 5 file format, 6 games, 7 overview, 8 admin.",
+          "why": "Section 4 is devices and special files. You rarely need it on LFCS, but knowing it exists stops you hunting through 5 and 8 for loop(4)."
         },
         {
           "n": 11,
@@ -761,7 +781,9 @@
             "man sudoers",
             "man sudoers.5",
             "man -s 5 sudoers"
-          ]
+          ],
+          "tip": "Grammar in 5, the editor that enforces it in 8.",
+          "why": "sudoers(5) carries the user-host-runas grammar and the NOPASSWD tag. visudo(8) carries -c for a syntax check and -f for an alternate file. Two pages, two jobs."
         },
         {
           "n": 12,
@@ -773,7 +795,9 @@
             "man visudo",
             "man visudo.8",
             "man -s 8 visudo"
-          ]
+          ],
+          "tip": "Grammar in 5, the editor that enforces it in 8.",
+          "why": "sudoers(5) carries the user-host-runas grammar and the NOPASSWD tag. visudo(8) carries -c for a syntax check and -f for an alternate file. Two pages, two jobs."
         },
         {
           "n": 13,
@@ -785,7 +809,9 @@
             "man systemd.timer",
             "man systemd.timer.5",
             "man -s 5 systemd.timer"
-          ]
+          ],
+          "tip": "Unit files are files, so they are section 5, one page per unit type.",
+          "why": "Every systemd unit type has its own section 5 page: systemd.unit, systemd.service, systemd.timer, systemd.mount, systemd.socket. The directives for [Timer] are only in systemd.timer(5)."
         },
         {
           "n": 14,
@@ -797,7 +823,9 @@
             "man systemd.exec",
             "man systemd.exec.5",
             "man -s 5 systemd.exec"
-          ]
+          ],
+          "tip": "How it runs is in .service. What it runs as is in .exec.",
+          "why": "systemd.service(5) documents Type=, ExecStart= and Restart=. Everything about the execution environment \u2014 user, group, environment, working directory, sandboxing \u2014 was factored out into systemd.exec(5) because [Service], [Socket] and [Mount] all share it."
         },
         {
           "n": 15,
@@ -809,7 +837,9 @@
             "man limits.conf",
             "man limits.conf.5",
             "man -s 5 limits.conf"
-          ]
+          ],
+          "tip": "The file has a section 5 page named exactly like the file.",
+          "why": "limits.conf(5) has the four-column domain/type/item/value table and the full item list. pam_limits(8) is the module that reads it \u2014 a different page, and not the one with the syntax."
         },
         {
           "n": 16,
@@ -821,7 +851,9 @@
             "man sshd_config",
             "man sshd_config.5",
             "man -s 5 sshd_config"
-          ]
+          ],
+          "tip": "The d is for daemon. sshd_config for the server, ssh_config for you.",
+          "why": "sshd_config(5) is the server keyword list. ssh_config(5) is the client one, and mixing them up costs you the task. sshd(8) is the daemon itself."
         },
         {
           "n": 17,
@@ -833,7 +865,9 @@
             "man nfs",
             "man nfs.5",
             "man -s 5 nfs"
-          ]
+          ],
+          "tip": "Mount options are read out of a file, so they are documented in 5.",
+          "why": "nfs(5) is the mount option reference, and it is one of the highest-value pages on the whole exam. mount(8) points you here rather than repeating it."
         },
         {
           "n": 18,
@@ -845,7 +879,9 @@
             "apropos quota",
             "man --apropos quota",
             "man -k 'quota'"
-          ]
+          ],
+          "tip": "-k for keyword. Do not know the name, know a word.",
+          "why": "man -k is apropos: it searches the one-line NAME descriptions of every page. It is the fastest way out of a blank on this exam, and it costs you about three seconds."
         },
         {
           "n": 19,
@@ -856,7 +892,9 @@
           "accept": [
             "mandb -c",
             "/usr/bin/mandb"
-          ]
+          ],
+          "tip": "The db in mandb is the database that -k reads. No db, no keywords.",
+          "why": "apropos and whatis read a prebuilt index, not the pages themselves. On a minimal install or a container that index does not exist yet. mandb builds it. Learn this now rather than discovering it under the clock."
         },
         {
           "n": 20,
@@ -869,7 +907,9 @@
             "man -K 'OnCalendar'",
             "man -K oncalendar"
           ],
-          "cs": true
+          "cs": true,
+          "tip": "Little k, little search \u2014 just the descriptions. Big K, big search \u2014 every word of every page.",
+          "why": "-K is global-apropos: it greps the body of every page, not just the descriptions. It is slow enough to hurt, so narrow it with a section when you can \u2014 man -K -s 5 OnCalendar. Capital K, and the difference from lowercase k is not cosmetic."
         },
         {
           "n": 21,
@@ -880,7 +920,9 @@
           "accept": [
             "man -f ss",
             "man --whatis ss"
-          ]
+          ],
+          "tip": "whatis asks what it is. apropos asks what is about this.",
+          "why": "whatis is man -f: exact name lookup, one line back. It also reveals every section the name exists in, which is a quick way to spot a 1-and-5 collision before you open the wrong one."
         },
         {
           "n": 22,
@@ -894,7 +936,9 @@
             "apropos -s5 mount",
             "man -k -s5 mount",
             "apropos --section=5 mount"
-          ]
+          ],
+          "tip": "-s for section, and it accepts a list: -s 5,8.",
+          "why": "-s takes a comma- or colon-separated section list and works on apropos, whatis and man alike. Pair it with -K when a full-text search would otherwise take a minute."
         },
         {
           "n": 23,
@@ -906,7 +950,9 @@
             "man -k -e mount",
             "apropos --exact mount",
             "apropos -e 'mount'"
-          ]
+          ],
+          "tip": "-e for exact.",
+          "why": "-e requires the keyword to match a whole page name or description rather than appearing inside one. It is the difference between four results and forty."
         },
         {
           "n": 24,
@@ -919,7 +965,9 @@
             "apropos --and nfs mount",
             "apropos -a mount nfs",
             "man -k -a mount nfs"
-          ]
+          ],
+          "tip": "-a for and. -e for exact. Both are narrowing tools.",
+          "why": "apropos defaults to OR across keywords. -a switches it to AND. Two keywords with -a will usually get you to the right page in one shot where one keyword gets you a wall."
         },
         {
           "n": 25,
@@ -932,7 +980,9 @@
             "man --path sshd_config",
             "man --location sshd_config",
             "man -w 5 sshd_config"
-          ]
+          ],
+          "tip": "-w for where.",
+          "why": "-w prints the location rather than rendering. Handy when you want to grep or zcat the raw page, or to confirm which of several installed copies you are actually reading."
         },
         {
           "n": 26,
@@ -945,7 +995,9 @@
             "apropos '^chage'",
             "apropos ^chage",
             "man -k \"^chage\""
-          ]
+          ],
+          "tip": "It is a regex, so treat it like grep.",
+          "why": "Because -k takes a regex, ^ and $ work. Anchoring turns a noisy search into a precise one without needing -e."
         },
         {
           "n": 27,
@@ -956,7 +1008,9 @@
           "accept": [
             "manpath -g",
             "echo $MANPATH"
-          ]
+          ],
+          "tip": "Like PATH, but for pages.",
+          "why": "manpath shows the resolved search path. If a page you just installed is not being found, this is the first thing to check \u2014 and manpath(5) documents the config file behind it."
         },
         {
           "n": 28,
@@ -967,7 +1021,9 @@
           "accept": [
             "/EXAMPLE",
             "/^EXAMPLES"
-          ]
+          ],
+          "tip": "Headings shout. Search in caps to hit the heading, not the paragraph.",
+          "why": "man renders through less, so every less search works. Headings are uppercase, so searching for the uppercase word lands on the heading rather than on prose mentions of the word."
         },
         {
           "n": 29,
@@ -975,7 +1031,9 @@
           "subject": "repeat the search, next match",
           "answer": "n",
           "decoy": "/EXAMPLES",
-          "cs": true
+          "cs": true,
+          "tip": "Shift reverses. Everywhere in less, and in vim too.",
+          "why": "Lowercase n goes forward, uppercase N goes back. Same as vim, which is worth leaning on since you are drilling both."
         },
         {
           "n": 30,
@@ -983,7 +1041,9 @@
           "subject": "repeat the search, previous match",
           "answer": "N",
           "decoy": "/EXAMPLES",
-          "cs": true
+          "cs": true,
+          "tip": "Shift reverses. Everywhere in less, and in vim too.",
+          "why": "Lowercase n goes forward, uppercase N goes back. Same as vim, which is worth leaning on since you are drilling both."
         },
         {
           "n": 31,
@@ -994,7 +1054,9 @@
           "accept": [
             ">"
           ],
-          "cs": true
+          "cs": true,
+          "tip": "Big G goes to the big end.",
+          "why": "g and G in less, same as vim's gg and G. Jumping to the end is how you check whether a page has an EXAMPLES or SEE ALSO section without scrolling through it."
         },
         {
           "n": 32,
@@ -1005,7 +1067,9 @@
           "accept": [
             "<"
           ],
-          "cs": true
+          "cs": true,
+          "tip": "Big G goes to the big end.",
+          "why": "g and G in less, same as vim's gg and G. Jumping to the end is how you check whether a page has an EXAMPLES or SEE ALSO section without scrolling through it."
         },
         {
           "n": 33,
@@ -1016,7 +1080,9 @@
           "accept": [
             ":q",
             "ZZ"
-          ]
+          ],
+          "tip": "q for quit, and it is the same key in less, top and journalctl.",
+          "why": "q quits. Worth being deliberate about because Ctrl+C does not close less, and on the exam a stuck pager wastes seconds you are counting."
         },
         {
           "n": 34,
@@ -1027,7 +1093,9 @@
           "accept": [
             "& noexec"
           ],
-          "cs": true
+          "cs": true,
+          "tip": "& is grep inside less. The one pager key most people never learn.",
+          "why": "& filters the display to matching lines only \u2014 the rest are hidden, not just skipped. On a page as long as mount(8) or nfs(5) this turns two minutes of scrolling into one line of typing. Press & then Enter with an empty pattern to switch it off."
         },
         {
           "n": 35,
@@ -1038,14 +1106,18 @@
           "accept": [
             "? noexec"
           ],
-          "cs": true
+          "cs": true,
+          "tip": "Forward slash leans forward. The question mark curls back.",
+          "why": "/ searches forward, ? searches backward. n and N then step through the results in whichever direction you started."
         },
         {
           "n": 36,
           "step": 4,
           "subject": "the pager's own help",
           "answer": "h",
-          "decoy": "/EXAMPLES"
+          "decoy": "/EXAMPLES",
+          "tip": "h for help, and it is allowed in the exam because it is not the internet.",
+          "why": "h prints the complete less command list, inside the pager, offline. The less man page itself says that if you forget every other command, remember this one."
         },
         {
           "n": 37,
@@ -1060,7 +1132,9 @@
             "ctrl d",
             "C-d",
             "d"
-          ]
+          ],
+          "tip": "d for down, u for up, and hold Ctrl for half.",
+          "why": "Ctrl-d is half a screen down, Ctrl-u is half a screen up, Space is a full screen. Half-screen scrolling keeps a few lines of context on screen, which matters when you are reading a table of mount options."
         },
         {
           "n": 38,
@@ -1071,7 +1145,9 @@
           "accept": [
             "/usr/share/doc/",
             "usr/share/doc"
-          ]
+          ],
+          "tip": "hier(7) says it plainly: documentation about installed programs.",
+          "why": "Every packaged program may drop READMEs, changelogs and example configs under /usr/share/doc/<package>/. Your exam notes list it as an allowed reference alongside man, and it often holds a working sample config you can copy rather than write."
         },
         {
           "n": 39,
@@ -1082,7 +1158,9 @@
           "accept": [
             "dpkg --listfiles nfs-common",
             "dpkg-query -L nfs-common"
-          ]
+          ],
+          "tip": "-L for list files. Capital L, because lowercase -l lists packages.",
+          "why": "dpkg -L lists a package's files, which is how you find its docs, its unit files and its example configs when you do not know their paths."
         },
         {
           "n": 40,
@@ -1095,7 +1173,9 @@
             "rpm -qd --whatprovides chrony",
             "rpm --query --docfiles chrony",
             "rpm -q --docfiles chrony"
-          ]
+          ],
+          "tip": "q query, then d docs, l list all, c config.",
+          "why": "-qd queries doc files only, so you skip the binaries and libraries. -ql gives you everything, -qc gives you just the config files \u2014 that last one is worth remembering too."
         },
         {
           "n": 41,
@@ -1105,7 +1185,9 @@
           "decoy": "/usr/share/doc",
           "accept": [
             "whereis -b nft"
-          ]
+          ],
+          "tip": "which is one answer, whereis is three.",
+          "why": "whereis returns binary, source and manual locations. which only returns the executable, and type tells you whether the shell would even reach a file."
         },
         {
           "n": 42,
@@ -1116,7 +1198,9 @@
           "accept": [
             "type -a cd",
             "command -V cd"
-          ]
+          ],
+          "tip": "If type says builtin, the docs are in bash(1), under SHELL BUILTIN COMMANDS.",
+          "why": "This matters because builtins have no man page of their own \u2014 they are documented inside bash(1). If type says builtin, stop looking for cd(1) and search inside man bash instead."
         },
         {
           "n": 43,
@@ -1127,7 +1211,9 @@
           "accept": [
             "rpm -q -f /etc/chrony.conf",
             "rpm --query --file /etc/chrony.conf"
-          ]
+          ],
+          "tip": "rpm asks -qf, which file. dpkg asks -S, search.",
+          "why": "Once you have the package name, dpkg -L or rpm -qd gets you to its docs and examples. This is the two-step that turns an unfamiliar config file into a documented one."
         },
         {
           "n": 44,
@@ -1138,7 +1224,9 @@
           "accept": [
             "dpkg --search /etc/chrony.conf",
             "dpkg-query -S /etc/chrony.conf"
-          ]
+          ],
+          "tip": "rpm asks -qf, which file. dpkg asks -S, search.",
+          "why": "Once you have the package name, dpkg -L or rpm -qd gets you to its docs and examples. This is the two-step that turns an unfamiliar config file into a documented one."
         },
         {
           "n": 45,
@@ -1148,7 +1236,9 @@
           "decoy": "/usr/share/doc",
           "accept": [
             "systemctl cat chronyd.service"
-          ]
+          ],
+          "tip": "cat the unit, not the file, and you get the overrides for free.",
+          "why": "systemctl cat prints the real file with its path, and appends every /etc/systemd/system/*.d/ drop-in in order. Faster than hunting the path yourself, and it shows you which overrides are live."
         },
         {
           "n": 46,
@@ -1160,7 +1250,9 @@
             "man systemd.directives",
             "man systemd.directives.7",
             "man -s 7 systemd.directives"
-          ]
+          ],
+          "tip": "Lost in systemd? Ask the directives index which page owns the word.",
+          "why": "systemd.directives(7) is an index of every directive systemd understands, each pointing at the page that documents it. There is also systemd.index(7) for page names. These two save more time than any other lookup on the systemd side."
         },
         {
           "n": 47,
@@ -1172,7 +1264,9 @@
             "man sysctl.d",
             "man sysctl.d.5",
             "man -s 5 sysctl.d"
-          ]
+          ],
+          "tip": "The command is 8, the drop-in directory is 5.",
+          "why": "It does need .conf, and files are read in lexical order with /etc winning over /usr/lib. All of that is on one page. Going to sysctl(8) instead gives you the flags but not the file rules."
         },
         {
           "n": 48,
@@ -1184,7 +1278,9 @@
             "man systemd.time",
             "man systemd.time.7",
             "man -s 7 systemd.time"
-          ]
+          ],
+          "tip": "The directive is in the unit page. The grammar behind the directive is in systemd.time(7).",
+          "why": "systemd.timer(5) tells you OnCalendar= exists. systemd.time(7) is where the calendar grammar, the shorthands like weekly, and the timespan units are actually defined \u2014 and it has worked examples you can copy. It is a 7 because it documents a syntax rather than a file."
         },
         {
           "n": 49,
@@ -1196,7 +1292,9 @@
             "man mount",
             "man mount.8",
             "man -s 8 mount"
-          ]
+          ],
+          "tip": "fstab(5) gives you the columns. mount(8) gives you what goes in column four.",
+          "why": "fstab(5) describes the six columns but hands the fourth one \u2014 the options \u2014 to mount(8). Every mount option you will ever need in fstab is documented under FILESYSTEM-INDEPENDENT MOUNT OPTIONS in mount(8), and filesystem-specific ones like the NFS set live in nfs(5)."
         },
         {
           "n": 50,
@@ -1207,7 +1305,9 @@
           "accept": [
             "man 1 setfacl",
             "man setfacl.1"
-          ]
+          ],
+          "tip": "Open, slash, read, q. Four moves, under fifteen seconds.",
+          "why": "It is -d. The pattern here matters more than the flag: open the page, search rather than scroll, and get out. acl(5) covers the concept and the text format if you need those instead."
         },
         {
           "n": 51,
@@ -1218,7 +1318,9 @@
           "accept": [
             "/-d",
             "&default"
-          ]
+          ],
+          "tip": "Open, slash, read, q. Four moves, under fifteen seconds.",
+          "why": "It is -d. The pattern here matters more than the flag: open the page, search rather than scroll, and get out. acl(5) covers the concept and the text format if you need those instead."
         },
         {
           "n": 52,
@@ -1230,7 +1332,9 @@
             "man firewalld.richlanguage",
             "man firewalld.richlanguage.5",
             "man -s 5 firewalld.richlanguage"
-          ]
+          ],
+          "tip": "One tool, many section 5 pages. When in doubt, man -k the product name.",
+          "why": "firewalld splits across a dozen pages: firewall-cmd(1) for the tool, firewalld.zone(5) for zone files, firewalld.richlanguage(5) for rich rules, firewalld.conf(5) for the daemon. man -k firewalld lists them all in one line if you cannot recall the suffix."
         },
         {
           "n": 53,
@@ -1242,7 +1346,9 @@
             "man nft",
             "man nft.8",
             "man -s 8 nft"
-          ]
+          ],
+          "tip": "Long page, unfamiliar syntax: go to EXAMPLES first, not the top.",
+          "why": "nft(8) is long, and its EXAMPLES section has complete table-chain-rule blocks you can adapt. Searching straight to EXAMPLES is the single highest-value pager habit for this exam \u2014 most admin pages have one."
         },
         {
           "n": 54,
@@ -1253,7 +1359,9 @@
           "accept": [
             "/EXAMPLE",
             "&EXAMPLES"
-          ]
+          ],
+          "tip": "Long page, unfamiliar syntax: go to EXAMPLES first, not the top.",
+          "why": "nft(8) is long, and its EXAMPLES section has complete table-chain-rule blocks you can adapt. Searching straight to EXAMPLES is the single highest-value pager habit for this exam \u2014 most admin pages have one."
         },
         {
           "n": 55,
@@ -1265,7 +1373,9 @@
             "man systemd.time",
             "man systemd.time.7",
             "man -s 7 systemd.time"
-          ]
+          ],
+          "tip": "Anything systemd that smells like a date or a duration is systemd.time(7).",
+          "why": "journalctl(1) says --since takes a timestamp and points at systemd.time(7), which is where yesterday, -1h, and the absolute formats are actually listed. Same page as the OnCalendar grammar, asked from the other direction."
         },
         {
           "n": 56,
@@ -1277,7 +1387,9 @@
             "man nmcli-examples",
             "man nmcli-examples.7",
             "man -s 7 nmcli-examples"
-          ]
+          ],
+          "tip": "man -k nmcli shows all three. The examples page is the one worth opening first.",
+          "why": "NetworkManager ships a separate examples page that almost nobody finds. nmcli(1) is the flag reference, nm-settings-nmcli(5) is the property list, and nmcli-examples(7) is the one with full working command lines for static addressing, bonds and bridges."
         }
       ]
     }

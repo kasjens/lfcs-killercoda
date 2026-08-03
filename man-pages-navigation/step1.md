@@ -56,3 +56,17 @@ For question 3, read the two one-line descriptions. One of them is a system
 call, which is a thing programs use, not a thing you run.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 1 5
+answer 2 1
+answer 3 8
+```{{copy}}
+
+5 is file formats, so the fstab layout is there. `chage` is 1 because an
+unprivileged user can run `chage -l` on themselves. `sysctl` is in 2 as a
+system call and 8 as the command you run.
+
+</details>

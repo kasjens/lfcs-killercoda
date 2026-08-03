@@ -55,3 +55,19 @@ Questions 3 and 4 are both section 5 and both end in `.conf`. One is named
 after a three-letter daemon, the other after the protocol.
 
 </details>
+
+<details><summary>Solution</summary>
+
+```
+answer 1 nsswitch.conf
+answer 2 5
+answer 3 sssd.conf
+answer 4 ldap.conf
+```{{copy}}
+
+`nsswitch.conf(5)` decides which sources answer each database, which is why
+adding a directory there makes remote users visible to every program at once.
+`sssd.conf(5)` configures the caching daemon; `ldap.conf(5)` configures the
+client library underneath it.
+
+</details>
