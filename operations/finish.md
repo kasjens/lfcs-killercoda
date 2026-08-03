@@ -36,5 +36,5 @@ so the step covers AppArmor, which is, and maps the vocabulary across:
 permissive is complain, `getenforce` is `aa-status`.
 
 That is all five domains. The two prep scenarios are still the fastest way to
-get faster at the lookups themselves, and `drill --review` repeats only what
-you did not produce cold.
+get quicker at the lookups themselves, and worth a second pass closer to the
+exam.

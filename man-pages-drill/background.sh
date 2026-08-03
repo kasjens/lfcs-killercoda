@@ -1,35 +1,37 @@
 #!/bin/bash
-# Two jobs: put real man pages on the box, and install the drill.
+# One job: put real man pages on the box, so every answer can be settled here.
+# Ubuntu images ship with documentation stripped, which would make a man page
+# scenario impossible.
 set -x
 
 rm -f /etc/dpkg/dpkg.cfg.d/excludes
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update -qq
-apt-get install -y -qq man-db manpages manpages-dev less python3
+apt-get install -y -qq man-db manpages manpages-dev less quota nfs-common
 
-# The pages the drill asks about, so any answer can be settled on the spot.
-apt-get install -y -qq nfs-common quota acl lvm2 nftables chrony sudo openssh-server
-apt-get install -y -qq --reinstall coreutils util-linux passwd login mount cron
+# The pages the steps ask about, already installed but without their docs.
+apt-get install -y -qq --reinstall coreutils util-linux passwd login mount cron \
+  systemd procps
 
+# apropos and whatis read an index, not the pages. No index, no results.
 mandb -q
 
-# Assets land asynchronously, so wait for them rather than racing.
-for _ in $(seq 1 90); do
-  [ -f /root/drill.py ] && [ -f /root/bank.json ] && break
-  sleep 1
-done
-
-mkdir -p /usr/local/lib/lfcs-drill
-if [ -f /root/drill.py ] && [ -f /root/bank.json ]; then
-  mv /root/drill.py /root/bank.json /usr/local/lib/lfcs-drill/
-  chmod +x /usr/local/lib/lfcs-drill/drill.py
-fi
-
-cat > /usr/local/bin/drill <<'WRAPPER'
+# The steps record answers with this, so it has to exist before step 1.
+mkdir -p /tmp/answers
+cat > /usr/local/bin/answer <<'HELPER'
 #!/bin/bash
-exec python3 /usr/local/lib/lfcs-drill/drill.py "$@"
-WRAPPER
-chmod +x /usr/local/bin/drill
+if [ "$#" -lt 2 ]; then
+  echo "usage: answer <question number> <your answer>" >&2
+  echo "  writes the answer to /tmp/answers/<question number>," >&2
+  echo "  which is exactly what 'echo <answer> > /tmp/answers/<n>' does" >&2
+  exit 1
+fi
+mkdir -p /tmp/answers
+n="$1"; shift
+printf '%s\n' "$*" > "/tmp/answers/$n"
+echo "question $n recorded: $*"
+HELPER
+chmod +x /usr/local/bin/answer
 
 touch /tmp/scenario-ready

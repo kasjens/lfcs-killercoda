@@ -18,5 +18,5 @@ Two traps that were in here on purpose: `WorkingDirectory=` is in
 `systemd.exec(5)` rather than `systemd.service(5)`, and the `OnCalendar=`
 grammar is in `systemd.time(7)` rather than `systemd.timer(5)`.
 
-Next: **LFCS man page speed drill** — fifty items, scored, timed, in this same
-terminal.
+Next: **LFCS prep 2: man page speed drill**, fifty-six typed answers in this
+same terminal.

@@ -72,12 +72,6 @@ jobs:
       - name: Markdown avoids patterns the renderer mishandles
         run: python3 tests/test_markdown.py
 
-      - name: Bank is consistent
-        run: python3 tests/test_bank.py
-
-      - name: A full drill round scores 100%
-        run: python3 tests/test_drill_round.py
-
       # --no-skips because every package the questions reference is installed
       # above. A skipped claim here is an unverified question, not a missing
       # package, and it would otherwise pass unnoticed.

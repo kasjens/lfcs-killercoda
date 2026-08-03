@@ -21,13 +21,5 @@ Three that catch nearly everyone:
 2. `WorkingDirectory=` is in `systemd.exec(5)`, not `systemd.service(5)`.
 3. The `OnCalendar=` grammar is in `systemd.time(7)`, not `systemd.timer(5)`.
 
-For spaced repetition rather than a single pass, the scored version is still
-installed and tracks what you missed:
-
-```
-drill -n 20
-drill --review
-```{{copy}}
-
 Next: the five domain scenarios, where you stop naming commands and start
 fixing a box.

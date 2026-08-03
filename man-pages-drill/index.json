@@ -41,19 +41,6 @@
     ],
     "finish": {
       "text": "finish.md"
-    },
-    "assets": {
-      "host01": [
-        {
-          "file": "drill.py",
-          "target": "/root",
-          "chmod": "+x"
-        },
-        {
-          "file": "bank.json",
-          "target": "/root"
-        }
-      ]
     }
   },
   "backend": {

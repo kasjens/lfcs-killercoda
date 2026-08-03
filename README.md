@@ -9,7 +9,7 @@ enough that it does not cost you the task.
 | Scenario | What it is |
 |---|---|
 | [`man-pages-navigation`](man-pages-navigation) | Six steps, fifteen verified lookups. Every answer requires opening a page. |
-| [`man-pages-drill`](man-pages-drill) | Fifty scored items, typed answers, run as `drill` in the terminal. |
+| [`man-pages-drill`](man-pages-drill) | Six steps, fifty-six typed answers on sections, search, the pager and LFCS lookups. |
 
 **Domains.** Performance based, like the exam: you change the box and the check
 reads the machine.
@@ -68,12 +68,9 @@ man-pages-navigation/
 
 man-pages-drill/
 ├── index.json
-├── assets/
-│   ├── drill.py        the drill program
-│   └── bank.json       50 items, 5 topics
-├── background.sh       installs man pages + the drill, wires up /usr/local/bin/drill
-├── step1.md … step3.md
-├── verify1.sh … verify3.sh    read /tmp/lfcs-drill/history.json
+├── background.sh       installs man pages and the `answer` helper
+├── step1.md … step6.md
+├── verify1.sh … verify6.sh    generated from tests/questions.json
 └── finish.md
 
 <domain>/               one directory per LFCS domain, same shape
@@ -85,8 +82,6 @@ man-pages-drill/
 tests/
 ├── questions.json          every lookup question and every task's solution
 ├── validate_scenarios.py   every file index.json references must exist
-├── test_bank.py            bank consistency + control-token collisions
-├── test_drill_round.py     a full round, answered correctly, scores 100%
 ├── test_questions.py       lookup answers checked against the real pages
 ├── test_tasks.py           each task verifier fails before, passes after
 └── test_verifiers.sh       verifiers accept right answers, reject wrong ones
@@ -112,8 +107,6 @@ with `/`, not merely a zero exit code.
 
 ```bash
 python3 tests/validate_scenarios.py
-python3 tests/test_bank.py
-python3 tests/test_drill_round.py
 python3 tests/test_questions.py
 python3 tests/test_tasks.py
 bash tests/test_verifiers.sh
@@ -131,31 +124,13 @@ Root for that comes from a user namespace, so it runs unprivileged and never
 touches the real `/etc`. Two Storage tasks need loop devices, which no
 namespace can provide; they skip locally and run as root on CI.
 
-CI runs all seven on every push, with skips treated as failures. `test_drill_round.py` is the headless round: it
-pipes the canonical answer to all 56 blanks and requires 100% cold.
+CI runs all of them on every push, with skips treated as failures.
 
 Two of them need more than a checkout. `test_verifiers.sh` stages a unit file
 under `/etc/systemd/system`, so step 6 only runs as root, and step 5 needs
 `nfs(5)` installed. Both announce a skip rather than failing. A skip is not a
 pass, so CI installs the man pages first and fails outright if either check
 would have skipped.
-
-## The drill
-
-```
-drill                     15 items across every topic
-drill -n 50               all of them
-drill -t pager            one topic
-drill --review            only what you did not produce cold last round
-drill --list              topics and counts
-```
-
-At the prompt: `?` reveals, `!` counts a wording-only miss, `:quit` ends the
-round. It is `:quit` rather than `q` because `q` is the correct answer to one of
-the pager items — `tests/test_bank.py` asserts the control tokens never collide
-with a real answer.
-
-Results land in `/tmp/lfcs-drill/history.json` and vanish with the session.
 
 ## Accuracy
 

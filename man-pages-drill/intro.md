@@ -25,8 +25,3 @@ belongs to, so you can go back to just that one.
 
 The terminal beside this one has real man pages. Anything you are unsure of can
 be settled there in ten seconds, and doing that is the skill being drilled.
-
-> A scored version is also installed. `drill -t sections -n 8` picks items at
-> random, keeps score with lives and a streak, and `drill --review` repeats
-> only what you did not produce cold. It does not feed the checks here, so use
-> it as extra practice.

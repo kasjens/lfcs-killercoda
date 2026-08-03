@@ -73,16 +73,3 @@ answer 25 <your answer>
 answer 26 <your answer>
 answer 27 <your answer>
 ```{{copy}}
-
-<details><summary>Prefer it scored and shuffled?</summary>
-
-The drill program is still installed. It picks items at random, keeps score
-with lives and a streak, and `drill --review` repeats only what you did not
-produce cold. It does not feed this step's check, so use it as extra practice
-rather than instead.
-
-```
-drill -t discovery -n 8
-```{{copy}}
-
-</details>
