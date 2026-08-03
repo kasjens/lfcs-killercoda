@@ -10,6 +10,11 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install -y -qq man-db manpages manpages-dev less quota nfs-common
 
+# One question asks for the RPM equivalent of `dpkg -L`. The exam is
+# distribution agnostic, so the question is fair, but without the package there
+# is no rpm(8) to look it up in and the answer cannot be settled here.
+apt-get install -y -qq rpm
+
 # The pages the steps ask about, already installed but without their docs.
 apt-get install -y -qq --reinstall coreutils util-linux passwd login mount cron \
   systemd procps
