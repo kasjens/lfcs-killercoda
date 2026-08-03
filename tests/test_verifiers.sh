@@ -139,10 +139,8 @@ stage() { # stage <unit file text> — preconditions are already checked, so a
   exit 1
 }
 
-# One cleanup for both halves of the file. Single-quoted, so the variables are
-# read when the trap fires rather than now: `state` does not exist yet.
-trap '[ -n "${staged:-}" ] && $SUDO rm -f "$UNIT"
-      [ -n "${state:-}" ] && rm -rf "$state"' EXIT
+# Single-quoted so `staged` is read when the trap fires, not when it is set.
+trap '[ -n "${staged:-}" ] && $SUDO rm -f "$UNIT"' EXIT
 
 can_stage; staging=$?
 

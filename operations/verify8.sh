@@ -7,6 +7,10 @@
 #
 # The helper is inlined rather than sourced because Killercoda only promises
 # the script named in index.json reaches the host.
+#
+# shellcheck disable=SC2016
+# Accepted answers are literal text to compare against, not shell to run, so
+# one containing a dollar sign is quoted single deliberately.
 bad=0
 
 check() { # check <n> <cs|ci> <subject> <accepted answer>...
