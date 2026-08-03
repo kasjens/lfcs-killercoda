@@ -18,7 +18,7 @@ the `[Timer]` section overrides that pairing.
 
 The `OnCalendar=` grammar is in `systemd.time(7)`, not `systemd.timer(5)`. A 7
 because it describes a syntax rather than a file, and the same page covers
-`journalctl --since`. `systemd-analyze calendar '<expr>'` tells you what an
+`journalctl --since`. Running `systemd-analyze calendar '<expr>'` tells you what an
 expression means and when it fires next, which beats waiting to find out.
 
 Timers over cron when you want a job that catches up after downtime

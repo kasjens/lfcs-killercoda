@@ -13,8 +13,9 @@ Three that catch most people:
 
 - `chage` is section **1**, not 8 — an unprivileged user can run `chage -l` on
   their own account.
-- `bind` mounts are documented in `mount(8)`, not `fstab(5)`. `fstab(5)` gives
-  you the six columns and hands column four to `mount(8)`.
+- `bind` mounts are documented in `mount(8)`, not in the fstab page. All
+  `fstab(5)` gives you is the six columns, and it hands column four to
+  `mount(8)`.
 - `User=` and `WorkingDirectory=` are in `systemd.exec(5)`, not
   `systemd.service(5)`.
 

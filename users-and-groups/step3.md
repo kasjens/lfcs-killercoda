@@ -6,8 +6,9 @@ A line in `limits.conf` has four fields:
 <domain>  <type>  <item>  <value>
 ```
 
-`domain` is who it applies to: a username, a `@group`, or `*`. `type` is `soft`
-or `hard`. `item` is what is being limited. `value` is the number.
+`domain` is who it applies to: a username, a `@group`, or `*`. The `type` field
+is either `soft` or `hard`. Then `item` is what is being limited, and `value`
+is the number.
 
 Soft against hard is the part worth understanding rather than memorising. The
 soft limit is what is actually enforced right now. The hard limit is the

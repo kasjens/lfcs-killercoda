@@ -12,8 +12,8 @@ package owned; the modern place is a drop-in in `/etc/sysctl.d/`. Files there
 are read in lexical order, which is why they are conventionally numbered, and
 later files win, so `99-` beats `10-`.
 
-`sysctl -p <file>` applies a file immediately, which is how you avoid a reboot
-after editing one. `sysctl -a` lists everything currently set, and piping that
+Applying a file with `sysctl -p <file>` takes effect immediately, which is how
+you avoid a reboot after editing one. `sysctl -a` lists everything currently set, and piping that
 through `grep` beats remembering exact key names.
 
 Two that come up constantly. `net.ipv4.ip_forward` turns the box into a router

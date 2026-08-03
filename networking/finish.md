@@ -6,15 +6,16 @@ Networking, 25% of the exam and the heaviest domain.
 The moves worth keeping:
 
 - **`ip` has a page per object.** `ip-link(8)`, `ip-address(8)`,
-  `ip-route(8)`. `man ip` is only the index, and knowing that saves more time
-  here than anywhere else.
+  `ip-route(8)`. The bare `man ip` is only the index, and knowing that saves
+  more time here than anywhere else.
 - **`ss -tulpn`** as one word. TCP and UDP, listening, numeric, with process.
 - **Check it is listening before you touch the firewall.** A daemon bound to
   `127.0.0.1` is unreachable no matter how open the filter is, and that is the
   more common cause.
-- **`sshd -t`, `nginx -t`, `chronyd -Q`.** Three daemons that will validate
-  their own configuration. Use them before reloading anything, especially over
-  a connection you would lose.
+- **`sshd -t` and `nginx -t`.** Both validate their own configuration and exit.
+  Use them before reloading anything, especially over a connection you would
+  lose. `chronyd -Q` looks like the same thing and is not: it performs a real
+  time query and hangs against a server that does not answer.
 
 Six traps that were in here on purpose:
 

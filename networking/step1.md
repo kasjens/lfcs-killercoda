@@ -1,9 +1,9 @@
 # Configure IPv4 and IPv6 networking and hostname resolution
 
 `ip` is one command with a page per object, and the pages are hyphenated the
-way Git's are: `ip-address(8)`, `ip-route(8)`, `ip-link(8)`. `man ip` is only
-the index. Knowing this turns the whole `iproute2` suite into something you can
-read under time pressure.
+way Git's are: `ip-address(8)`, `ip-route(8)`, `ip-link(8)`. The bare `man ip`
+is only the index. Knowing this turns the whole `iproute2` suite into something
+you can read under time pressure.
 
 Three things about addressing that the old `ifconfig` habits get wrong.
 
@@ -45,9 +45,9 @@ man 5 nsswitch.conf
 Creating a dummy interface is `ip link add ... type dummy`. The types are
 listed in `ip-link(8)` under `ip link add`.
 
-Test with `getent hosts app.lfcs.local`, not `ping`. `getent` goes through the
-switch, so it tells you whether resolution works rather than whether the host
-answers.
+Test with `getent hosts app.lfcs.local`, not with `ping`. Only `getent` goes
+through the switch, so it tells you whether resolution works rather than
+whether the host answers.
 
 </details>
 

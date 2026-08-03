@@ -67,6 +67,11 @@ jobs:
       - name: Referenced files exist
         run: python3 tests/validate_scenarios.py
 
+      # Killercoda leaks its copy-button markup into the page when two inline
+      # code spans are separated only by a full stop. Found live, not here.
+      - name: Markdown avoids patterns the renderer mishandles
+        run: python3 tests/test_markdown.py
+
       - name: Bank is consistent
         run: python3 tests/test_bank.py
 
