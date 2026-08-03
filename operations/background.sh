@@ -39,4 +39,21 @@ grep -q '/mnt/backup' /etc/fstab || \
 
 mkdir -p /etc/docker /etc/apt/keyrings
 
+# Steps 6 and 8 are lookups that record answers with this, so it has to exist.
+mkdir -p /tmp/answers
+cat > /usr/local/bin/answer <<'HELPER'
+#!/bin/bash
+if [ "$#" -lt 2 ]; then
+  echo "usage: answer <question number> <your answer>" >&2
+  echo "  writes the answer to /tmp/answers/<question number>," >&2
+  echo "  which is exactly what 'echo <answer> > /tmp/answers/<n>' does" >&2
+  exit 1
+fi
+mkdir -p /tmp/answers
+n="$1"; shift
+printf '%s\n' "$*" > "/tmp/answers/$n"
+echo "question $n recorded: $*"
+HELPER
+chmod +x /usr/local/bin/answer
+
 touch /tmp/scenario-ready

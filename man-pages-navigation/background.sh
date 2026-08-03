@@ -8,7 +8,7 @@ rm -f /etc/dpkg/dpkg.cfg.d/excludes
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update -qq
-apt-get install -y -qq man-db manpages manpages-dev less quota nfs-common
+apt-get install -y -qq man-db manpages manpages-dev less quota nfs-common vim
 
 # Already installed, but without their documentation.
 apt-get install -y -qq --reinstall coreutils util-linux passwd login mount cron
