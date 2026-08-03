@@ -1,6 +1,6 @@
 {
   "title": "LFCS prep 2: man page speed drill",
-  "description": "Fifty scored items on man page sections, search, the pager and LFCS-specific lookups. Typed answers, no multiple choice, in a terminal with real man pages beside it. Do prep 1 first.",
+  "description": "Fifty-six typed answers on man page sections, search, the pager and LFCS-specific lookups, recorded with the answer command and checked step by step. Do prep 1 first.",
   "details": {
     "intro": {
       "text": "intro.md",
@@ -8,17 +8,55 @@
       "foreground": "foreground.sh"
     },
     "steps": [
-      { "title": "Warm up",     "text": "step1.md", "verify": "verify1.sh" },
-      { "title": "Full round",  "text": "step2.md", "verify": "verify2.sh" },
-      { "title": "Repair",      "text": "step3.md", "verify": "verify3.sh" }
+      {
+        "title": "Sections, part 1",
+        "text": "step1.md",
+        "verify": "verify1.sh"
+      },
+      {
+        "title": "Sections, part 2",
+        "text": "step2.md",
+        "verify": "verify2.sh"
+      },
+      {
+        "title": "Discovery",
+        "text": "step3.md",
+        "verify": "verify3.sh"
+      },
+      {
+        "title": "The pager",
+        "text": "step4.md",
+        "verify": "verify4.sh"
+      },
+      {
+        "title": "Beyond man",
+        "text": "step5.md",
+        "verify": "verify5.sh"
+      },
+      {
+        "title": "Exam lookups",
+        "text": "step6.md",
+        "verify": "verify6.sh"
+      }
     ],
-    "finish": { "text": "finish.md" },
+    "finish": {
+      "text": "finish.md"
+    },
     "assets": {
       "host01": [
-        { "file": "drill.py",  "target": "/root", "chmod": "+x" },
-        { "file": "bank.json", "target": "/root" }
+        {
+          "file": "drill.py",
+          "target": "/root",
+          "chmod": "+x"
+        },
+        {
+          "file": "bank.json",
+          "target": "/root"
+        }
       ]
     }
   },
-  "backend": { "imageid": "ubuntu" }
+  "backend": {
+    "imageid": "ubuntu"
+  }
 }

@@ -174,47 +174,9 @@ OnCalendar=Mon *-*-* 03:00:00"
   staged=""
 fi
 
-# ---------------------------------------------------------------- drill
-# The drill verifiers read the round history. They honour LFCS_DRILL_STATE, so
-# these run against a scratch directory rather than the learner's real state.
-
-D=man-pages-drill
-state="$(mktemp -d)"
-export LFCS_DRILL_STATE="$state"
-
-hist() { printf '%s\n' "$1" > "$state/history.json"; }
-
-# round <asked> <notCold json> <review true|false>
-round() { printf '{"finished":"2026-01-01T00:00:00+00:00","topic":"ALL",'
-          printf '"review":%s,"asked":%s,"planned":%s,"cold":1,"revealed":0,' "$3" "$1" "$1"
-          printf '"missed":0,"pct":50,"xp":25,"seconds":60,"notCold":%s}' "$2"; }
-
-rm -f "$state/history.json"
-expect fail "drill1 no history yet"            "$D" verify1.sh
-hist "[$(round 8 '[]' false)]"
-expect pass "drill1 eight item round"          "$D" verify1.sh
-expect fail "drill2 eight is not enough"       "$D" verify2.sh
-hist "[$(round 20 '[1,2]' false)]"
-expect pass "drill2 twenty item round"         "$D" verify2.sh
-expect fail "drill3 full round, no repair yet" "$D" verify3.sh
-hist "[$(round 20 '[]' false)]"
-expect pass "drill3 clean round needs nothing" "$D" verify3.sh
-says "nothing needed repairing" "drill3 clean round says so" "$D" verify3.sh
-hist "[$(round 20 '[1,2]' false),$(round 2 '[]' true)]"
-expect pass "drill3 repair round done"         "$D" verify3.sh
-
-# The three that used to be wrong. A learner who revealed sixteen items gets a
-# sixteen-item review round, which the old size-based guess read as the full
-# round; and any small round at all counted as the repair.
-hist "[$(round 20 '[1,2]' false),$(round 16 '[3]' true)]"
-expect pass "drill3 large review still counts" "$D" verify3.sh
-hist "[$(round 20 '[1,2]' false),$(round 16 '[]' true)]"
-expect pass "drill3 large clean review counts" "$D" verify3.sh
-# Exits 0 either way. The old code got here by reading the review round as the
-# full round and telling the learner their full round had been clean.
-says "Repair round done" "drill3 large clean review, right reason" "$D" verify3.sh
-hist "[$(round 20 '[1,2]' false),$(round 3 '[]' false)]"
-expect fail "drill3 a small round is no repair" "$D" verify3.sh
+# The drill scenario's verifiers are generated from tests/questions.json and
+# covered by tests/test_questions.py, so nothing to do here any more. It used
+# to read /tmp/lfcs-drill/history.json, which no longer decides anything.
 
 echo
 echo "  $pass passed, $fail failed"

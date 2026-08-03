@@ -1,25 +1,33 @@
 # Done
 
-Your rounds are in `/tmp/lfcs-drill/history.json` — they disappear with the
-session, so note the topic breakdown if you want to compare next week.
+Fifty-six lookups across the five topics that make up the retrieval skill: the
+sections table, searching by description, the pager, documentation outside the
+man pages, and the LFCS-specific pages.
 
-### What this measured, and what it did not
+The moves worth keeping:
 
-It measured whether you can produce a lookup command from memory. It did not
-measure whether you can find an answer under time pressure with a task list
-running down — that is what the other scenario, **LFCS: find it in the man
-pages**, is for. Do that one if you have not.
+- **Section first, name second.** `man 5 fstab` beats `man fstab` because the
+  number is what saves you when a name lives in two sections.
+- **`man -k` searches descriptions and takes a regex**, so `man -k '^chage'`
+  anchors it. `man -K` searches page bodies and is slow, so narrow it with
+  `-s`.
+- **`&pattern` in the pager** collapses a nine-screen page to the lines that
+  matter. It is the single biggest time saver in this whole drill.
+- **`whatis` before `man`** when all you need is a section number.
 
-### The five that pay for themselves
+Three that catch nearly everyone:
 
-- `man -k word` — forgot the command name. Nothing appropriate? Run `mandb`.
-- `man -K word` — forgot which page owns a directive. Narrow it: `-K -s 5`.
-- `&word` — inside the pager, collapse a long page to the matching lines.
-- `/EXAMPLES` — first move on any unfamiliar section 8 page.
-- `man 7 systemd.directives` — the index of every systemd directive and the page
-  that defines it.
+1. `chage` is section **1**, not 8.
+2. `WorkingDirectory=` is in `systemd.exec(5)`, not `systemd.service(5)`.
+3. The `OnCalendar=` grammar is in `systemd.time(7)`, not `systemd.timer(5)`.
 
-### Worth carrying into the exam
+For spaced repetition rather than a single pass, the scored version is still
+installed and tracks what you missed:
 
-Section 5 for anything you edit, section 8 for anything you run. When a name
-exists in both, `whatis` tells you before you open the wrong one.
+```
+drill -n 20
+drill --review
+```{{copy}}
+
+Next: the five domain scenarios, where you stop naming commands and start
+fixing a box.

@@ -621,6 +621,665 @@
           "contains": "aa-status"
         }
       ]
+    },
+    "man-pages-drill": {
+      "title": "LFCS prep 2: man page speed drill",
+      "domain": "prep",
+      "weight": "n/a",
+      "steps": [
+        "SECTIONS (10 answers)",
+        "SECTIONS (7 answers)",
+        "DISCOVERY (10 answers)",
+        "PAGER (10 answers)",
+        "BEYOND-MAN (9 answers)",
+        "EXAM-LOOKUPS (10 answers)"
+      ],
+      "questions": [
+        {
+          "n": 1,
+          "step": 1,
+          "subject": "fstab",
+          "answer": "man 5 fstab",
+          "decoy": "8",
+          "accept": [
+            "man fstab.5",
+            "man -s 5 fstab",
+            "man --sections=5 fstab"
+          ]
+        },
+        {
+          "n": 2,
+          "step": 1,
+          "subject": "admin commands",
+          "answer": "8",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "section 8",
+            "man8",
+            "8)"
+          ]
+        },
+        {
+          "n": 3,
+          "step": 1,
+          "subject": "crontab",
+          "answer": "man 5 crontab",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man crontab.5",
+            "man -s 5 crontab"
+          ]
+        },
+        {
+          "n": 4,
+          "step": 1,
+          "subject": "chage",
+          "answer": "1",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "section 1",
+            "man1",
+            "1)"
+          ]
+        },
+        {
+          "n": 5,
+          "step": 1,
+          "subject": "passwd",
+          "answer": "man 5 passwd",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man passwd.5",
+            "man -s 5 passwd"
+          ]
+        },
+        {
+          "n": 6,
+          "step": 1,
+          "subject": "read every match",
+          "answer": "man -a passwd",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man --all passwd",
+            "man -a -- passwd"
+          ]
+        },
+        {
+          "n": 7,
+          "step": 1,
+          "subject": "sysctl",
+          "answer": "man 8 sysctl",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man sysctl.8",
+            "man -s 8 sysctl"
+          ]
+        },
+        {
+          "n": 8,
+          "step": 1,
+          "subject": "sysctl.d drop-ins",
+          "answer": "man 5 sysctl.d",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man sysctl.d",
+            "man sysctl.d.5",
+            "man -s 5 sysctl.d"
+          ]
+        },
+        {
+          "n": 9,
+          "step": 1,
+          "subject": "the filesystem layout",
+          "answer": "man 7 hier",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man hier",
+            "man hier.7",
+            "man -s 7 hier"
+          ]
+        },
+        {
+          "n": 10,
+          "step": 1,
+          "subject": "device files",
+          "answer": "4",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "section 4",
+            "man4",
+            "4)"
+          ]
+        },
+        {
+          "n": 11,
+          "step": 2,
+          "subject": "sudoers, two pages, the file syntax",
+          "answer": "man 5 sudoers",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man sudoers",
+            "man sudoers.5",
+            "man -s 5 sudoers"
+          ]
+        },
+        {
+          "n": 12,
+          "step": 2,
+          "subject": "sudoers, two pages, the safe editor",
+          "answer": "man 8 visudo",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man visudo",
+            "man visudo.8",
+            "man -s 8 visudo"
+          ]
+        },
+        {
+          "n": 13,
+          "step": 2,
+          "subject": "timer units",
+          "answer": "man 5 systemd.timer",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man systemd.timer",
+            "man systemd.timer.5",
+            "man -s 5 systemd.timer"
+          ]
+        },
+        {
+          "n": 14,
+          "step": 2,
+          "subject": "the directive you cannot find",
+          "answer": "man 5 systemd.exec",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man systemd.exec",
+            "man systemd.exec.5",
+            "man -s 5 systemd.exec"
+          ]
+        },
+        {
+          "n": 15,
+          "step": 2,
+          "subject": "resource limits",
+          "answer": "man 5 limits.conf",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man limits.conf",
+            "man limits.conf.5",
+            "man -s 5 limits.conf"
+          ]
+        },
+        {
+          "n": 16,
+          "step": 2,
+          "subject": "sshd keywords",
+          "answer": "man 5 sshd_config",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man sshd_config",
+            "man sshd_config.5",
+            "man -s 5 sshd_config"
+          ]
+        },
+        {
+          "n": 17,
+          "step": 2,
+          "subject": "nfs mount options",
+          "answer": "man 5 nfs",
+          "decoy": "man 5 fstab",
+          "accept": [
+            "man nfs",
+            "man nfs.5",
+            "man -s 5 nfs"
+          ]
+        },
+        {
+          "n": 18,
+          "step": 3,
+          "subject": "you do not know the command name",
+          "answer": "man -k quota",
+          "decoy": "mandb",
+          "accept": [
+            "apropos quota",
+            "man --apropos quota",
+            "man -k 'quota'"
+          ]
+        },
+        {
+          "n": 19,
+          "step": 3,
+          "subject": "nothing appropriate",
+          "answer": "mandb",
+          "decoy": "man -k quota",
+          "accept": [
+            "mandb -c",
+            "/usr/bin/mandb"
+          ]
+        },
+        {
+          "n": 20,
+          "step": 3,
+          "subject": "the brute-force search",
+          "answer": "man -K OnCalendar",
+          "decoy": "man -k quota",
+          "accept": [
+            "man --global-apropos OnCalendar",
+            "man -K 'OnCalendar'",
+            "man -K oncalendar"
+          ],
+          "cs": true
+        },
+        {
+          "n": 21,
+          "step": 3,
+          "subject": "what does this thing do",
+          "answer": "whatis ss",
+          "decoy": "man -k quota",
+          "accept": [
+            "man -f ss",
+            "man --whatis ss"
+          ]
+        },
+        {
+          "n": 22,
+          "step": 3,
+          "subject": "narrow the search",
+          "answer": "apropos -s 5 mount",
+          "decoy": "man -k quota",
+          "accept": [
+            "man -k -s 5 mount",
+            "apropos --sections=5 mount",
+            "apropos -s5 mount",
+            "man -k -s5 mount",
+            "apropos --section=5 mount"
+          ]
+        },
+        {
+          "n": 23,
+          "step": 3,
+          "subject": "too many hits",
+          "answer": "apropos -e mount",
+          "decoy": "man -k quota",
+          "accept": [
+            "man -k -e mount",
+            "apropos --exact mount",
+            "apropos -e 'mount'"
+          ]
+        },
+        {
+          "n": 24,
+          "step": 3,
+          "subject": "both words, not either",
+          "answer": "apropos -a nfs mount",
+          "decoy": "man -k quota",
+          "accept": [
+            "man -k -a nfs mount",
+            "apropos --and nfs mount",
+            "apropos -a mount nfs",
+            "man -k -a mount nfs"
+          ]
+        },
+        {
+          "n": 25,
+          "step": 3,
+          "subject": "where does the page live",
+          "answer": "man -w sshd_config",
+          "decoy": "man -k quota",
+          "accept": [
+            "man --where sshd_config",
+            "man --path sshd_config",
+            "man --location sshd_config",
+            "man -w 5 sshd_config"
+          ]
+        },
+        {
+          "n": 26,
+          "step": 3,
+          "subject": "anchor the keyword",
+          "answer": "man -k '^chage'",
+          "decoy": "man -k quota",
+          "accept": [
+            "man -k ^chage",
+            "apropos '^chage'",
+            "apropos ^chage",
+            "man -k \"^chage\""
+          ]
+        },
+        {
+          "n": 27,
+          "step": 3,
+          "subject": "where is man looking",
+          "answer": "manpath",
+          "decoy": "man -k quota",
+          "accept": [
+            "manpath -g",
+            "echo $MANPATH"
+          ]
+        },
+        {
+          "n": 28,
+          "step": 4,
+          "subject": "get to the examples",
+          "answer": "/EXAMPLES",
+          "decoy": "n",
+          "accept": [
+            "/EXAMPLE",
+            "/^EXAMPLES"
+          ]
+        },
+        {
+          "n": 29,
+          "step": 4,
+          "subject": "repeat the search, next match",
+          "answer": "n",
+          "decoy": "/EXAMPLES",
+          "cs": true
+        },
+        {
+          "n": 30,
+          "step": 4,
+          "subject": "repeat the search, previous match",
+          "answer": "N",
+          "decoy": "/EXAMPLES",
+          "cs": true
+        },
+        {
+          "n": 31,
+          "step": 4,
+          "subject": "both ends of the page, end",
+          "answer": "G",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            ">"
+          ],
+          "cs": true
+        },
+        {
+          "n": 32,
+          "step": 4,
+          "subject": "both ends of the page, top",
+          "answer": "g",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            "<"
+          ],
+          "cs": true
+        },
+        {
+          "n": 33,
+          "step": 4,
+          "subject": "leave",
+          "answer": "q",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            ":q",
+            "ZZ"
+          ]
+        },
+        {
+          "n": 34,
+          "step": 4,
+          "subject": "hide everything else",
+          "answer": "&noexec",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            "& noexec"
+          ],
+          "cs": true
+        },
+        {
+          "n": 35,
+          "step": 4,
+          "subject": "search backwards",
+          "answer": "?noexec",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            "? noexec"
+          ],
+          "cs": true
+        },
+        {
+          "n": 36,
+          "step": 4,
+          "subject": "the pager's own help",
+          "answer": "h",
+          "decoy": "/EXAMPLES"
+        },
+        {
+          "n": 37,
+          "step": 4,
+          "subject": "half a screen",
+          "answer": "Ctrl-d",
+          "decoy": "/EXAMPLES",
+          "accept": [
+            "^D",
+            "<C-d>",
+            "ctrl+d",
+            "ctrl d",
+            "C-d",
+            "d"
+          ]
+        },
+        {
+          "n": 38,
+          "step": 5,
+          "subject": "the other documentation tree",
+          "answer": "/usr/share/doc",
+          "decoy": "dpkg -L nfs-common",
+          "accept": [
+            "/usr/share/doc/",
+            "usr/share/doc"
+          ]
+        },
+        {
+          "n": 39,
+          "step": 5,
+          "subject": "what did this package install",
+          "answer": "dpkg -L nfs-common",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "dpkg --listfiles nfs-common",
+            "dpkg-query -L nfs-common"
+          ]
+        },
+        {
+          "n": 40,
+          "step": 5,
+          "subject": "just the documentation",
+          "answer": "rpm -qd chrony",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "rpm -q -d chrony",
+            "rpm -qd --whatprovides chrony",
+            "rpm --query --docfiles chrony",
+            "rpm -q --docfiles chrony"
+          ]
+        },
+        {
+          "n": 41,
+          "step": 5,
+          "subject": "three locations at once",
+          "answer": "whereis nft",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "whereis -b nft"
+          ]
+        },
+        {
+          "n": 42,
+          "step": 5,
+          "subject": "builtin or binary",
+          "answer": "type cd",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "type -a cd",
+            "command -V cd"
+          ]
+        },
+        {
+          "n": 43,
+          "step": 5,
+          "subject": "which package owns this file, RPM host",
+          "answer": "rpm -qf /etc/chrony.conf",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "rpm -q -f /etc/chrony.conf",
+            "rpm --query --file /etc/chrony.conf"
+          ]
+        },
+        {
+          "n": 44,
+          "step": 5,
+          "subject": "which package owns this file, Debian host",
+          "answer": "dpkg -S /etc/chrony.conf",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "dpkg --search /etc/chrony.conf",
+            "dpkg-query -S /etc/chrony.conf"
+          ]
+        },
+        {
+          "n": 45,
+          "step": 5,
+          "subject": "the unit as loaded",
+          "answer": "systemctl cat chronyd",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "systemctl cat chronyd.service"
+          ]
+        },
+        {
+          "n": 46,
+          "step": 5,
+          "subject": "every systemd directive",
+          "answer": "man 7 systemd.directives",
+          "decoy": "/usr/share/doc",
+          "accept": [
+            "man systemd.directives",
+            "man systemd.directives.7",
+            "man -s 7 systemd.directives"
+          ]
+        },
+        {
+          "n": 47,
+          "step": 6,
+          "subject": "make it persist",
+          "answer": "man 5 sysctl.d",
+          "decoy": "man 7 systemd.time",
+          "accept": [
+            "man sysctl.d",
+            "man sysctl.d.5",
+            "man -s 5 sysctl.d"
+          ]
+        },
+        {
+          "n": 48,
+          "step": 6,
+          "subject": "every monday at 03:00",
+          "answer": "man 7 systemd.time",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man systemd.time",
+            "man systemd.time.7",
+            "man -s 7 systemd.time"
+          ]
+        },
+        {
+          "n": 49,
+          "step": 6,
+          "subject": "the bind mount",
+          "answer": "man 8 mount",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man mount",
+            "man mount.8",
+            "man -s 8 mount"
+          ]
+        },
+        {
+          "n": 50,
+          "step": 6,
+          "subject": "default acl, open the page",
+          "answer": "man setfacl",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man 1 setfacl",
+            "man setfacl.1"
+          ]
+        },
+        {
+          "n": 51,
+          "step": 6,
+          "subject": "default acl, inside the page",
+          "answer": "/default",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "/-d",
+            "&default"
+          ]
+        },
+        {
+          "n": 52,
+          "step": 6,
+          "subject": "rich rules",
+          "answer": "man 5 firewalld.richlanguage",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man firewalld.richlanguage",
+            "man firewalld.richlanguage.5",
+            "man -s 5 firewalld.richlanguage"
+          ]
+        },
+        {
+          "n": 53,
+          "step": 6,
+          "subject": "an nftables rule from scratch, the page",
+          "answer": "man 8 nft",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man nft",
+            "man nft.8",
+            "man -s 8 nft"
+          ]
+        },
+        {
+          "n": 54,
+          "step": 6,
+          "subject": "an nftables rule from scratch, inside the page",
+          "answer": "/EXAMPLES",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "/EXAMPLE",
+            "&EXAMPLES"
+          ]
+        },
+        {
+          "n": 55,
+          "step": 6,
+          "subject": "journalctl since yesterday",
+          "answer": "man 7 systemd.time",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man systemd.time",
+            "man systemd.time.7",
+            "man -s 7 systemd.time"
+          ]
+        },
+        {
+          "n": 56,
+          "step": 6,
+          "subject": "nmcli, worked",
+          "answer": "man 7 nmcli-examples",
+          "decoy": "man 5 sysctl.d",
+          "accept": [
+            "man nmcli-examples",
+            "man nmcli-examples.7",
+            "man -s 7 nmcli-examples"
+          ]
+        }
+      ]
     }
   }
 }

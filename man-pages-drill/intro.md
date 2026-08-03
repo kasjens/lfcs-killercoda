@@ -1,31 +1,32 @@
 # Man page speed drill
 
-Fifty items across five topics. You **type the command** — there are no options
-to choose from, because the exam does not offer any either.
+Fifty-six typed answers on the lookups that come up most: section numbers,
+searching when you have forgotten a command name, pager keys, documentation
+outside the man pages, and the handful of LFCS pages that are not where you
+would guess.
 
-The terminal beside this text has real man pages on it. That is the whole point.
-When an item catches you out, do not just read the explanation: open the page and
-look. Being wrong and then finding the answer in eleven seconds is exactly the
-loop the exam rewards.
+Six steps, grouped by topic. Every answer is typed, never picked from a list,
+because the exam does not offer a list either. Record each one with the
+`answer` command:
 
-| Topic | Items | About |
-|---|---|---|
-| SECTIONS | 16 | which numbered page holds a thing |
-| DISCOVERY | 10 | `-k`, `-K`, `apropos`, `whatis`, `mandb` |
-| PAGER | 8 | searching and filtering inside a page |
-| BEYOND-MAN | 8 | `/usr/share/doc`, `dpkg -L`, `rpm -qd`, `systemctl cat` |
-| EXAM-LOOKUPS | 8 | LFCS-shaped tasks — where would you look |
+```
+answer 1 man 5 fstab
+```{{copy}}
 
-Five lives. 25 XP an item, plus 10 at a three streak. At the prompt:
+That writes to `/tmp/answers/1`, which is the file the check reads, so plain
+redirection does the same job:
 
-| Type | Does |
-|---|---|
-| `?` | reveal the answer — no life lost, no XP, counted separately |
-| `!` | after a miss, if it was only wording, count it |
-| `:quit` | end the round |
+```
+echo 'man 5 fstab' > /tmp/answers/1
+```{{copy}}
 
-The score that matters is **produced cold** — the reveals are tracked apart from
-it on purpose. A reveal is not a miss, but it is not knowledge either.
+Answer a step's set, then press **Check**. A wrong answer names the question it
+belongs to, so you can go back to just that one.
 
-> Section numbers in this drill were checked against the man page paths that the
-> packages actually ship, not written from memory.
+The terminal beside this one has real man pages. Anything you are unsure of can
+be settled there in ten seconds, and doing that is the skill being drilled.
+
+> A scored version is also installed. `drill -t sections -n 8` picks items at
+> random, keeps score with lives and a streak, and `drill --review` repeats
+> only what you did not produce cold. It does not feed the checks here, so use
+> it as extra practice.

@@ -1,32 +1,66 @@
-# Full round
+# SECTIONS, part 2 of 2
 
-Twenty items, every topic, scored.
+Section numbers are the first decision in every lookup. Get the number right
+and the page is one command away; get it wrong and you read the wrong thing
+convincingly. 1 is user commands, 5 is file formats, 8 is administration, and
+7 is the odd one for things that are neither.
+
+### Task
+
+7 answers. Record each one, then press **Check**. A wrong answer names the
+question it belongs to, so you can go back to just that one.
+
+**11.** *sudoers, two pages*
+
+You need the sudoers file syntax, and separately the tool that edits it
+safely. Type both commands. (the file syntax)
+
+**12.** *the second part of the same item* (the safe editor)
+
+**13.** *timer units*
+
+You are writing a .timer unit and need OnBootSec, Persistent and Unit. Type
+the command.
+
+**14.** *the directive you cannot find*
+
+You need User=, Environment= and WorkingDirectory= for a service unit, and
+they are not in systemd.service(5). Type the page that has them.
+
+**15.** *resource limits*
+
+A task asks you to raise nofile for a user in /etc/security/limits.conf. Type
+the command for the syntax.
+
+**16.** *sshd keywords*
+
+You need PermitRootLogin, AllowUsers and the Match block syntax. Type the
+command.
+
+**17.** *NFS mount options*
+
+You are mounting an export and need vers=, soft, hard, timeo and retrans. Type
+the command.
 
 ```
-drill -n 20
-```{{exec}}
-
-Two rules that make the number mean something:
-
-**Do not look anything up mid-item.** Answer, then read the explanation, then
-verify in the terminal. Looking first turns a recall measurement into a reading
-comprehension one.
-
-**Use `!` honestly.** It exists for `man --sections=5 fstab` against
-`man -s 5 fstab`, not for "I was close". The drill accepts a lot of legitimate
-variants already — the normaliser strips `sudo`, collapses whitespace and
-ignores quoting differences.
-
-Below 70% produced cold, the topic breakdown at the end tells you where the
-hours should go. It sorts weakest first.
-
-<details><summary>Longer round</summary>
-
-```
-drill -n 50
+answer 11 <your answer>
+answer 12 <your answer>
+answer 13 <your answer>
+answer 14 <your answer>
+answer 15 <your answer>
+answer 16 <your answer>
+answer 17 <your answer>
 ```{{copy}}
 
-All fifty. Roughly twenty-five minutes, and five lives will not survive a bad
-day — which is the point of having them.
+<details><summary>Prefer it scored and shuffled?</summary>
+
+The drill program is still installed. It picks items at random, keeps score
+with lives and a streak, and `drill --review` repeats only what you did not
+produce cold. It does not feed this step's check, so use it as extra practice
+rather than instead.
+
+```
+drill -t sections -n 8
+```{{copy}}
 
 </details>
