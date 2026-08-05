@@ -13,7 +13,7 @@ The fifth step is LDAP, which needs a directory server to talk to and so cannot
 be rehearsed properly here. That one is lookups, and it says so.
 
 > Do **LFCS prep 1: find it in the man pages** first if you have not. This
-> scenario assumes `man -k`, `man -K`, `man -w` and the pager keys are already
-> reflexes. It will not tell you which page to open.
+> scenario assumes `man -k`{{}}, `man -K`{{}}, `man -w`{{}} and the pager keys
+> are already reflexes. It will not tell you which page to open.
 
 You are root. There is nothing on this box you can break that matters.

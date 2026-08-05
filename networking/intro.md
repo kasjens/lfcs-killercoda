@@ -11,11 +11,11 @@ one when it is ready, so you know which to leave alone.
 
 Two steps configure a daemon that has nothing to talk to: chrony has no time
 server and nginx has no backend. Those check that the configuration is correct
-and that the daemon accepts it, which is what `chronyd -Q` and `nginx -t` are
-for. Both steps say so.
+and that the daemon accepts it, which is what `chronyd -Q`{{}} and
+`nginx -t`{{}} are for. Both steps say so.
 
-> Do **LFCS prep 1: find it in the man pages** first if you have not. `ip` alone
-> has a page per subcommand, and knowing that `man ip-route` exists is worth
-> more here than in any other domain.
+> Do **LFCS prep 1: find it in the man pages** first if you have not. `ip`{{}}
+> alone has a page per subcommand, and knowing that `man ip-route`{{}} exists
+> is worth more here than in any other domain.
 
 You are root.

@@ -1,9 +1,10 @@
 # Work with SSL certificates
 
 The toolkit is one command with dozens of subcommands, and like Git it
-documents each on its own page: `openssl-x509`, `openssl-req`, `openssl-genrsa`.
-These pages sit in a section written `1ssl`, so `whatis openssl` reports
-something that looks wrong and is not. The files still land in `man1`.
+documents each on its own page: `openssl-x509`{{}}, `openssl-req`{{}},
+`openssl-genrsa`{{}}. These pages sit in a section written `1ssl`{{}}, so
+`whatis openssl`{{}} reports something that looks wrong and is not. The files
+still land in `man1`{{}}.
 
 For generating a certificate the subcommand you want is the request one, not
 the x509 one, which reads and converts existing certificates more often than it
@@ -29,15 +30,15 @@ with restrictive permissions.
 
 Generate a self-signed certificate:
 
-1. Certificate at **`/etc/ssl/certs/lfcs.crt`**, key at
-   **`/etc/ssl/private/lfcs.key`**.
-2. Common name **`lfcs.example.com`**.
+1. Certificate at **`/etc/ssl/certs/lfcs.crt`{{}}**, key at
+   **`/etc/ssl/private/lfcs.key`{{}}**.
+2. Common name **`lfcs.example.com`{{}}**.
 3. Valid for **365 days**.
 4. The key must have **no passphrase**, and must not be readable by other
    users.
 
-The check reads the certificate with `openssl`, confirms the key matches it,
-and looks at the key's permissions.
+The check reads the certificate with `openssl`{{}}, confirms the key matches
+it, and looks at the key's permissions.
 
 <details><summary>Tip</summary>
 

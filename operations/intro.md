@@ -4,8 +4,8 @@ The other 25% domain, and the broadest: kernel parameters, service
 troubleshooting, scheduled jobs, packages and pinning, boot recovery, virtual
 machines, container engines, and mandatory access control.
 
-Six of the eight steps are real work on this box, and two of them are
-diagnosis rather than construction. A unit file and an `/etc/fstab` entry are
+Six of the eight steps are real work on this box, and two of them are diagnosis
+rather than construction. A unit file and an `/etc/fstab`{{}} entry are
 deliberately broken. Finding out *why* is the exercise; the fix is small once
 you have.
 

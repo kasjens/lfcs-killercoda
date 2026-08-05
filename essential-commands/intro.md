@@ -11,7 +11,8 @@ pages you need, and change the system. The check reads the machine afterwards,
 so any route that produces the right result passes.
 
 > Do **LFCS prep 1: find it in the man pages** first if you have not. This
-> scenario assumes `man -k`, `man -K`, `man -w` and the pager keys are already
-> reflexes. It will tell you what to achieve, not which page to open.
+> scenario assumes `man -k`{{}}, `man -K`{{}}, `man -w`{{}} and the pager keys
+> are already reflexes. It will tell you what to achieve, not which page to
+> open.
 
 You are root. There is nothing on this box you can break that matters.

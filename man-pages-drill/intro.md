@@ -7,14 +7,14 @@ would guess.
 
 Six steps, grouped by topic. Every answer is typed, never picked from a list,
 because the exam does not offer a list either. Record each one with the
-`answer` command:
+`answer`{{}} command:
 
 ```
 answer 1 man 5 fstab
 ```{{copy}}
 
-That writes to `/tmp/answers/1`, which is the file the check reads, so plain
-redirection does the same job:
+That writes to `/tmp/answers/1`{{}}, which is the file the check reads, so
+plain redirection does the same job:
 
 ```
 echo 'man 5 fstab' > /tmp/answers/1

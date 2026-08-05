@@ -67,9 +67,10 @@ jobs:
       - name: Referenced files exist
         run: python3 tests/validate_scenarios.py
 
-      # Killercoda leaks its copy-button markup into the page when two inline
-      # code spans are separated only by a full stop. Found live, not here.
-      - name: Markdown avoids patterns the renderer mishandles
+      # Killercoda leaks its copy-button markup into the page, on a trigger we
+      # never pinned down. Inline code opts out of the button with {{}} so
+      # there is no button to leak. Found live, not here.
+      - name: Inline code opts out of the copy button
         run: python3 tests/test_markdown.py
 
       # --no-skips because every package the questions reference is installed

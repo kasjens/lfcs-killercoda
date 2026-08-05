@@ -9,11 +9,11 @@ Directory lookups are not a special case. They plug into the same mechanism
 that already answers "who is uid 1000", the Name Service Switch.
 
 One configuration file lists, per database, which sources are consulted and in
-what order. The `passwd`, `group` and `shadow` databases each get a line, and
-the sources are tried left to right. Adding a directory source to those lines
-is what makes remote accounts visible to every program on the box, without any
-of them being recompiled or even aware. That is why `id`, `ls -l` and `sudo`
-all start resolving remote users at the same moment.
+what order. The `passwd`{{}}, `group`{{}} and `shadow`{{}} databases each get a
+line, and the sources are tried left to right. Adding a directory source to
+those lines is what makes remote accounts visible to every program on the box,
+without any of them being recompiled or even aware. That is why `id`{{}},
+`ls -l`{{}} and `sudo`{{}} all start resolving remote users at the same moment.
 
 Something has to implement the source. The usual answer today is a daemon that
 caches lookups and handles the connection, failover and credentials, so nothing
@@ -26,10 +26,10 @@ other decides how to reach the directory.
 
 ### Task
 
-Four lookups. Record each with the `answer` command, then press **Check**.
+Four lookups. Record each with the `answer`{{}} command, then press **Check**.
 
-**1.** The page deciding which sources answer `passwd` and `group` lookups.
-Page name, no section number.
+**1.** The page deciding which sources answer `passwd`{{}} and `group`{{}}
+lookups. Page name, no section number.
 
 **2.** The section that page lives in.
 
@@ -51,7 +51,7 @@ man -k 'name service'
 man -k ldap | head -20
 ```{{exec}}
 
-Questions 3 and 4 are both section 5 and both end in `.conf`. One is named
+Questions 3 and 4 are both section 5 and both end in `.conf`{{}}. One is named
 after a three-letter daemon, the other after the protocol.
 
 </details>
@@ -65,9 +65,9 @@ answer 3 sssd.conf
 answer 4 ldap.conf
 ```{{copy}}
 
-`nsswitch.conf(5)` decides which sources answer each database, which is why
+`nsswitch.conf(5)`{{}} decides which sources answer each database, which is why
 adding a directory there makes remote users visible to every program at once.
-`sssd.conf(5)` configures the caching daemon; `ldap.conf(5)` configures the
-client library underneath it.
+`sssd.conf(5)`{{}} configures the caching daemon; `ldap.conf(5)`{{}} configures
+the client library underneath it.
 
 </details>

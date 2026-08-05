@@ -1,8 +1,8 @@
 # BEYOND-MAN
 
-Man pages are not the only documentation on the box. `/usr/share/doc`, package
-file lists and systemd's own introspection all answer questions the manual
-does not, and the exam allows every one of them.
+Man pages are not the only documentation on the box. `/usr/share/doc`{{}},
+package file lists and systemd's own introspection all answer questions the
+manual does not, and the exam allows every one of them.
 
 ### Task
 

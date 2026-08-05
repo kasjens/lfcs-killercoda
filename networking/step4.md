@@ -4,27 +4,28 @@ Four pages, and picking the wrong one wastes real time:
 
 | Page | What it is |
 |---|---|
-| `sshd(8)` | the server daemon |
-| `sshd_config(5)` | **the server's configuration** |
-| `ssh(1)` | the client command |
-| `ssh_config(5)` | the client's configuration |
+| `sshd(8)`{{}} | the server daemon |
+| `sshd_config(5)`{{}} | **the server's configuration** |
+| `ssh(1)`{{}} | the client command |
+| `ssh_config(5)`{{}} | the client's configuration |
 
-The two that get confused are `sshd_config` and `ssh_config`. One letter, and
-editing the wrong one produces a change that silently does nothing.
+The two that get confused are `sshd_config`{{}} and `ssh_config`{{}}. One
+letter, and editing the wrong one produces a change that silently does nothing.
 
-Three behaviours of `sshd_config` that are not obvious.
+Three behaviours of `sshd_config`{{}} that are not obvious.
 
 **First occurrence wins.** Unlike most config files, sshd takes the *first*
 setting of a keyword and ignores later ones. Appending your line to the bottom
 of a file that already sets it changes nothing. On modern Debian and Ubuntu
-there is also an `Include /etc/ssh/sshd_config.d/*.conf` at the **top**, which
-means drop-ins win over everything below them.
+there is also an `Include /etc/ssh/sshd_config.d/*.conf`{{}} at the **top**,
+which means drop-ins win over everything below them.
 
-**`PermitRootLogin` has more than two values.** The default on many systems is
-`prohibit-password`, which still allows key-based root login. If a task says
-disable root login, `no` is the answer and `prohibit-password` is not.
+**`PermitRootLogin`{{}} has more than two values.** The default on many systems
+is `prohibit-password`{{}}, which still allows key-based root login. If a task
+says disable root login, `no`{{}} is the answer and `prohibit-password`{{}} is
+not.
 
-**`sshd -t` validates the file.** A syntax error means the daemon will not
+**`sshd -t`{{}} validates the file.** A syntax error means the daemon will not
 restart, and finding that out during a reload on a remote box is how people
 lock themselves out. Validate first, always.
 
@@ -39,8 +40,8 @@ Harden the server configuration. Do not restart anything.
 2. **Disallow root login entirely**, not just by password.
 3. **Disable password authentication**, leaving keys only.
 
-The check reads the effective settings and, if `sshd` is installed, asks it to
-validate the file.
+The check reads the effective settings and, if `sshd`{{}} is installed, asks it
+to validate the file.
 
 <details><summary>Tip</summary>
 
@@ -48,10 +49,10 @@ validate the file.
 man 5 sshd_config
 ```{{exec}}
 
-Read what `PermitRootLogin` actually accepts before choosing a value. There are
-four, and two of them permit a root login.
+Read what `PermitRootLogin`{{}} actually accepts before choosing a value. There
+are four, and two of them permit a root login.
 
-Validate with `sshd -t`. Silence means it parses.
+Validate with `sshd -t`{{}}. Silence means it parses.
 
 </details>
 

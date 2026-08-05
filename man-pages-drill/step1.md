@@ -114,24 +114,25 @@ answer 9 man 7 hier
 answer 10 4
 ```{{copy}}
 
-**1.** fstab(5) is the file format. mount(8) is the command. Plain `man fstab`
-happens to land on 5 here because nothing else claims the name, but typing the
-number is the habit that saves you when a name lives in two sections.
+**1.** fstab(5) is the file format. mount(8) is the command. Plain
+`man fstab`{{}} happens to land on 5 here because nothing else claims the name,
+but typing the number is the habit that saves you when a name lives in two
+sections.
 
 **2.** Section 8 is system administration commands — the ones that normally
 need root. Almost every LFCS task verb lives here.
 
 **3.** crontab(1) documents the *command* — how to edit and list. crontab(5)
-documents the *file* — the five fields, @reboot, ranges and steps. Bare `man
-crontab` gives you 1 and leaves you no wiser.
+documents the *file* — the five fields, @reboot, ranges and steps. Bare
+`man crontab`{{}} gives you 1 and leaves you no wiser.
 
 **4.** chage is section 1, not 8, even though it reads like an admin tool —
-because an unprivileged user may run `chage -l` on their own account. useradd,
-usermod and userdel are 8; chage, passwd and gpasswd are 1.
+because an unprivileged user may run `chage -l`{{}} on their own account.
+useradd, usermod and userdel are 8; chage, passwd and gpasswd are 1.
 
 **5.** passwd(1) changes a password. passwd(5) describes the file. This is the
 cleanest example of why the number matters — the same name, two entirely
-different pages, and bare `man passwd` gives you the wrong one.
+different pages, and bare `man passwd`{{}} gives you the wrong one.
 
 **6.** -a walks all matches instead of stopping at the lowest-numbered one.
 Quit one page with q and the next opens. Useful when you know the name but not

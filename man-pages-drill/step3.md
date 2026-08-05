@@ -1,9 +1,9 @@
 # DISCOVERY
 
 When you cannot remember the name of a command, you search descriptions rather
-than pages. `man -k` searches the one-line summaries and treats its argument
-as a regular expression. `man -K` searches the body of every page, which is
-slow but finds a directive nobody indexed.
+than pages. `man -k`{{}} searches the one-line summaries and treats its
+argument as a regular expression. `man -K`{{}} searches the body of every page,
+which is slow but finds a directive nobody indexed.
 
 ### Task
 

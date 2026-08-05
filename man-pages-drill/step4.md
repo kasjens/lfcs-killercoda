@@ -1,6 +1,6 @@
 # PAGER
 
-Everything man shows you goes through `less`, so pager keys are the fastest
+Everything man shows you goes through `less`{{}}, so pager keys are the fastest
 speed-up available. Filtering a nine-screen page down to the six lines that
 matter is worth more in an exam than remembering any single flag.
 

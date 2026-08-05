@@ -15,8 +15,8 @@ They differ in what the policy attaches to.
 
 **SELinux labels everything.** Every file, port and process carries a context,
 and rules are written between labels. That is powerful and total, and it is why
-a mislabelled file breaks a service in a way no `ls -l` explains, and why
-`restorecon` exists.
+a mislabelled file breaks a service in a way no `ls -l`{{}} explains, and why
+`restorecon`{{}} exists.
 
 **AppArmor confines paths.** A profile names an executable and lists the paths
 it may touch. Simpler to read, easier to write, and blind to a file reached by
@@ -26,16 +26,16 @@ The vocabulary maps closely enough to be worth holding:
 
 | SELinux | AppArmor |
 |---|---|
-| `getenforce` | `aa-status` |
+| `getenforce`{{}} | `aa-status`{{}} |
 | permissive mode | complain mode |
 | enforcing mode | enforce mode |
-| `setsebool` | edit the profile and reload |
+| `setsebool`{{}} | edit the profile and reload |
 
 **Permissive and complain both mean the same thing**: log what would have been
 denied, deny nothing. That is the mode you use to find out what a policy needs
 before turning it on, and the first thing to check when a service misbehaves
 for no visible reason. On SELinux the denials are in the audit log; on AppArmor
-they are in the kernel log, and `dmesg | grep -i apparmor` finds them.
+they are in the kernel log, and `dmesg | grep -i apparmor`{{}} finds them.
 
 ### Task
 
@@ -43,7 +43,8 @@ Three lookups about the MAC system on this box.
 
 **1.** The page describing the MAC system Ubuntu actually enforces.
 
-**2.** The page describing the profile language, the one under `/etc/apparmor.d`.
+**2.** The page describing the profile language, the one under
+`/etc/apparmor.d`{{}}.
 
 **3.** The command reporting which profiles are loaded and in what mode.
 
@@ -72,8 +73,8 @@ answer 5 apparmor.d
 answer 6 aa-status
 ```{{copy}}
 
-Three sections between three answers: `apparmor(7)` is the overview,
-`apparmor.d(5)` is the profile file format, and `aa-status(8)` is the
+Three sections between three answers: `apparmor(7)`{{}} is the overview,
+`apparmor.d(5)`{{}} is the profile file format, and `aa-status(8)`{{}} is the
 administrative command. That spread is the same shape SELinux uses.
 
 </details>
