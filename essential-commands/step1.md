@@ -1,9 +1,9 @@
 # Basic Git operations
 
-Git ships one man page per subcommand, named with a hyphen: `git-clone(1)`, not
-`git clone(1)`. So `man git clone` fails and `man git-clone` works. That naming
-is the only thing standing between you and every Git answer in the exam.
-`git help <verb>` opens the same page.
+Git ships one man page per subcommand, named with a hyphen: `git-clone(1)`{{}},
+not `git clone(1)`{{}}. So `man git clone`{{}} fails and `man git-clone`{{}}
+works. That naming is the only thing standing between you and every Git answer
+in the exam. `git help <verb>`{{}} opens the same page.
 
 Two things about a first commit catch people out.
 
