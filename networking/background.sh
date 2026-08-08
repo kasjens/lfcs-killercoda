@@ -23,6 +23,13 @@ modprobe dummy 2>/dev/null
 modprobe bonding 2>/dev/null
 modprobe br_netfilter 2>/dev/null
 
+# Step 5 builds a default-drop input chain. On this box that also drops the
+# connection the Check button arrives over, and the step reports a validation
+# error rather than a result. So the ruleset gets a network namespace of its
+# own. Still a real kernel ruleset, read back with nft, just not this box's.
+ip netns add lfcs 2>/dev/null
+ip netns exec lfcs ip link set lo up 2>/dev/null
+
 # nginx listens on 80 by default, which collides with step 8's site on 8080
 # only if someone changes it, but a running default server also makes `ss`
 # output in step 3 more interesting.

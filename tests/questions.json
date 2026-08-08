@@ -422,19 +422,28 @@
           "n": 5,
           "title": "packet filtering and NAT",
           "sandbox": "user-ns-net",
+          "comment": [
+            "The rules go in the lfcs namespace, as they do on the live box: a",
+            "default-drop input chain on the box itself cuts the connection the",
+            "Check button arrives over, and the step reports a validation error",
+            "instead of a result. dummy0 stays outside it, which is why the",
+            "masquerade rule names the interface as a string."
+          ],
           "solve": [
-            "nft add table inet filter",
-            "nft 'add chain inet filter input { type filter hook input priority 0; policy drop; }'",
-            "nft add rule inet filter input ct state established,related accept",
-            "nft add rule inet filter input iif lo accept",
-            "nft add rule inet filter input tcp dport 22 accept",
-            "nft add table ip nat",
-            "nft 'add chain ip nat postrouting { type nat hook postrouting priority 100; }'",
-            "nft add rule ip nat postrouting oifname \"dummy0\" masquerade"
+            "ip netns exec lfcs nft add table inet filter",
+            "ip netns exec lfcs nft 'add chain inet filter input { type filter hook input priority 0; policy drop; }'",
+            "ip netns exec lfcs nft add rule inet filter input ct state established,related accept",
+            "ip netns exec lfcs nft add rule inet filter input iif lo accept",
+            "ip netns exec lfcs nft add rule inet filter input tcp dport 22 accept",
+            "ip netns exec lfcs nft add table ip nat",
+            "ip netns exec lfcs nft 'add chain ip nat postrouting { type nat hook postrouting priority 100; }'",
+            "ip netns exec lfcs nft add rule ip nat postrouting oifname \"dummy0\" masquerade"
           ],
           "setup": [
             "ip link add dummy0 type dummy",
-            "ip link set dummy0 up"
+            "ip link set dummy0 up",
+            "ip netns add lfcs",
+            "ip netns exec lfcs ip link set lo up"
           ]
         },
         {

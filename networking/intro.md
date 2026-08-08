@@ -7,7 +7,9 @@ NAT, static routing, bridges and bonds, and reverse proxies.
 Every step is real work on this box. All of it happens on **dummy interfaces**
 you create, never on the interface carrying your session, so there is nothing
 you can do here that disconnects you. The terminal prints the name of the real
-one when it is ready, so you know which to leave alone.
+one when it is ready, so you know which to leave alone. The one step that
+cannot be kept off the real interface, a default-drop firewall, is done in a
+network namespace of its own instead.
 
 Two steps configure a daemon that has nothing to talk to: chrony has no time
 server and nginx has no backend. Those check that the configuration is correct

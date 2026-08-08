@@ -1,13 +1,19 @@
 #!/bin/bash
 # Step 5: packet filtering and NAT. Reads the live ruleset from the kernel, so
-# a rules file that was never loaded does not pass.
+# a rules file that was never loaded does not pass. The ruleset lives in the
+# lfcs network namespace: a default-drop input chain on the box itself takes
+# out the connection this check arrives over, and the step cannot report a
+# result at all.
 bad=0
 note() { echo "$1" >&2; bad=1; }
+ns=lfcs
 
 command -v nft >/dev/null 2>&1 || { echo "nft is not installed" >&2; exit 1; }
+ip netns list 2>/dev/null | grep -q "^$ns\b" \
+  || { echo "the $ns network namespace is missing; the scenario creates it at start" >&2; exit 1; }
 
-rules="$(nft list ruleset 2>/dev/null)"
-[ -n "$rules" ] || { echo "the nftables ruleset is empty" >&2; exit 1; }
+rules="$(ip netns exec "$ns" nft list ruleset 2>/dev/null)"
+[ -n "$rules" ] || { echo "the ruleset in the $ns namespace is empty; the rules go in there, not on the box: ip netns exec $ns nft ..." >&2; exit 1; }
 
 # A filter chain that drops by default. Anything else is a firewall in name only.
 printf '%s\n' "$rules" | grep -qE 'type filter hook input' \

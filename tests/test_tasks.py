@@ -48,6 +48,11 @@ mount --bind "$E" /etc
 mount -t tmpfs tmpfs /home
 mount -t tmpfs tmpfs /root
 mount -t tmpfs tmpfs /mnt
+# `ip netns add` bind-mounts the new namespace under /run/netns, which is not
+# writable in here. Networking step 5 keeps its ruleset in a namespace, so
+# without this the task cannot be set up at all.
+mkdir -p /run/netns 2>/dev/null
+mount -t tmpfs tmpfs /run/netns
 mount --bind {srv} /srv
 set +e
 """

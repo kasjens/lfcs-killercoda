@@ -39,6 +39,20 @@ Rules made with `nft`{{}} are lost at reboot; `/etc/nftables.conf`{{}} and the
 
 ### Task
 
+A `policy drop`{{}} input chain on this box would drop the connection the
+**Check** button arrives over, which is the mistake this step warns about,
+committed against the machine you are reading this on. So the ruleset goes in a
+network namespace of its own, `lfcs`{{}}, already created for you. It is a real
+kernel ruleset, read back with `nft`{{}}, it just is not this box's.
+
+```
+ip netns exec lfcs bash
+```{{exec}}
+
+Everything below happens in that shell. `exit`{{}} returns you to the box.
+`dummy0`{{}} is not in the namespace, which is exactly why rule 5 names the
+interface as a string.
+
 Build a ruleset:
 
 1. An **inet** table with an **input** chain, hook input, **policy drop**.
@@ -58,21 +72,25 @@ The page's synopsis section shows chain creation with the hook, priority and
 policy in braces. Quote the braces so your shell does not eat them.
 
 `nft list ruleset`{{}} prints everything you have built, and is how the check
-reads it too.
+reads it too. If it prints nothing, you are on the box rather than in the
+namespace: either go back in, or put `ip netns exec lfcs`{{}} in front of the
+command.
 
 </details>
 
 <details><summary>Solution</summary>
 
+Prefixed, so it runs from the box or from inside the namespace either way.
+
 ```
-nft add table inet filter
-nft 'add chain inet filter input { type filter hook input priority 0; policy drop; }'
-nft add rule inet filter input ct state established,related accept
-nft add rule inet filter input iif lo accept
-nft add rule inet filter input tcp dport 22 accept
-nft add table ip nat
-nft 'add chain ip nat postrouting { type nat hook postrouting priority 100; }'
-nft add rule ip nat postrouting oifname "dummy0" masquerade
+ip netns exec lfcs nft add table inet filter
+ip netns exec lfcs nft 'add chain inet filter input { type filter hook input priority 0; policy drop; }'
+ip netns exec lfcs nft add rule inet filter input ct state established,related accept
+ip netns exec lfcs nft add rule inet filter input iif lo accept
+ip netns exec lfcs nft add rule inet filter input tcp dport 22 accept
+ip netns exec lfcs nft add table ip nat
+ip netns exec lfcs nft 'add chain ip nat postrouting { type nat hook postrouting priority 100; }'
+ip netns exec lfcs nft add rule ip nat postrouting oifname "dummy0" masquerade
 ```{{copy}}
 
 </details>
