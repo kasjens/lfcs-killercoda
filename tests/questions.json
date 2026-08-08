@@ -339,6 +339,15 @@
         "Configure bridge and bonding devices",
         "Implement reverse proxies and load balancers"
       ],
+      "provided_by_install": {
+        "/etc/chrony/chrony.conf": "the chrony package",
+        "/etc/ssh/sshd_config": "the openssh-server package",
+        "/etc/ssh/sshd_config.d": "the openssh-server package",
+        "/etc/ssh/sshd_config.d/50-cloud-init.conf": "cloud-init on the live image, which is the layout step 4 has to survive",
+        "/run/sshd": "the openssh-server package, through its unit",
+        "/etc/nginx/sites-available": "the nginx package",
+        "/etc/nginx/sites-enabled": "the nginx package"
+      },
       "tasks": [
         {
           "n": 1,
@@ -467,7 +476,9 @@
           "sandbox": "user-ns-net",
           "setup": [
             "ip link add dummy1 type dummy",
-            "ip link add dummy2 type dummy"
+            "ip link add dummy2 type dummy",
+            "ip link set dummy1 up",
+            "ip link set dummy2 up"
           ],
           "solve": [
             "ip link add br0 type bridge",
@@ -508,6 +519,11 @@
         "Configure container engines",
         "Mandatory access control"
       ],
+      "provided_by_install": {
+        "/etc/cron.d": "the cron package",
+        "/etc/apt/sources.list.d": "the apt package",
+        "/etc/apt/preferences.d": "the apt package"
+      },
       "tasks": [
         {
           "n": 1,

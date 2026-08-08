@@ -23,6 +23,16 @@ modprobe dummy 2>/dev/null
 modprobe bonding 2>/dev/null
 modprobe br_netfilter 2>/dev/null
 
+# Step 7 says these two are already here and then asks for a bridge and a bond
+# built out of them. They were never created, so the step could not be done at
+# all: every command in it answered "Cannot find device". Up, because the rule
+# the step teaches -- a member must be down before a bond will take it -- is
+# only a lesson if the learner meets an interface that is up.
+ip link add dummy1 type dummy 2>/dev/null
+ip link add dummy2 type dummy 2>/dev/null
+ip link set dummy1 up 2>/dev/null
+ip link set dummy2 up 2>/dev/null
+
 # Step 5 builds a default-drop input chain. On this box that also drops the
 # connection the Check button arrives over, and the step reports a validation
 # error rather than a result. So the ruleset gets a network namespace of its

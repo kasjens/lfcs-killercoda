@@ -67,6 +67,11 @@ jobs:
       - name: Referenced files exist
         run: python3 tests/validate_scenarios.py
 
+      # A step asked for work on interfaces only the test harness ever created,
+      # so it passed here and could not be done on the box. Found live.
+      - name: Task prerequisites come from the scenario, not the harness
+        run: python3 tests/test_prerequisites.py
+
       # Killercoda leaks its copy-button markup into the page, on a trigger we
       # never pinned down. Inline code opts out of the button with {{}} so
       # there is no button to leak. Found live, not here.
