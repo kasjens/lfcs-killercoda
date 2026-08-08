@@ -382,18 +382,40 @@
         },
         {
           "n": 4,
-          "title": "OpenSSH server",
+          "title": "OpenSSH server, keywords already in the file",
           "sandbox": "user-ns",
           "setup": [
-            "mkdir -p /etc/ssh",
+            "mkdir -p /etc/ssh/sshd_config.d",
             "mkdir -p /run/sshd 2>/dev/null || true",
             "printf 'Port 22\\nPermitRootLogin prohibit-password\\nPasswordAuthentication yes\\n' > /etc/ssh/sshd_config",
             "command -v ssh-keygen >/dev/null 2>&1 && ssh-keygen -A >/dev/null 2>&1 || true"
           ],
           "solve": [
-            "sed -i -E 's/^[[:space:]]*Port[[:space:]]+.*/Port 2222/' /etc/ssh/sshd_config",
-            "sed -i -E 's/^[[:space:]]*PermitRootLogin[[:space:]]+.*/PermitRootLogin no/' /etc/ssh/sshd_config",
-            "sed -i -E 's/^[[:space:]]*PasswordAuthentication[[:space:]]+.*/PasswordAuthentication no/' /etc/ssh/sshd_config"
+            "for f in /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf; do [ -f \"$f\" ] && sed -i -E '/^[[:space:]]*#?[[:space:]]*(Port|PermitRootLogin|PasswordAuthentication)[[:space:]]/d' \"$f\"; done",
+            "printf 'Port 2222\\nPermitRootLogin no\\nPasswordAuthentication no\\n' >> /etc/ssh/sshd_config"
+          ]
+        },
+        {
+          "n": 4,
+          "title": "OpenSSH server, keywords absent and set in a drop-in",
+          "sandbox": "user-ns",
+          "comment": [
+            "The layout the live box turned out to have. The old solution",
+            "substituted into lines that were not there, so it changed nothing,",
+            "said nothing, and the step could not be cleared. A drop-in is in",
+            "here too because Include sits at the top of sshd_config on Ubuntu,",
+            "so a value set there beats anything the learner writes below it."
+          ],
+          "setup": [
+            "mkdir -p /etc/ssh/sshd_config.d",
+            "mkdir -p /run/sshd 2>/dev/null || true",
+            "printf 'Include /etc/ssh/sshd_config.d/*.conf\\n\\nKbdInteractiveAuthentication no\\nUsePAM yes\\n' > /etc/ssh/sshd_config",
+            "printf 'PasswordAuthentication yes\\n' > /etc/ssh/sshd_config.d/50-cloud-init.conf",
+            "command -v ssh-keygen >/dev/null 2>&1 && ssh-keygen -A >/dev/null 2>&1 || true"
+          ],
+          "solve": [
+            "for f in /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf; do [ -f \"$f\" ] && sed -i -E '/^[[:space:]]*#?[[:space:]]*(Port|PermitRootLogin|PasswordAuthentication)[[:space:]]/d' \"$f\"; done",
+            "printf 'Port 2222\\nPermitRootLogin no\\nPasswordAuthentication no\\n' >> /etc/ssh/sshd_config"
           ]
         },
         {

@@ -12,7 +12,7 @@ Four pages, and picking the wrong one wastes real time:
 The two that get confused are `sshd_config`{{}} and `ssh_config`{{}}. One
 letter, and editing the wrong one produces a change that silently does nothing.
 
-Three behaviours of `sshd_config`{{}} that are not obvious.
+Four behaviours of `sshd_config`{{}} that are not obvious.
 
 **First occurrence wins.** Unlike most config files, sshd takes the *first*
 setting of a keyword and ignores later ones. Appending your line to the bottom
@@ -24,6 +24,11 @@ which means drop-ins win over everything below them.
 is `prohibit-password`{{}}, which still allows key-based root login. If a task
 says disable root login, `no`{{}} is the answer and `prohibit-password`{{}} is
 not.
+
+**A keyword that is not in the file cannot be edited into it.** Most of these
+ship commented out, some images ship without them at all, and a substitution
+that matches no line changes nothing and says nothing about it. Read the file
+back after editing, or add the line rather than rewriting one.
 
 **`sshd -t`{{}} validates the file.** A syntax error means the daemon will not
 restart, and finding that out during a reload on a remote box is how people
@@ -52,6 +57,15 @@ man 5 sshd_config
 Read what `PermitRootLogin`{{}} actually accepts before choosing a value. There
 are four, and two of them permit a root login.
 
+See what is set already, drop-ins included, before you decide how to change it:
+
+```
+grep -rniE '^[[:space:]]*(Port|PermitRootLogin|PasswordAuthentication)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/
+```{{exec}}
+
+Nothing printed for a keyword means there is no line to edit and you have to
+add one.
+
 Validate with `sshd -t`{{}}. Silence means it parses.
 
 </details>
@@ -59,9 +73,10 @@ Validate with `sshd -t`{{}}. Silence means it parses.
 <details><summary>Solution</summary>
 
 ```
-sed -i -E 's/^[[:space:]]*#?[[:space:]]*Port[[:space:]]+.*/Port 2222/' /etc/ssh/sshd_config
-sed -i -E 's/^[[:space:]]*#?[[:space:]]*PermitRootLogin[[:space:]]+.*/PermitRootLogin no/' /etc/ssh/sshd_config
-sed -i -E 's/^[[:space:]]*#?[[:space:]]*PasswordAuthentication[[:space:]]+.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+for f in /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf; do
+  [ -f "$f" ] && sed -i -E '/^[[:space:]]*#?[[:space:]]*(Port|PermitRootLogin|PasswordAuthentication)[[:space:]]/d' "$f"
+done
+printf 'Port 2222\nPermitRootLogin no\nPasswordAuthentication no\n' >> /etc/ssh/sshd_config
 sshd -t
 ```{{copy}}
 
