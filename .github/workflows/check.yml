@@ -45,6 +45,11 @@ jobs:
           sudo -E apt-get install -y -qq --no-install-recommends libvirt-daemon-system
           sudo -E apt-get install -y -qq --reinstall coreutils util-linux \
             passwd login mount cron bash procps systemd libpam-modules
+          # operations step 7 reads dockerd(8) and the docker shell completion,
+          # so test_tips.py needs both. The runner ships docker-ce already;
+          # installing docker.io on top of it would conflict, so only fill the
+          # gap if there is one.
+          command -v dockerd >/dev/null || sudo -E apt-get install -y -qq docker.io
           sudo mandb -q
 
       # test_verifiers.sh skips step 5 and step 6 when their tooling is absent.
@@ -62,6 +67,14 @@ jobs:
             || { echo "::error::no systemd-analyze, so step 6 would skip"; fail=1; }
           sudo test -w /etc/systemd/system \
             || { echo "::error::/etc/systemd/system is not writable, so step 6 cannot stage a timer"; fail=1; }
+          # The non-man sources a tip is allowed to name. test_tips.py skips a
+          # source it cannot read, and --no-skips turns that into a failure, so
+          # say which file is missing rather than making the run decode it.
+          for f in /usr/share/bash-completion/completions/docker \
+                   /usr/share/vim/addons/syntax/nginx.vim \
+                   /etc/nginx/proxy_params; do
+            [ -f "$f" ] || { echo "::error::$f is missing, so a tip in test_tips.py would go unchecked"; fail=1; }
+          done
           exit "$fail"
 
       - name: Referenced files exist
@@ -89,6 +102,13 @@ jobs:
 
       - name: Domain questions match their man pages
         run: python3 tests/test_questions.py --no-skips
+
+      # The tips went unchecked until three of them were found live naming a
+      # page the answer is not in: `man docker` for a daemon setting,
+      # /usr/share/doc/nginx for a directive reference that is not there, and
+      # the timer page for ExecStart=. Same --no-skips reason as above.
+      - name: Tips name a source that has the answer
+        run: python3 tests/test_tips.py --no-skips
 
       # Each task verifier is run against a clean box and then against the
       # reference solution. The failure this catches is a verifier that passes

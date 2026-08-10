@@ -10,7 +10,14 @@
     "Fields: n question number, step, subject shown on failure, answer canonical,",
     "accept other accepted spellings, cs case-sensitive, decoy a wrong answer that",
     "must be rejected, page the man page backing the answer, section expected",
-    "section, contains a term the rendered page must include."
+    "section, contains a term the rendered page must include.",
+    "",
+    "tip_exemptions: needles tests/test_tips.py would otherwise flag, where the",
+    "tip legitimately does not name a source containing them. Each reason is a",
+    "claim about what is on the box, so it says what it relies on. Adding one is",
+    "a decision, not a formality: the docker bug this test exists to catch had",
+    "max-size written in the step's own prose, so 'the step says it' is exactly",
+    "the excuse that let a broken tip ship."
   ],
   "scenarios": {
     "essential-commands": {
@@ -1439,6 +1446,18 @@
           "why": "NetworkManager ships a separate examples page that almost nobody finds. nmcli(1) is the flag reference, nm-settings-nmcli(5) is the property list, and nmcli-examples(7) is the one with full working command lines for static addressing, bonds and bridges."
         }
       ]
+    }
+  },
+  "tip_exemptions": {
+    "man-pages-navigation/step6.md": {
+      "OnCalendar": "The deferral is the exercise. The step body names systemd.timer(5) as where OnCalendar= and Unit= live, and the tip covers only the grammar systemd.timer(5) hands to systemd.time(7). A tip naming the timer page would delete the step.",
+      "WantedBy": "[Install] boilerplate, given in full in the task text; it is not what the step asks anyone to look up."
+    },
+    "operations/step5.md": {
+      "--verify": "A findmnt(8) flag, and the tip runs `findmnt --verify` rather than claiming fstab(5) documents it. The tip's page is fstab(5) because the six columns are the lookup."
+    },
+    "operations/step7.md": {
+      "log-opts": "Checked: the string log-opts is on no man page, doc file or completion on the box -- only the CLI's --log-opt is. The daemon.json object name cannot be looked up, so the step body gives it and the tip's job is the driver keys inside it."
     }
   }
 }

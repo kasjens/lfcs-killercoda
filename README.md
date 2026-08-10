@@ -84,6 +84,7 @@ tests/
 ├── validate_scenarios.py   every file index.json references must exist
 ├── test_questions.py       lookup answers checked against the real pages
 ├── test_tasks.py           each task verifier fails before, passes after
+├── test_tips.py            each tip names a source the answer is really in
 └── test_verifiers.sh       verifiers accept right answers, reject wrong ones
 
 tools/
@@ -109,6 +110,7 @@ with `/`, not merely a zero exit code.
 python3 tests/validate_scenarios.py
 python3 tests/test_questions.py
 python3 tests/test_tasks.py
+python3 tests/test_tips.py
 bash tests/test_verifiers.sh
 find . -name '*.sh' -exec shellcheck -s bash -e SC2148 {} +
 ```
@@ -148,11 +150,14 @@ Every lookup answer in the domain scenarios is re-checked against the installed
 page on each CI run, so a section that moves between package versions fails the
 build rather than quietly teaching the wrong thing.
 
-The other way a tip goes wrong is subtler and CI cannot see it: the section is
-right, the page exists, and the answer is not in it, because the page defers to
-a component that owns the setting. A tip that does this is worse than no tip,
-since it turns a search problem into a trust problem. The three found so far,
-all confirmed by rendering the page rather than from memory:
+The other way a tip goes wrong is subtler: the section is right, the page
+exists, and the answer is not in it, because the page defers to a component
+that owns the setting. A tip that does this is worse than no tip, since it
+turns a search problem into a trust problem. Nothing checked for it until three
+had been found by running the scenarios; `test_tips.py` now does, by taking the
+settings each solution depends on and requiring them to appear in something the
+tip actually names. The three, all confirmed by rendering the page rather than
+from memory:
 
 - `dockerd(8)` documents `--log-opt` as "Logging driver specific options" and
   lists none of them. `max-size` and `max-file` are in **no** docker man page;
@@ -167,6 +172,13 @@ all confirmed by rendering the page rather than from memory:
 Where a page defers, the tip has to say so and name the route on. Two of these
 are also a technique worth having: when the documentation will not enumerate a
 tool's valid values, the tool's own shell completion has to.
+
+A tip may legitimately not cover something — the timer step in
+`man-pages-navigation` withholds the page on purpose, because finding it is the
+exercise. Those are listed under `tip_exemptions` in `questions.json`, each with
+its reason, and adding one is meant to be a decision rather than a formality:
+the docker tip that started this had `max-size` written in the step's own prose,
+so "the step already says it" is exactly the excuse that let it ship.
 
 ## Grouping them into a course
 
