@@ -148,6 +148,26 @@ Every lookup answer in the domain scenarios is re-checked against the installed
 page on each CI run, so a section that moves between package versions fails the
 build rather than quietly teaching the wrong thing.
 
+The other way a tip goes wrong is subtler and CI cannot see it: the section is
+right, the page exists, and the answer is not in it, because the page defers to
+a component that owns the setting. A tip that does this is worse than no tip,
+since it turns a search problem into a trust problem. The three found so far,
+all confirmed by rendering the page rather than from memory:
+
+- `dockerd(8)` documents `--log-opt` as "Logging driver specific options" and
+  lists none of them. `max-size` and `max-file` are in **no** docker man page;
+  the enumeration on the box is
+  `/usr/share/bash-completion/completions/docker`.
+- `nginx(8)` is eight command-line flags. There is no directive reference on
+  the box — `/usr/share/doc/nginx` is a changelog and a copyright — so
+  `proxy_pass` comes from `/etc/nginx/proxy_params` and the vim syntax file.
+- `systemd.timer(5)` owns `OnCalendar=` and `Unit=` and nothing about the
+  service half; `ExecStart=` and `Type=` are in `systemd.service(5)`.
+
+Where a page defers, the tip has to say so and name the route on. Two of these
+are also a technique worth having: when the documentation will not enumerate a
+tool's valid values, the tool's own shell completion has to.
+
 ## Grouping them into a course
 
 Killercoda treats a shared subdirectory as a course. Moving the domain folders
