@@ -49,12 +49,26 @@ Create a site at **`/etc/nginx/sites-available/lfcs`{{}}** and enable it:
 
 ```
 man nginx
-ls /etc/nginx/sites-available/
 ```{{exec}}
 
-`nginx(8)`{{}} is thin; the directive reference lives in
-`/usr/share/doc/nginx`{{}} and in the default site file, which is a working
-example of the syntax you need.
+`nginx(8)`{{}} is the binary: eight command-line flags, no directives. There is
+no directive reference on the box either — `/usr/share/doc/nginx`{{}} is a
+changelog and a copyright file, and the default site shows `server`{{}},
+`listen`{{}} and `location`{{}} but never proxies anything. So this one is not
+a man page problem, and knowing that early is worth more than another search.
+
+What the box does have is its own configuration, which was written by people
+who knew the directives:
+
+```
+cat /etc/nginx/proxy_params
+grep -w proxy_pass /usr/share/vim/addons/syntax/nginx.vim
+```{{exec}}
+
+`proxy_params`{{}} is the two headers this task asks for, already written out
+correctly — Debian ships it precisely because everyone needs them. The vim
+syntax file is the whole directive vocabulary, which settles "is it
+`proxy_header`{{}} or `proxy_set_header`{{}}" without a guess.
 
 Enable by symlinking into `sites-enabled`{{}}, then `nginx -t`{{}}.
 

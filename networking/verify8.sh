@@ -12,6 +12,21 @@ done
 
 conf="$(cat "$site")"
 
+# nginx reads includes, so the check has to as well. Debian ships
+# /etc/nginx/proxy_params holding exactly the two headers this task wants, and
+# `include proxy_params;` is how most real sites set them -- a correct answer
+# that a grep of the site file alone would reject. The included file is read
+# rather than trusted: including something that does not set them is no pass.
+effective="$conf"
+while read -r inc; do
+  case "$inc" in
+    /*) ;;
+    *) inc="/etc/nginx/$inc" ;;
+  esac
+  [ -f "$inc" ] && effective="$effective
+$(cat "$inc")"
+done < <(printf '%s\n' "$conf" | sed -n 's/^[[:space:]]*include[[:space:]]\{1,\}\([^;]*\);.*/\1/p')
+
 printf '%s\n' "$conf" | grep -qE 'listen[[:space:]]+8080' \
   || note "the site does not listen on 8080"
 
@@ -20,11 +35,11 @@ printf '%s\n' "$conf" | grep -qE 'proxy_pass[[:space:]]+http://127\.0\.0\.1:3000
 
 # Without this the backend sees nginx's own Host header and generates wrong
 # absolute URLs, which is the classic reverse proxy bug.
-printf '%s\n' "$conf" | grep -qiE 'proxy_set_header[[:space:]]+Host' \
+printf '%s\n' "$effective" | grep -qiE 'proxy_set_header[[:space:]]+Host' \
   || note "the Host header is not forwarded, so the backend sees the wrong hostname"
 
 # Without this every request appears to come from the proxy itself.
-printf '%s\n' "$conf" | grep -qiE 'proxy_set_header[[:space:]]+X-Forwarded-For' \
+printf '%s\n' "$effective" | grep -qiE 'proxy_set_header[[:space:]]+X-Forwarded-For' \
   || note "X-Forwarded-For is not set, so the backend cannot see the client address"
 
 # Enabled, not merely written. A file in sites-available does nothing.

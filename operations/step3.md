@@ -41,7 +41,15 @@ Schedule `/usr/local/bin/report.sh`{{}}, which already exists, **twice**:
 man 5 crontab
 man 5 systemd.timer
 man 7 systemd.time
+man 5 systemd.service
 ```{{exec}}
+
+Three pages for two units, because the work is split three ways.
+`systemd.timer(5)`{{}} has `OnCalendar=`{{}} and `Unit=`{{}} but hands the
+calendar grammar to `systemd.time(7)`{{}}, and it has nothing at all about the
+service half: `Type=oneshot`{{}} and `ExecStart=`{{}} are in
+`systemd.service(5)`{{}}. Asking the timer page about `ExecStart=`{{}} is a
+search that cannot succeed.
 
 Check your calendar expression before committing to it:
 
