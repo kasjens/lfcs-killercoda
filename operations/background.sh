@@ -14,6 +14,14 @@ apt-get install -y -qq man-db manpages manpages-dev less
 apt-get install -y -qq libvirt-clients libvirt-daemon-system apparmor apparmor-utils cron
 apt-get install -y -qq --reinstall systemd procps util-linux apt
 
+# Step 7 reads dockerd(8), greps the shell completion for the log driver's
+# options and restarts docker.service, so the engine has to be on the box. The
+# Killercoda ubuntu image ships it, but the step must not depend on that: if a
+# future image drops it, install it rather than let the step ask for a binary
+# that is not there. docker-ce installs put dockerd on PATH too, so this is a
+# no-op on those and never fights them for the same files.
+command -v dockerd >/dev/null 2>&1 || apt-get install -y -qq docker.io
+
 mandb -q
 
 # Step 2's fault: a mistyped section header, which systemd ignores silently,
