@@ -82,10 +82,16 @@ grep -n max-size /usr/share/bash-completion/completions/docker
 ```{{exec}}
 
 That lands on the line where the completion lists the `json-file`{{}} driver's
-options, with the ones every driver shares defined a few lines above it. Then
-validate with
-`python3 -m json.tool /etc/docker/daemon.json`{{}}, remembering it only proves
-the JSON parses, not that the daemon will accept it.
+options, with the ones every driver shares defined a few lines above it.
+
+Worth knowing where that works: the spelled-out list is Ubuntu's
+`docker.io`{{}} packaging. Upstream's `docker-ce`{{}} ships a completion that
+asks the binary at runtime instead, so it holds no option names at all and this
+grep comes back empty. On that packaging nothing on the box has them, which
+makes these two keys a pair to know rather than to find.
+
+Then validate with `python3 -m json.tool /etc/docker/daemon.json`{{}},
+remembering it only proves the JSON parses, not that the daemon will accept it.
 
 </details>
 

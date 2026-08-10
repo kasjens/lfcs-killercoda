@@ -15,12 +15,14 @@ apt-get install -y -qq libvirt-clients libvirt-daemon-system apparmor apparmor-u
 apt-get install -y -qq --reinstall systemd procps util-linux apt
 
 # Step 7 reads dockerd(8), greps the shell completion for the log driver's
-# options and restarts docker.service, so the engine has to be on the box. The
-# Killercoda ubuntu image ships it, but the step must not depend on that: if a
-# future image drops it, install it rather than let the step ask for a binary
-# that is not there. docker-ce installs put dockerd on PATH too, so this is a
-# no-op on those and never fights them for the same files.
-command -v dockerd >/dev/null 2>&1 || apt-get install -y -qq docker.io
+# options and restarts docker.service, so the engine has to be on the box --
+# and specifically Ubuntu's packaging of it. docker.io ships a completion that
+# spells the options out; upstream docker-ce ships one that asks the binary at
+# runtime and contains no values at all, so the tip's grep would come back
+# empty there. Keying off the option list rather than off dockerd covers both
+# an image with no docker and an image with the wrong packaging of it.
+grep -q max-size /usr/share/bash-completion/completions/docker 2>/dev/null \
+  || apt-get install -y -qq docker.io
 
 mandb -q
 
